@@ -658,6 +658,13 @@ tr:last-child td{
         </div>
       </div>
 
+      <!-- BOTÃO DO MENU -->
+      <button class="menu-toggle"
+              onclick="toggleMenu()"
+              aria-label="Abrir menu">
+        ☰
+      </button>
+
       <div class="account">
         <span id="currentUser" class="user-badge"></span>
         <button onclick="logout()">Sair</button>
@@ -1238,6 +1245,21 @@ function buildNav(){
 }
 
 
+/* =========================================================
+   MENU MOBILE
+========================================================= */
+
+function toggleMenu(){
+
+  const nav=document.getElementById("nav");
+
+  if(nav){
+    nav.classList.toggle("open");
+  }
+
+}
+
+
 function show(view){
 
   document.querySelectorAll(".view")
@@ -1254,6 +1276,12 @@ function show(view){
         b.dataset.view===view
       );
     });
+
+  const nav=document.getElementById("nav");
+
+  if(nav){
+    nav.classList.remove("open");
+  }
 
   render();
 }
@@ -2189,13 +2217,6 @@ function toggleEventCase(id,caseId,checked){
       return;
     }
 
-    /*
-      AQUI ESTÁ A REGRA NOVA:
-
-      O conteúdo é detalhado no momento em que
-      o case é colocado no evento.
-    */
-
     const eventItems=c.items.map(i=>({
       name:i.name,
       qty:i.qty||0,
@@ -2210,11 +2231,6 @@ function toggleEventCase(id,caseId,checked){
       returned:false,
       divergences:[]
     });
-
-    /*
-      O case não muda o cadastro padrão.
-      Apenas fica reservado para esta movimentação.
-    */
 
     c.status="Reservado";
 
@@ -2654,21 +2670,12 @@ function deleteMovement(id){
 
   if(!confirm(message))return;
 
-  /*
-    Antes de excluir:
-    devolve todos os cases para Disponível.
-  */
-
   m.cases.forEach(ec=>{
     updateCaseStatus(ec.caseId);
   });
 
   db.movements=
     db.movements.filter(x=>x.id!==id);
-
-  /*
-    Recalcula depois da remoção.
-  */
 
   db.cases.forEach(c=>{
     updateCaseStatus(c.id);
