@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09090b">
+<title>Star Vision Gestão</title>
+<style>
+:root{--bg:#09090b;--p:#151519;--p2:#202026;--l:#36363e;--t:#f5f5f5;--m:#a1a1aa;--ok:#42d77d;--w:#f3bd4e;--bad:#ff626b;--blue:#65a8ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:15px Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.hidden{display:none!important}header{position:sticky;top:0;z-index:50;background:#09090bf5;border-bottom:1px solid var(--l)}
+.head{max-width:1150px;margin:auto;padding:10px 15px}.bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px;white-space:nowrap}.logo small{display:block;font-size:10px;color:var(--m);font-weight:400;letter-spacing:1.5px}
+.acct{display:flex;align-items:center;gap:7px}.user{border:1px solid var(--l);border-radius:99px;padding:8px 11px;font-size:12px}
+.menu{display:none}nav{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.nav{border:1px solid var(--l);background:var(--p2);color:#fff;border-radius:9px;padding:9px 13px}.nav.active{border-color:#aaa;background:#29292f}
+button{border:1px solid var(--l);background:var(--p2);color:#fff;border-radius:9px;padding:9px 12px}button.primary{background:#eee;color:#111;border-color:#eee}button.danger{color:#ff8d95;border-color:#753039}button.success{color:#65e69a;border-color:#246c43}
+main{max-width:1150px;margin:auto;padding:25px 15px 50px}.view{display:none}.view.active{display:block}h1{margin:0 0 5px;font-size:30px}h3{margin:0 0 7px}.muted{color:var(--m);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:22px 0}.kpi,.card{background:var(--p);border:1px solid var(--l);border-radius:15px;padding:16px}.kpi b{display:block;font-size:30px;margin-bottom:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:13px}.between{display:flex;justify-content:space-between;align-items:center;gap:10px}.row{display:flex;gap:7px;flex-wrap:wrap}.badge{display:inline-block;border:1px solid var(--l);border-radius:99px;padding:5px 8px;font-size:12px;margin:2px 3px 2px 0}.ok{color:var(--ok)}.warn{color:var(--w)}.bad{color:var(--bad)}.blue{color:var(--blue)}
+input,select,textarea{width:100%;background:#0e0e10;color:#fff;border:1px solid #444;border-radius:8px;padding:10px;margin:5px 0 12px}textarea{min-height:100px;resize:vertical}label{display:block;color:#ddd;font-size:13px;margin-top:4px}
+table{width:100%;border-collapse:collapse;background:var(--p);margin-top:12px}th,td{padding:9px;border-bottom:1px solid var(--l);text-align:left;font-size:13px;vertical-align:top}th{color:var(--m);font-size:11px}.wrap{overflow:auto}
+.empty{padding:28px;text-align:center;color:var(--m);border:1px dashed var(--l);border-radius:12px}.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:15px;z-index:100}.modal.open{display:flex}.box{width:min(800px,100%);max-height:92vh;overflow:auto;background:var(--p);border:1px solid var(--l);border-radius:15px;padding:18px}
+.mhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.casebox{border:1px solid var(--l);border-radius:12px;margin:8px 0;overflow:hidden}.casehead{padding:11px;background:var(--p2);display:flex;justify-content:space-between}.casebody{padding:11px}
+.crow{display:grid;grid-template-columns:1.7fr 70px 70px auto;gap:7px;align-items:end}.check{display:flex;gap:10px;padding:10px;border-bottom:1px solid var(--l);cursor:pointer}.check:last-child{border-bottom:0}.check input{width:auto;margin:3px 0}
+.event-card{border-left:3px solid var(--w)}.event-card.done{border-left-color:var(--ok)}.event-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle,#17171c,#09090b 55%)}.loginbox{width:min(430px,100%);background:var(--p);border:1px solid var(--l);border-radius:18px;padding:25px}.brand{font-size:28px;font-weight:800;text-align:center;margin-bottom:25px}.brand small{display:block;font-size:11px;color:var(--m);letter-spacing:2px;margin-top:5px}
+@media(max-width:850px){.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.logo{font-size:18px}.menu{display:block}.user{font-size:10px}nav{display:none}nav.open{display:grid;grid-template-columns:repeat(2,1fr)}.nav{width:100%}.kpis{gap:9px}.kpi{padding:13px}.kpi b{font-size:26px}.grid{grid-template-columns:1fr}.crow{grid-template-columns:1fr 65px 65px auto}}
+</style>
+</head>
+<body>
+
+<div id="login" class="login"><div class="loginbox">
+<div class="brand">STAR VISION<small>GESTÃO AUDIOVISUAL</small></div>
+<label>Usuário</label><input id="lu" autocomplete="username">
+<label>Senha</label><input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+<button class="primary" style="width:100%" onclick="login()">Entrar</button>
+<p id="le" class="bad" style="text-align:center"></p>
+<p class="muted" style="text-align:center">Primeiro acesso: admin / 1234</p>
+</div></div>
+
+<div id="app" class="hidden"><header><div class="head"><div class="bar">
+<div class="logo">STAR VISION<small>GESTÃO AUDIOVISUAL</small></div>
+<div class="acct"><span id="who" class="user"></span><button class="menu" onclick="toggleMenu()">☰</button><button onclick="logout()">Sair</button></div>
+</div><nav id="nav"></nav></div></header><main>
+
+<section id="home" class="view active"><h1>Painel</h1><div class="muted">Controle interno de equipamentos, cases e movimentações</div>
+<div class="kpis"><div class="kpi"><b id="kc">0</b><span class="muted">Cases</span></div><div class="kpi"><b id="ke">0</b><span class="muted">Patrimônios</span></div><div class="kpi"><b id="km">0</b><span class="muted">Manutenções abertas</span></div><div class="kpi"><b id="kv">0</b><span class="muted">Eventos / empréstimos</span></div></div>
+<div id="homeEvents"></div></section>
+
+<section id="inv" class="view"><div class="between"><div><h1>Inventário</h1><div class="muted">Cases e patrimônios com conteúdo controlado.</div></div><button class="primary" onclick="newEq()">+ Patrimônio</button></div><div id="inventory"></div></section>
+
+<section id="mov" class="view"><div class="between"><div><h1>Eventos / Empréstimos</h1><div class="muted">Saída, conferência e retorno. Eventos em andamento permanecem aqui até o retorno.</div></div><button class="primary" onclick="newEvent()">+ Novo evento</button></div><div id="movs" class="grid"></div></section>
+
+<section id="maint" class="view"><div class="between"><div><h1>Manutenção</h1><div class="muted">Interna ou externa.</div></div><button class="primary" onclick="newMaint()">+ Registrar</button></div><div id="maintList" class="grid"></div></section>
+
+<section id="stock" class="view"><div class="between"><div><h1>Estoque</h1><div class="muted">Peças, materiais e consumíveis.</div></div><button class="primary" onclick="newStock()">+ Novo item</button></div><div id="stockList" class="grid"></div></section>
+
+<section id="users" class="view"><div class="between"><div><h1>Usuários</h1><div class="muted">Cadastro e controle de acesso.</div></div><button class="primary" onclick="newUser()">+ Novo usuário</button></div><div id="usersList" class="grid"></div></section>
+
+</main></div>
+<div id="modal" class="modal"><div class="box"><div class="mhead"><h2 id="mt"></h2><button onclick="closeM()">Fechar</button></div><div id="mb"></div></div></div>
+
+<script>
+const CASES=[
+["SV-C001","Case 01 - XLR Som","XLR Som"],["SV-C002","Case 01 - XLR Luz","XLR Luz"],["SV-C003","Case 01 - Chicotes","Chicotes"],
+["SV-C004","Case 01 - Extensão PP","Extensão Régua;Extensão PP Simples"],["SV-C005","Case 01 - 01V96","01V96 × 1;ADA Behringer × 2"],
+["SV-C006","Case 02 - 01V96i","01V96i × 1"],["SV-C007","Case 01 - Midas M32 Full","Midas M32 Full × 1"],
+["SV-C008","Case 01 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],["SV-C009","Case 02 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],
+["SV-C010","Case 03 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],["SV-C011","Case 04 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],
+["SV-C012","Case 05 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],["SV-C013","Case 06 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],
+["SV-C014","Case 07 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],["SV-C015","Case 08 - Beam","Beam × 2;Powercon × 2;Gancho × 4"],
+["SV-C016","Case 01 - Cabos Painel","Gancho;RJ;Powercon"],["SV-C017","Case 02 - Cabos Painel","Gancho;RJ;Powercon"],
+["SV-C018","Case 01 - Grand MA","Grand MA × 1"],["SV-C019","Case 02 - Grand MA","Grand MA × 1"]
+];
+const EQ=[
+["01V96","PAT-0001","SV-C005"],["ADA Behringer 01","PAT-0002","SV-C005"],["ADA Behringer 02","PAT-0003","SV-C005"],
+["01V96i","PAT-0004","SV-C006"],["Midas M32 Full","PAT-0005","SV-C007"],
+...Array.from({length:16},(_,i)=>["Beam "+String(i+1).padStart(2,"0"),"PAT-"+String(i+6).padStart(4,"0"),"SV-C008"]),
+["Grand MA 01","PAT-0022","SV-C018"],["Grand MA 02","PAT-0023","SV-C019"]
+];
+
+function load(){
+ let d=null;try{d=JSON.parse(localStorage.getItem("svdb")||"null")}catch(e){}
+ if(d){
+  d.cases=d.cases&&d.cases.length?d.cases:CASES.map(x=>({id:x[0],name:x[1],items:x[2],status:"Disponível"}));
+  d.equipment=d.equipment||[];d.maint=d.maint||[];d.mov=d.mov||[];d.stock=d.stock||[];
+  d.users=d.users&&d.users.length?d.users:[{id:"U001",name:"Administrador",user:"admin",pass:"1234",role:"Administrador",active:true}];
+  return d;
+ }
+ return{cases:CASES.map(x=>({id:x[0],name:x[1],items:x[2],status:"Disponível"})),equipment:EQ.map(x=>({name:x[0],pat:x[1],case:x[2],status:"Disponível"})),maint:[],mov:[],stock:[],users:[{id:"U001",name:"Administrador",user:"admin",pass:"1234",role:"Administrador",active:true}]};
+}
+let db=load(),me=null,selected={};
+function save(){localStorage.setItem("svdb",JSON.stringify(db));render()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function attr(v){return esc(v)}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmt(v){if(!v)return"—";let p=String(v).split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:v}
+function uid(p){return p+Date.now().toString(36)}
+function admin(){return me&&me.role==="Administrador"}
+function modal(t,b){mt.textContent=t;mb.innerHTML=b;document.getElementById("modal").classList.add("open")}
+function closeM(){document.getElementById("modal").classList.remove("open")}
+document.getElementById("modal").onclick=e=>{if(e.target===e.currentTarget)closeM()}
+
+function login(){let u=lu.value.trim(),p=lp.value,x=db.users.find(a=>a.user===u&&a.pass===p&&a.active!==false);if(!x){le.textContent="Usuário ou senha inválidos.";return}me=x;sessionStorage.setItem("svu",x.id);document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");who.textContent=x.name+" • "+x.role;navBuild();render()}
+function restore(){let x=db.users.find(a=>a.id===sessionStorage.getItem("svu")&&a.active!==false);if(x){me=x;document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");who.textContent=x.name+" • "+x.role;navBuild();render()}}
+function logout(){sessionStorage.removeItem("svu");location.reload()}
+function toggleMenu(){nav.classList.toggle("open")}
+function navBuild(){let n=[["home","Início"],["inv","Inventário"],["mov","Eventos"],["maint","Manutenção"],["stock","Estoque"]];if(admin())n.push(["users","Usuários"]);nav.innerHTML=n.map(x=>`<button class="nav" data-v="${x[0]}" onclick="view('${x[0]}')">${x[1]}</button>`).join("")}
+function view(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(v).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.v===v));nav.classList.remove("open");render()}
+
+function render(){
+ if(!me)return;
+ kc.textContent=db.cases.length;
+ ke.textContent=db.equipment.length;
+ km.textContent=db.maint.filter(x=>x.status!=="Concluída").length;
+ kv.textContent=db.mov.length;
+ renderInv();renderMov();renderMaint();renderStock();renderUsers();renderHomeEvents();
+}
+function renderHomeEvents(){
+ let active=db.mov.filter(x=>x.status!=="Concluído").slice().reverse();
+ homeEvents.innerHTML=active.length?`<div class="card"><div class="between"><h3>Eventos em andamento</h3><button onclick="view('mov')">Ver todos</button></div><div class="grid">${active.map(m=>`<div><b>${esc(m.name)}</b><div class="muted">Responsável: ${esc(m.resp||"—")}<br>Saída: ${fmt(m.date)} • Retorno previsto: ${fmt(m.retPrev)}</div></div>`).join("")}</div></div>`:"";
+}
+
+function renderInv(){
+ inventory.innerHTML=`<div class="grid">${db.cases.map(c=>`<div class="card"><div class="between"><div><h3>${esc(c.name)}</h3><span class="muted">${c.id}</span></div><span class="badge ${c.status==="Disponível"?"ok":"warn"}">${esc(c.status)}</span></div><p>${(c.items||"").split(";").filter(Boolean).map(x=>`<span class="badge">${esc(x)}</span>`).join("")}</p><div class="row">${admin()?`<button onclick="editCase('${c.id}')">Editar case</button>`:""}<button onclick="newMaint('${c.id}')">Manutenção</button></div></div>`).join("")}</div><div class="card" style="margin-top:13px"><h3>Patrimônios</h3><div class="wrap"><table><tr><th>Item</th><th>ID</th><th>Case</th><th>Status</th></tr>${db.equipment.map(e=>`<tr><td>${esc(e.name)}</td><td>${esc(e.pat)}</td><td>${esc(db.cases.find(c=>c.id===e.case)?.name||"—")}</td><td>${esc(e.status||"Disponível")}</td></tr>`).join("")}</table></div></div>`;
+}
+function editCase(id){if(!admin())return alert("Somente administrador.");let c=db.cases.find(x=>x.id===id);modal("Editar case",`<label>Nome</label><input id="cn" value="${attr(c.name)}"><label>Conteúdo padrão</label><textarea id="ci">${esc((c.items||"").split(";").join("\n"))}</textarea><button class="primary" onclick="saveCase('${id}')">Salvar</button>`)}
+function saveCase(id){let c=db.cases.find(x=>x.id===id);c.name=cn.value.trim();c.items=ci.value.split("\n").map(x=>x.trim()).filter(Boolean).join(";");closeM();save()}
+function newEq(){if(!admin())return alert("Somente administrador.");modal("Novo patrimônio",`<label>Descrição</label><input id="en"><label>Patrimônio</label><input id="ep"><label>Case</label><select id="ec">${db.cases.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select><button class="primary" onclick="addEq()">Cadastrar</button>`)}
+function addEq(){if(!en.value.trim()||!ep.value.trim())return alert("Preencha os campos.");db.equipment.push({name:en.value.trim(),pat:ep.value.trim(),case:ec.value,status:"Disponível"});closeM();save()}
+
+function newEvent(){
+ selected={};
+ modal("Novo evento / empréstimo",`
+ <label>Evento / cliente</label><input id="evn" placeholder="Ex.: Formatura PG">
+ <label>Responsável</label><input id="evr" placeholder="Digite o responsável">
+ <label>Data da saída</label><input id="evd" type="date" value="${today()}">
+ <label>Data prevista de retorno</label><input id="evrt" type="date">
+ <label>Observação</label><textarea id="evo"></textarea>
+ <h3>Selecione os cases</h3>
+ <div style="border:1px solid var(--l);border-radius:10px;overflow:hidden">${db.cases.map(c=>`
+ <label class="check"><input type="checkbox" value="${c.id}" onchange="pickCase(this)"><span><b>${esc(c.name)}</b><br><span class="muted">${c.id} • ${esc(c.status)}</span></span></label>`).join("")}</div>
+ <div id="caseForms"></div>
+ <button class="primary" onclick="createEvent()">Criar saída</button>`);
+}
+function pickCase(ch){
+ let c=db.cases.find(x=>x.id===ch.value);
+ if(ch.checked){
+  if(c.status!=="Disponível"){ch.checked=false;return alert("Case indisponível.");}
+  selected[c.id]=(c.items||"").split(";").filter(Boolean).map(s=>{let m=s.match(/^(.*?)(?: × (\d+))?$/);return{desc:m[1],qty:Number(m[2]||1),unit:"un"}})
+ }else delete selected[c.id];
+ forms();
+}
+function forms(){caseForms.innerHTML=Object.keys(selected).map(id=>{let c=db.cases.find(x=>x.id===id);return`<div class="casebox"><div class="casehead"><b>${esc(c.name)}</b><span class="badge">Conteúdo do evento</span></div><div class="casebody"><div id="rows_${id}">${selected[id].map((r,i)=>row(id,i,r)).join("")}</div><button onclick="addRow('${id}')">+ Item</button></div></div>`}).join("")}
+function row(id,i,r){return`<div class="crow"><input value="${attr(r.desc)}" placeholder="Descrição" oninput="selected['${id}'][${i}].desc=this.value"><input type="number" min="0" value="${r.qty}" oninput="selected['${id}'][${i}].qty=Number(this.value)"><input value="${attr(r.unit)}" oninput="selected['${id}'][${i}].unit=this.value"><button class="danger" onclick="selected['${id}'].splice(${i},1);forms()">×</button></div>`}
+function addRow(id){selected[id].push({desc:"",qty:1,unit:"un"});forms()}
+function createEvent(){
+ let ids=Object.keys(selected);
+ if(!evn.value.trim()||!evr.value.trim()||!ids.length)return alert("Informe o evento, o responsável e selecione pelo menos um case.");
+ let m={id:uid("M"),name:evn.value.trim(),resp:evr.value.trim(),date:evd.value,retPrev:evrt.value,obs:evo.value,status:"Em campo",ret:"",cases:ids.map(id=>({id,items:selected[id]}))};
+ db.mov.push(m);
+ ids.forEach(id=>{let c=db.cases.find(x=>x.id===id);if(c)c.status="Em campo — "+m.name});
+ closeM();save();printEvent(m.id);
+}
+function renderMov(){
+ movs.innerHTML=db.mov.length?db.mov.slice().reverse().map(m=>`<div class="card event-card ${m.status==="Concluído"?"done":""}">
+ <div class="between"><div><h3>${esc(m.name)}</h3><span class="badge ${m.status==="Concluído"?"ok":"warn"}">${esc(m.status)}</span></div><span class="badge">${m.status==="Concluído"?"Finalizado":"Em andamento"}</span></div>
+ <p class="muted">Responsável: ${esc(m.resp||"—")}<br>Saída: ${fmt(m.date)}<br>Retorno previsto: ${fmt(m.retPrev)}${m.ret?`<br>Retorno realizado: ${fmt(m.ret)}`:""}</p>
+ <p>${m.cases.map(x=>`<span class="badge">${esc(db.cases.find(c=>c.id===x.id)?.name||x.id)}</span>`).join("")}</p>
+ <div class="event-actions"><button onclick="openEvent('${m.id}')">Abrir / conferir</button><button onclick="printEvent('${m.id}')">Imprimir</button>${m.status!=="Concluído"?`<button class="success" onclick="retEvent('${m.id}')">Registrar retorno</button>`:""}<button class="danger" onclick="delEvent('${m.id}')">Excluir</button></div>
+ </div>`).join(""):'<div class="empty">Nenhum evento ou empréstimo cadastrado.</div>';
+}
+function openEvent(id){
+ let m=db.mov.find(x=>x.id===id);if(!m)return;
+ modal("Evento — "+m.name,`<p><b>Status:</b> ${esc(m.status)}<br><b>Responsável:</b> ${esc(m.resp||"—")}<br><b>Saída:</b> ${fmt(m.date)}<br><b>Retorno previsto:</b> ${fmt(m.retPrev)}${m.ret?`<br><b>Retorno realizado:</b> ${fmt(m.ret)}`:""}</p>
+ ${m.cases.map(x=>`<div class="casebox"><div class="casehead"><b>${esc(db.cases.find(c=>c.id===x.id)?.name||x.id)}</b></div><div class="casebody"><table><tr><th>Item</th><th>Qtd.</th><th>Un.</th>${m.status==="Concluído"?"<th>Retornado</th>":""}</tr>${x.items.map(r=>`<tr><td>${esc(r.desc)}</td><td>${r.qty}</td><td>${esc(r.unit)}</td>${m.status==="Concluído"?`<td>${r.returned??"—"}</td>`:""}</tr>`).join("")}</table></div></div>`).join("")}
+ <div class="row">${m.status!=="Concluído"?`<button class="success" onclick="retEvent('${id}')">Registrar retorno</button>`:""}<button onclick="printEvent('${id}')">Imprimir</button><button class="danger" onclick="delEvent('${id}')">Excluir evento</button></div>`);
+}
+function retEvent(id){
+ let m=db.mov.find(x=>x.id===id);
+ modal("Retorno — "+m.name,`<label>Data do retorno</label><input id="rd" type="date" value="${today()}"><label>Observações / faltas / danos / divergências</label><textarea id="ro"></textarea>
+ ${m.cases.map(x=>`<div class="casebox"><div class="casehead"><b>${esc(db.cases.find(c=>c.id===x.id)?.name||x.id)}</b></div><div class="casebody">${x.items.map((r,i)=>`<div class="crow"><input value="${attr(r.desc)}" readonly><input id="r_${x.id}_${i}" type="number" min="0" value="${r.qty}"><input value="${attr(r.unit)}" readonly><span></span></div>`).join("")}</div></div>`).join("")}
+ <button class="primary" onclick="finishRet('${id}')">Concluir retorno</button>`);
+}
+function finishRet(id){
+ let m=db.mov.find(x=>x.id===id);m.ret=rd.value;m.retObs=ro.value;m.status="Concluído";
+ m.cases.forEach(x=>{x.items.forEach((r,i)=>r.returned=Number(document.getElementById("r_"+x.id+"_"+i).value||0));let c=db.cases.find(c=>c.id===x.id);if(c)c.status="Disponível"});
+ closeM();save();printEvent(id);
+}
+function delEvent(id){
+ let m=db.mov.find(x=>x.id===id);if(!m)return;
+ if(!confirm("Excluir este evento/empréstimo? Os cases vinculados voltarão para Disponível."))return;
+ m.cases.forEach(x=>{let c=db.cases.find(c=>c.id===x.id);if(c)c.status="Disponível"});
+ db.mov=db.mov.filter(x=>x.id!==id);closeM();save();
+}
+function printEvent(id){
+ let m=db.mov.find(x=>x.id===id);if(!m)return;
+ let rows=m.cases.flatMap(x=>x.items.map(r=>`<tr><td>${esc(db.cases.find(c=>c.id===x.id)?.name||x.id)}</td><td>${esc(r.desc)}</td><td>${r.qty}</td><td>${esc(r.unit)}</td><td>${r.returned??"—"}</td></tr>`)).join("");
+ let w=open("","_blank");w.document.write(`<html><head><title>${esc(m.name)}</title><style>body{font-family:Arial;margin:30px;color:#111}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:7px;font-size:12px}h2{margin-bottom:4px}</style></head><body><h2>STAR VISION — ${m.status==="Concluído"?"Retorno":"Saída"}</h2><h3>${esc(m.name)}</h3><p>Responsável: ${esc(m.resp||"—")}<br>Saída: ${fmt(m.date)}<br>Retorno previsto: ${fmt(m.retPrev)}<br>Retorno realizado: ${fmt(m.ret)}</p><table><tr><th>Case</th><th>Item</th><th>Qtd.</th><th>Un.</th><th>Retornado</th></tr>${rows}</table><p><b>Observações:</b> ${esc(m.retObs||m.obs||"")}</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()
+}
+
+function newMaint(caseId=""){modal("Registrar manutenção",`<label>Case</label><select id="mc">${db.cases.map(c=>`<option value="${c.id}" ${c.id===caseId?"selected":""}>${esc(c.name)}</option>`).join("")}</select><label>Tipo</label><select id="mtype"><option>Interna</option><option>Externa</option></select><label>Descrição</label><textarea id="mdesc"></textarea><button class="primary" onclick="addMaint()">Registrar</button>`)}
+function addMaint(){let c=db.cases.find(x=>x.id===mc.value);db.maint.push({id:uid("MT"),name:c.name,case:c.id,type:mtype.value,desc:mdesc.value,status:"Pendente",date:today()});c.status=mtype.value==="Externa"?"Em manutenção externa":"Em manutenção interna";closeM();save()}
+function renderMaint(){maintList.innerHTML=db.maint.length?db.maint.slice().reverse().map(m=>`<div class="card"><div class="between"><h3>${esc(m.name)}</h3><span class="badge">${esc(m.status)}</span></div><p>${esc(m.desc||"")}</p><p class="muted">${esc(m.type)} • ${fmt(m.date)}</p>${m.status!=="Concluída"?`<button class="success" onclick="finishMaint(${db.maint.indexOf(m)})">Concluir</button>`:""}</div>`).join(""):'<div class="empty">Nenhuma manutenção.</div>'}
+function finishMaint(i){let m=db.maint[i];m.status="Concluída";let c=db.cases.find(x=>x.id===m.case);if(c)c.status="Disponível";save()}
+
+function newStock(){modal("Novo item de estoque",`<label>Item</label><input id="sn"><label>Unidade</label><input id="su" value="un"><label>Quantidade</label><input id="sq" type="number" min="0" value="0"><label>Mínimo</label><input id="sm" type="number" min="0" value="0"><button class="primary" onclick="addStock()">Cadastrar</button>`)}
+function addStock(){db.stock.push({name:sn.value.trim(),unit:su.value.trim()||"un",qty:Number(sq.value||0),min:Number(sm.value||0)});closeM();save()}
+function renderStock(){stockList.innerHTML=db.stock.length?db.stock.map((s,i)=>`<div class="card"><div class="between"><h3>${esc(s.name)}</h3><b class="${s.qty<=s.min?"bad":"ok"}">${s.qty<=s.min?"REPOR":"OK"}</b></div><p><b>${s.qty}</b> ${esc(s.unit)} • mínimo ${s.min}</p><button onclick="moveStock(${i})">Movimentar</button></div>`).join(""):'<div class="empty">Nenhum item no estoque.</div>'}
+function moveStock(i){let s=db.stock[i];modal("Estoque — "+s.name,`<p>Saldo: <b>${s.qty} ${esc(s.unit)}</b></p><label>Movimento</label><select id="st"><option value="1">Entrada</option><option value="-1">Saída</option></select><label>Quantidade</label><input id="sv" type="number" min="1" value="1"><button class="primary" onclick="applyStock(${i})">Aplicar</button>`)}
+function applyStock(i){db.stock[i].qty=Math.max(0,db.stock[i].qty+Number(st.value)*Number(sv.value));closeM();save()}
+
+function newUser(){if(!admin())return;modal("Novo usuário",`<label>Nome</label><input id="un"><label>Login</label><input id="ul"><label>Senha</label><input id="up" type="password"><label>Perfil</label><select id="ur"><option>Operador</option><option>Administrador</option></select><button class="primary" onclick="addUser()">Cadastrar</button>`)}
+function addUser(){let name=un.value.trim(),login=ul.value.trim();if(!name||!login||!up.value)return alert("Preencha todos os campos.");if(db.users.some(x=>x.user.toLowerCase()===login.toLowerCase()))return alert("Esse login já existe.");db.users.push({id:uid("U"),name,user:login,pass:up.value,role:ur.value,active:true});closeM();save()}
+function renderUsers(){if(!admin()){usersList.innerHTML="";return}usersList.innerHTML=db.users.map((u,i)=>`<div class="card"><div class="between"><h3>${esc(u.name)}</h3><span class="badge ${u.active===false?"bad":"ok"}">${u.active===false?"Bloqueado":"Ativo"}</span></div><p class="muted">Login: ${esc(u.user)}<br>Perfil: ${esc(u.role)}</p><div class="row"><button onclick="editUser(${i})">Editar</button><button onclick="toggleUser(${i})">${u.active===false?"Ativar":"Bloquear"}</button>${u.id!=="U001"?`<button class="danger" onclick="deleteUser(${i})">Excluir</button>`:""}</div></div>`).join("")}
+function editUser(i){let u=db.users[i];modal("Editar usuário",`<label>Nome</label><input id="eun" value="${attr(u.name)}"><label>Login</label><input id="eul" value="${attr(u.user)}"><label>Nova senha (vazio = manter)</label><input id="eup" type="password"><label>Perfil</label><select id="eur"><option ${u.role==="Operador"?"selected":""}>Operador</option><option ${u.role==="Administrador"?"selected":""}>Administrador</option></select><button class="primary" onclick="saveUser(${i})">Salvar</button>`)}
+function saveUser(i){let u=db.users[i],login=eul.value.trim();if(db.users.some((x,j)=>j!==i&&x.user.toLowerCase()===login.toLowerCase()))return alert("Esse login já existe.");u.name=eun.value.trim();u.user=login;if(eup.value)u.pass=eup.value;u.role=eur.value;closeM();save();if(me.id===u.id){me=u;who.textContent=u.name+" • "+u.role;navBuild()}}
+function toggleUser(i){if(db.users[i].id==="U001")return alert("O administrador inicial não pode ser bloqueado.");db.users[i].active=db.users[i].active===false;save()}
+function deleteUser(i){if(db.users[i].id==="U001")return;if(confirm("Excluir este usuário?")){db.users.splice(i,1);save()}}
+
+restore();
+</script>
+</body>
+</html>
