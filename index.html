@@ -5,846 +5,2316 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#09090b">
 <title>Star Vision Gestão</title>
+
 <style>
-:root{--bg:#09090b;--p:#151519;--p2:#202026;--l:#36363e;--t:#f5f5f5;--m:#a1a1aa;--ok:#42d77d;--w:#f3bd4e;--bad:#ff626b;--blue:#5ea7ff}
+:root{
+--bg:#09090b;
+--p:#151519;
+--p2:#202026;
+--l:#36363e;
+--t:#f5f5f5;
+--m:#a1a1aa;
+--ok:#42d77d;
+--w:#f3bd4e;
+--bad:#ff626b;
+--blue:#5ea7ff
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--t);font:15px Arial,sans-serif}
-header{position:sticky;top:0;background:#0b0b0def;border-bottom:1px solid var(--l);z-index:5}
-.bar{max-width:1100px;margin:auto;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.logo{font-weight:900;letter-spacing:2px}
-.logo small{display:block;color:var(--m);font-size:9px;letter-spacing:2px;margin-top:4px}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-.nav,button{border:1px solid var(--l);background:var(--p2);color:white;border-radius:8px;padding:9px 11px;cursor:pointer}
-.nav.active{border-color:#aaa}
-.nav:hover,button:hover{border-color:#777}
-button.primary{background:#eee;color:#111;border-color:#eee}
-button.danger{border-color:#633238;color:#ff9ca2}
-main{max-width:1100px;margin:auto;padding:22px 18px}
-.view{display:none}
-.view.active{display:block}
-h1{margin:0 0 4px}
-h2{margin-top:0}
-.muted{color:var(--m);font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:18px}
-.card,.kpi{background:var(--p);border:1px solid var(--l);border-radius:13px;padding:15px}
-.between{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.badge{display:inline-block;border:1px solid var(--l);border-radius:99px;padding:5px 8px;font-size:12px;margin:3px 3px 0 0}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--t);
+font:15px Arial,sans-serif
+}
+
+header{
+position:sticky;
+top:0;
+background:#0b0b0def;
+border-bottom:1px solid var(--l);
+z-index:5
+}
+
+.bar{
+max-width:1100px;
+margin:auto;
+padding:15px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px
+}
+
+.logo{
+font-weight:900;
+letter-spacing:2px
+}
+
+.logo small{
+display:block;
+color:var(--m);
+font-size:9px;
+letter-spacing:2px;
+margin-top:4px
+}
+
+nav{
+display:flex;
+gap:6px;
+flex-wrap:wrap
+}
+
+.nav,button{
+border:1px solid var(--l);
+background:var(--p2);
+color:white;
+border-radius:8px;
+padding:9px 11px;
+cursor:pointer
+}
+
+.nav.active{
+border-color:#aaa
+}
+
+.nav:hover,button:hover{
+border-color:#777
+}
+
+button.primary{
+background:#eee;
+color:#111;
+border-color:#eee
+}
+
+button.danger{
+border-color:#633238;
+color:#ff9ca2
+}
+
+main{
+max-width:1100px;
+margin:auto;
+padding:22px 18px
+}
+
+.view{
+display:none
+}
+
+.view.active{
+display:block
+}
+
+h1{
+margin:0 0 4px
+}
+
+h2{
+margin-top:0
+}
+
+h3{
+margin-top:0
+}
+
+.muted{
+color:var(--m);
+font-size:13px
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:12px;
+margin-top:18px
+}
+
+.card,.kpi{
+background:var(--p);
+border:1px solid var(--l);
+border-radius:13px;
+padding:15px
+}
+
+.between{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center
+}
+
+.row{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.badge{
+display:inline-block;
+border:1px solid var(--l);
+border-radius:99px;
+padding:5px 8px;
+font-size:12px;
+margin:3px 3px 0 0
+}
+
 .ok{color:var(--ok)}
 .warn{color:var(--w)}
 .bad{color:var(--bad)}
 .blue{color:var(--blue)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
-.kpi b{display:block;font-size:28px;margin-bottom:5px}
-input,select,textarea{width:100%;background:#0e0e10;color:white;border:1px solid #444;border-radius:8px;padding:10px;margin:5px 0 12px}
-textarea{min-height:90px}
-table{width:100%;border-collapse:collapse;background:var(--p);margin-top:15px}
-th,td{padding:10px;border-bottom:1px solid var(--l);text-align:left;font-size:13px}
-th{color:var(--m);font-size:11px}
-.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
-.modal.open{display:flex}
-.box{background:var(--p);border:1px solid var(--l);border-radius:14px;padding:18px;width:min(680px,100%);max-height:90vh;overflow:auto}
-.qr{background:#fff;padding:18px;border-radius:10px;display:inline-block}
-.center{text-align:center}
-.search{max-width:500px}
-.empty{padding:25px;text-align:center}
+
+.kpis{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin:18px 0
+}
+
+.kpi b{
+display:block;
+font-size:28px;
+margin-bottom:5px
+}
+
+input,select,textarea{
+width:100%;
+background:#0e0e10;
+color:white;
+border:1px solid #444;
+border-radius:8px;
+padding:10px;
+margin:5px 0 12px
+}
+
+textarea{
+min-height:90px
+}
+
+label{
+display:block
+}
+
+.check-list{
+border:1px solid var(--l);
+border-radius:10px;
+overflow:hidden;
+margin:8px 0 15px
+}
+
+.check-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:11px;
+border-bottom:1px solid var(--l);
+cursor:pointer
+}
+
+.check-item:last-child{
+border-bottom:0
+}
+
+.check-item input{
+width:auto;
+margin:0
+}
+
+.check-item:hover{
+background:#202026
+}
+
+.case-box{
+background:#101014;
+border:1px solid var(--l);
+border-radius:10px;
+padding:12px;
+margin-bottom:8px
+}
+
+.case-box h4{
+margin:0 0 5px
+}
+
+.case-items{
+margin-top:6px
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:var(--p);
+margin-top:15px
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid var(--l);
+text-align:left;
+font-size:13px
+}
+
+th{
+color:var(--m);
+font-size:11px
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#000c;
+display:none;
+align-items:center;
+justify-content:center;
+padding:16px;
+z-index:20
+}
+
+.modal.open{
+display:flex
+}
+
+.box{
+background:var(--p);
+border:1px solid var(--l);
+border-radius:14px;
+padding:18px;
+width:min(680px,100%);
+max-height:90vh;
+overflow:auto
+}
+
+.center{
+text-align:center
+}
+
+.search{
+max-width:500px
+}
+
+.empty{
+padding:25px;
+text-align:center
+}
+
+.status-box{
+padding:10px;
+border-radius:9px;
+background:#101014;
+border:1px solid var(--l);
+margin:10px 0
+}
+
 @media(max-width:700px){
-.kpis{grid-template-columns:repeat(2,1fr)}
-.bar{align-items:flex-start;flex-direction:column}
-table{display:block;overflow:auto;white-space:nowrap}
+
+.kpis{
+grid-template-columns:repeat(2,1fr)
+}
+
+.bar{
+align-items:flex-start;
+flex-direction:column
+}
+
+table{
+display:block;
+overflow:auto;
+white-space:nowrap
+}
+
 }
 </style>
 </head>
+
 <body>
 
 <header>
 <div class="bar">
-<div class="logo">STAR VISION<small>GESTÃO DE EQUIPAMENTOS</small></div>
+
+<div class="logo">
+STAR VISION
+<small>GESTÃO DE EQUIPAMENTOS</small>
+</div>
+
 <nav id="nav"></nav>
+
 </div>
 </header>
 
+
 <main>
 
+
+<!-- =========================
+     INÍCIO
+========================= -->
+
 <section id="home" class="view active">
+
 <h1>Painel</h1>
-<div class="muted">Controle interno de equipamentos, cases e movimentações</div>
+
+<div class="muted">
+Controle interno de equipamentos, cases e movimentações
+</div>
 
 <div class="kpis">
-<div class="kpi"><b id="kc">0</b><span class="muted">Cases</span></div>
-<div class="kpi"><b id="ke">0</b><span class="muted">Patrimônios</span></div>
-<div class="kpi"><b id="km">0</b><span class="muted">Manutenções abertas</span></div>
-<div class="kpi"><b id="kv">0</b><span class="muted">Movimentações</span></div>
+
+<div class="kpi">
+<b id="kc">0</b>
+<span class="muted">Cases</span>
 </div>
+
+<div class="kpi">
+<b id="ke">0</b>
+<span class="muted">Patrimônios</span>
+</div>
+
+<div class="kpi">
+<b id="km">0</b>
+<span class="muted">Manutenções abertas</span>
+</div>
+
+<div class="kpi">
+<b id="kv">0</b>
+<span class="muted">Movimentações</span>
+</div>
+
+</div>
+
 
 <div class="grid">
+
 <div class="card">
 <h3>Inventário</h3>
-<p class="muted">Equipamentos patrimoniais vinculados aos seus cases.</p>
+<p class="muted">
+Equipamentos patrimoniais vinculados aos seus cases.
+</p>
 </div>
 
 <div class="card">
-<h3>QR Code</h3>
-<p class="muted">Cada case possui identificador permanente e QR real para consulta.</p>
+<h3>Movimentação</h3>
+<p class="muted">
+Os cases são selecionados diretamente durante a criação da saída.
+</p>
 </div>
 
 <div class="card">
 <h3>Conferência</h3>
-<p class="muted">Eventos e empréstimos podem selecionar os cases que saíram.</p>
+<p class="muted">
+Saída, retorno e manutenção são tratados dentro dos respectivos fluxos.
+</p>
 </div>
+
 </div>
+
 </section>
 
-<section id="cases" class="view">
-<div class="between">
-<div>
-<h1>Cases</h1>
-<div class="muted">Os 19 cases iniciais da Star Vision.</div>
-</div>
-<button class="primary" onclick="novoCase()">+ Novo</button>
-</div>
 
-<input class="search" id="caseSearch" placeholder="Pesquisar case..." oninput="renderCases">
 
-<div id="caseList" class="grid"></div>
-</section>
+<!-- =========================
+     INVENTÁRIO
+========================= -->
 
 <section id="inv" class="view">
-<h1>Inventário</h1>
-<div class="muted">Equipamentos patrimoniais cadastrados.</div>
 
-<input class="search" id="invSearch" placeholder="Pesquisar equipamento ou patrimônio..." oninput="renderInv()">
+<h1>Inventário</h1>
+
+<div class="muted">
+Equipamentos patrimoniais cadastrados.
+</div>
+
+<input
+class="search"
+id="invSearch"
+placeholder="Pesquisar equipamento ou patrimônio..."
+oninput="renderInv()"
+>
 
 <div id="invBody"></div>
+
 </section>
 
+
+
+<!-- =========================
+     EVENTOS
+========================= -->
+
 <section id="mov" class="view">
+
 <div class="between">
+
 <div>
+
 <h1>Eventos / Empréstimos</h1>
-<div class="muted">Use o mesmo fluxo para saída, conferência e retorno.</div>
+
+<div class="muted">
+Saída, conferência e retorno dos equipamentos.
 </div>
-<button class="primary" onclick="novoMov()">+ Nova saída</button>
+
+</div>
+
+<button class="primary" onclick="novoMov()">
++ Nova saída
+</button>
+
 </div>
 
 <div id="movList" class="grid"></div>
+
 </section>
 
+
+
+<!-- =========================
+     MANUTENÇÃO
+========================= -->
+
 <section id="maint" class="view">
+
 <div class="between">
+
 <div>
+
 <h1>Manutenção</h1>
-<div class="muted">Controle de manutenção interna ou externa.</div>
+
+<div class="muted">
+Controle de manutenção interna ou externa.
 </div>
-<button class="primary" onclick="novaMan()">+ Registrar</button>
+
+</div>
+
+<button class="primary" onclick="novaMan()">
++ Registrar
+</button>
+
 </div>
 
 <div id="manList" class="grid"></div>
+
 </section>
 
+
+
+<!-- =========================
+     ESTOQUE
+========================= -->
+
 <section id="stock" class="view">
+
 <div class="between">
+
 <div>
+
 <h1>Estoque</h1>
-<div class="muted">Peças, materiais e consumíveis.</div>
+
+<div class="muted">
+Peças, materiais e consumíveis.
 </div>
-<button class="primary" onclick="novoEstoque()">+ Novo item</button>
+
+</div>
+
+<button class="primary" onclick="novoEstoque()">
++ Novo item
+</button>
+
 </div>
 
 <div id="stockList" class="grid"></div>
+
 </section>
+
 
 </main>
 
+
+
+<!-- =========================
+     MODAL
+========================= -->
+
 <div id="modal" class="modal">
+
 <div class="box">
+
 <div class="between">
+
 <h2 id="mtitle"></h2>
-<button onclick="closeM()">Fechar</button>
+
+<button onclick="closeM()">
+Fechar
+</button>
+
 </div>
+
 <div id="mbody"></div>
+
 </div>
+
 </div>
+
+
 
 <script>
+
+/* =========================================================
+   CASES
+========================================================= */
+
 const initialCases=[
+
 ['SV-C001','Case 01 - XLR Som','XLR Som'],
+
 ['SV-C002','Case 01 - XLR Luz','XLR Luz'],
+
 ['SV-C003','Case 01 - Chicotes','Chicotes'],
+
 ['SV-C004','Case 01 - Extensão PP','Extensão Régua;Extensão PP Simples'],
+
 ['SV-C005','Case 01 - 01V96','01V96 × 1;ADA Behringer × 2'],
+
 ['SV-C006','Case 02 - 01V96i','01V96i × 1'],
+
 ['SV-C007','Case 01 - Midas M32 Full','Midas M32 Full × 1'],
+
 ['SV-C008','Case 01 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C009','Case 02 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C010','Case 03 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C011','Case 04 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C012','Case 05 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C013','Case 06 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C014','Case 07 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C015','Case 08 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
+
 ['SV-C016','Case 01 - Cabos Painel','Gancho;RJ;Powercon'],
+
 ['SV-C017','Case 02 - Cabos Painel','Gancho;RJ;Powercon'],
+
 ['SV-C018','Case 01 - Grand MA','Grand MA × 1'],
+
 ['SV-C019','Case 02 - Grand MA','Grand MA × 1']
+
 ];
 
+
+
+/* =========================================================
+   EQUIPAMENTOS
+========================================================= */
+
 function defaultEquipment(){
+
 const e=[
+
 ['01V96','PAT-0001','SV-C005'],
+
 ['ADA Behringer 01','PAT-0002','SV-C005'],
+
 ['ADA Behringer 02','PAT-0003','SV-C005'],
+
 ['01V96i','PAT-0004','SV-C006'],
+
 ['Midas M32 Full','PAT-0005','SV-C007']
+
 ];
 
 for(let caseNo=0;caseNo<8;caseNo++){
+
 for(let n=1;n<=2;n++){
+
 const index=caseNo*2+n;
+
 e.push([
+
 'Beam '+String(index).padStart(2,'0'),
+
 'PAT-'+String(index+5).padStart(4,'0'),
+
 'SV-C'+String(8+caseNo).padStart(3,'0')
+
 ]);
-}}
+
+}
+
+}
 
 e.push(
+
 ['Grand MA 01','PAT-0022','SV-C018'],
+
 ['Grand MA 02','PAT-0023','SV-C019']
+
 );
 
 return e;
+
 }
 
+
+
+/* =========================================================
+   BANCO LOCAL
+========================================================= */
+
 const defaults={
+
 cases:initialCases.map(x=>({
+
 id:x[0],
+
 name:x[1],
+
 items:x[2],
+
 status:'Disponível'
+
 })),
 
 equipment:defaultEquipment(),
 
 maint:[],
+
 mov:[],
 
 stock:[
-{name:'Lâmpada AR-111',unit:'un',qty:10,min:2},
-{name:'Fita isolante',unit:'rolo',qty:20,min:10},
-{name:'Líquido de fumaça',unit:'L',qty:0,min:5},
-{name:'Papel picado',unit:'kg',qty:0,min:5}
-]
-};
 
-let db=JSON.parse(localStorage.getItem('svdb')||'null')||defaults;
+{
+name:'Lâmpada AR-111',
+unit:'un',
+qty:10,
+min:2
+},
 
-function save(){
-localStorage.setItem('svdb',JSON.stringify(db));
-render()
+{
+name:'Fita isolante',
+unit:'rolo',
+qty:20,
+min:10
+},
+
+{
+name:'Líquido de fumaça',
+unit:'L',
+qty:0,
+min:5
+},
+
+{
+name:'Papel picado',
+unit:'kg',
+qty:0,
+min:5
 }
 
+]
+
+};
+
+
+let db=JSON.parse(
+localStorage.getItem('svdb')||'null'
+)||defaults;
+
+
+/* =========================================================
+   NORMALIZA DADOS ANTIGOS
+========================================================= */
+
+db.cases ||= [];
+db.equipment ||= [];
+db.maint ||= [];
+db.mov ||= [];
+db.stock ||= [];
+
+db.mov.forEach(m=>{
+
+m.cases ||= [];
+
+m.returned ||= [];
+
+m.status ||= 'Em andamento';
+
+});
+
+
+/* =========================================================
+   UTILIDADES
+========================================================= */
+
+function save(){
+
+localStorage.setItem(
+'svdb',
+JSON.stringify(db)
+);
+
+render();
+
+}
+
+
 function esc(s){
-return String(s??'').replace(/[&<>"']/g,m=>({
+
+return String(s??'').replace(
+/[&<>"']/g,
+
+m=>({
+
 '&':'&amp;',
 '<':'&lt;',
 '>':'&gt;',
 '"':'&quot;',
 "'":'&#039;'
-}[m]))
+
+}[m])
+
+);
+
 }
+
 
 function openM(t,b){
+
 document.getElementById('mtitle').textContent=t;
+
 document.getElementById('mbody').innerHTML=b;
-document.getElementById('modal').classList.add('open')
+
+document.getElementById('modal').classList.add('open');
+
 }
+
 
 function closeM(){
-document.getElementById('modal').classList.remove('open')
+
+document.getElementById('modal').classList.remove('open');
+
 }
+
+
+/* =========================================================
+   MENU
+   CASES FOI REMOVIDO DAQUI
+========================================================= */
 
 const nav=[
+
 ['home','Início'],
-['cases','Cases'],
+
 ['inv','Inventário'],
+
 ['mov','Eventos'],
+
 ['maint','Manutenção'],
+
 ['stock','Estoque']
+
 ];
 
-document.getElementById('nav').innerHTML=nav.map(x=>
-`<button class="nav" data-v="${x[0]}">${x[1]}</button>`
+
+document.getElementById('nav').innerHTML=
+
+nav.map(x=>
+
+`<button
+class="nav"
+data-v="${x[0]}"
+>${x[1]}</button>`
+
 ).join('');
 
-document.querySelectorAll('.nav').forEach(b=>
-b.onclick=()=>show(b.dataset.v)
-);
+
+document.querySelectorAll('.nav').forEach(b=>{
+
+b.onclick=()=>show(b.dataset.v);
+
+});
+
 
 function show(v){
-document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-document.getElementById(v).classList.add('active');
 
-document.querySelectorAll('.nav').forEach(x=>
-x.classList.toggle('active',x.dataset.v===v)
+document
+.querySelectorAll('.view')
+.forEach(x=>x.classList.remove('active'));
+
+document
+.getElementById(v)
+.classList.add('active');
+
+
+document
+.querySelectorAll('.nav')
+.forEach(x=>
+
+x.classList.toggle(
+'active',
+x.dataset.v===v
+)
+
 );
 
-render()
+render();
+
 }
+
+
+/* =========================================================
+   RENDER GERAL
+========================================================= */
 
 function render(){
-document.getElementById('kc').textContent=db.cases.length;
-document.getElementById('ke').textContent=db.equipment.length;
-document.getElementById('km').textContent=db.maint.filter(x=>x.status!=='Concluída').length;
-document.getElementById('kv').textContent=db.mov.length;
 
-renderCases();
+document.getElementById('kc').textContent=
+db.cases.length;
+
+document.getElementById('ke').textContent=
+db.equipment.length;
+
+document.getElementById('km').textContent=
+db.maint.filter(
+x=>x.status!=='Concluída'
+).length;
+
+document.getElementById('kv').textContent=
+db.mov.filter(
+x=>x.status!=='Concluída'
+).length;
+
+
 renderInv();
+
 renderMov();
+
 renderMaint();
+
 renderStock();
+
 }
 
-function renderCases(){
-const q=(document.getElementById('caseSearch')?.value||'').toLowerCase();
 
-const list=db.cases.filter(c=>
-(c.name+' '+c.id+' '+c.items).toLowerCase().includes(q)
-);
-
-document.getElementById('caseList').innerHTML=list.map(c=>`
-<div class="card">
-
-<div class="between">
-<div>
-<h3>${esc(c.name)}</h3>
-<div class="muted">${c.id}</div>
-</div>
-
-<span class="badge ${c.status==='Disponível'?'ok':'warn'}">
-${esc(c.status)}
-</span>
-</div>
-
-<p>
-${c.items.split(';').map(x=>
-`<span class="badge">${esc(x)}</span>`
-).join('')}
-</p>
-
-<div class="row">
-<button onclick="editCase('${c.id}')">Editar</button>
-<button onclick="caseQR('${c.id}')">QR</button>
-<button onclick="caseMan('${c.id}')">Manutenção</button>
-</div>
-
-</div>
-`).join('')||'<div class="card empty muted">Nenhum case encontrado.</div>';
-}
+/* =========================================================
+   INVENTÁRIO
+========================================================= */
 
 function renderInv(){
-const q=(document.getElementById('invSearch')?.value||'').toLowerCase();
+
+const q=
+(document.getElementById('invSearch')?.value||'')
+.toLowerCase();
+
 
 const list=db.equipment.filter(e=>
-(e.join(' ')+' '+(db.cases.find(c=>c.id===e[2])?.name||'')).toLowerCase().includes(q)
+
+(
+e.join(' ')+' '+
+(
+db.cases.find(
+c=>c.id===e[2]
+)?.name||''
+)
+).toLowerCase().includes(q)
+
 );
 
+
 document.getElementById('invBody').innerHTML=
-'<table><tr><th>Equipamento</th><th>Patrimônio</th><th>Case</th><th>Status</th></tr>'+
+
+'<table>'+
+'<tr>'+
+'<th>Equipamento</th>'+
+'<th>Patrimônio</th>'+
+'<th>Case</th>'+
+'<th>Status</th>'+
+'</tr>'+
+
 list.map(e=>`
+
 <tr>
+
 <td>${esc(e[0])}</td>
+
 <td>${esc(e[1])}</td>
-<td>${esc(db.cases.find(c=>c.id===e[2])?.name||'—')}</td>
+
+<td>
+${esc(
+db.cases.find(c=>c.id===e[2])?.name||'—'
+)}
+</td>
+
 <td>${esc(e[3]||'Disponível')}</td>
+
 </tr>
+
 `).join('')+
+
 '</table>';
+
 }
 
-function renderMov(){
-document.getElementById('movList').innerHTML=db.mov.length?db.mov.map(m=>`
-<div class="card">
-<div class="between">
-<h3>${esc(m.name)}</h3>
-<span class="badge">${esc(m.type)}</span>
-</div>
 
-<p class="muted">
-Responsável: ${esc(m.resp||'—')}<br>
-Saída: ${esc(m.date||'—')} • Retorno previsto: ${esc(m.ret||'—')}<br>
-Cases: ${m.cases.length}
-</p>
+/* =========================================================
+   SELECTOR DE CASES
+   USADO EM SAÍDA
+========================================================= */
 
-<button onclick="openMov('${m.id}')">Abrir / conferir</button>
-</div>
-`).join(''):'<div class="card muted">Nenhuma movimentação.</div>';
-}
+function caseSelector(selected=[]){
 
-function renderMaint(){
-document.getElementById('manList').innerHTML=db.maint.length?db.maint.map((m,i)=>`
-<div class="card">
-<div class="between">
-<h3>${esc(m.name)}</h3>
-<span class="badge">${esc(m.status)}</span>
-</div>
+return `
 
-<span class="badge">${esc(m.type)}</span>
-<p>${esc(m.desc)}</p>
+<div class="check-list">
 
-<div class="row">
-<button onclick="concluirMan(${i})">Concluir</button>
-</div>
-</div>
-`).join(''):'<div class="card muted">Nenhuma manutenção.</div>';
-}
+${db.cases.map(c=>`
 
-function renderStock(){
-document.getElementById('stockList').innerHTML=db.stock.map((s,i)=>`
-<div class="card">
-<div class="between">
-<h3>${esc(s.name)}</h3>
-<b class="${s.qty<=s.min?'bad':'ok'}">
-${s.qty<=s.min?'REPOR':'OK'}
-</b>
-</div>
-
-<p>
-<b>${s.qty}</b> ${esc(s.unit)} • mínimo ${s.min}
-</p>
-
-<button onclick="stock(${i})">Movimentar</button>
-</div>
-`).join('');
-}
-
-function editCase(id){
-const c=db.cases.find(x=>x.id===id);
-
-openM('Editar case',`
-<label>Nome</label>
-<input id="a" value="${esc(c.name)}">
-
-<label>Conteúdo, um item por linha</label>
-<textarea id="b">${esc(c.items.replaceAll(';','\n'))}</textarea>
-
-<label>Status</label>
-<select id="d">
-${['Disponível','Reservado','Em manutenção interna','Em manutenção externa','Indisponível'].map(x=>
-`<option ${c.status===x?'selected':''}>${x}</option>`
-).join('')}
-</select>
-
-<button class="primary" onclick="saveCase('${id}')">Salvar</button>
-`);
-}
-
-function saveCase(id){
-const c=db.cases.find(x=>x.id===id);
-
-c.name=document.getElementById('a').value;
-c.items=document.getElementById('b').value.split('\n').filter(Boolean).join(';');
-c.status=document.getElementById('d').value;
-
-closeM();
-save()
-}
-
-function novoCase(){
-openM('Novo case',`
-<label>Nome</label>
-<input id="a">
-
-<label>Conteúdo</label>
-<textarea id="b"></textarea>
-
-<button class="primary" onclick="addCase()">Criar</button>
-`)
-}
-
-function addCase(){
-const n=db.cases.length+1;
-
-db.cases.push({
-id:'SV-C'+String(n).padStart(3,'0'),
-name:document.getElementById('a').value,
-items:document.getElementById('b').value.split('\n').filter(Boolean).join(';'),
-status:'Disponível'
-});
-
-closeM();
-save()
-}
-
-function caseQR(id){
-const c=db.cases.find(x=>x.id===id);
-
-const url=location.origin+location.pathname+'?case='+encodeURIComponent(c.id);
-
-openM('QR Code — '+c.name,`
-<div class="center">
-<div id="qrcode" class="qr"></div>
-
-<h3>${esc(c.id)}</h3>
-
-<p class="muted">
-Este QR identifica permanentemente este case.
-</p>
-
-<button onclick="window.print()">Imprimir</button>
-</div>
-`);
-
-const s=document.createElement('script');
-
-s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-
-s.onload=()=>{
-new QRCode(
-document.getElementById('qrcode'),
-{
-text:url,
-width:220,
-height:220
-}
-)
-};
-
-document.body.appendChild(s);
-}
-
-function caseMan(id){
-const c=db.cases.find(x=>x.id===id);
-
-openM('Manutenção — '+c.name,`
-<label>Tipo</label>
-
-<select id="a">
-<option>Interna</option>
-<option>Externa</option>
-</select>
-
-<label>Descrição</label>
-
-<textarea id="b" placeholder="Verificar cabos, conexão AC, placa..."></textarea>
-
-<button class="primary" onclick="addMan('${id}')">
-Registrar
-</button>
-`);
-}
-
-function addMan(id){
-const c=db.cases.find(x=>x.id===id);
-
-db.maint.push({
-name:c.name,
-type:document.getElementById('a').value,
-desc:document.getElementById('b').value,
-status:'Pendente',
-case:id
-});
-
-c.status=
-document.getElementById('a').value==='Externa'
-?'Em manutenção externa'
-:'Em manutenção interna';
-
-closeM();
-save()
-}
-
-function concluirMan(i){
-const m=db.maint[i];
-
-m.status='Concluída';
-
-const c=db.cases.find(x=>x.id===m.case);
-
-if(c)c.status='Disponível';
-
-save()
-}
-
-function novaMan(){
-openM('Registrar manutenção',`
-
-<label>Case</label>
-
-<select id="a">
-${db.cases.map(c=>
-`<option value="${c.id}">
-${esc(c.name)}
-</option>`
-).join('')}
-</select>
-
-<label>Tipo</label>
-
-<select id="b">
-<option>Interna</option>
-<option>Externa</option>
-</select>
-
-<label>Descrição</label>
-
-<textarea id="c"></textarea>
-
-<button class="primary" onclick="addMan2()">
-Registrar
-</button>
-`)
-}
-
-function addMan2(){
-const cid=document.getElementById('a').value;
-
-const c=db.cases.find(x=>x.id===cid);
-
-db.maint.push({
-name:c.name,
-type:document.getElementById('b').value,
-desc:document.getElementById('c').value,
-status:'Pendente',
-case:cid
-});
-
-c.status=
-document.getElementById('b').value==='Externa'
-?'Em manutenção externa'
-:'Em manutenção interna';
-
-closeM();
-save()
-}
-
-function novoMov(){
-openM('Nova movimentação',`
-
-<label>Tipo</label>
-
-<select id="a">
-<option>Evento</option>
-<option>Empréstimo</option>
-</select>
-
-<label>Nome / destino</label>
-
-<input id="b" placeholder="Formatura XYZ / Empresa ABC">
-
-<label>Data de saída</label>
-
-<input id="c" type="date">
-
-<label>Responsável</label>
-
-<input id="d">
-
-<label>Retorno previsto</label>
-
-<input id="e" type="date">
-
-<button class="primary" onclick="addMov()">
-Criar
-</button>
-`)
-}
-
-function addMov(){
-
-db.mov.push({
-id:'MOV-'+String(db.mov.length+1).padStart(4,'0'),
-type:document.getElementById('a').value,
-name:document.getElementById('b').value,
-date:document.getElementById('c').value,
-resp:document.getElementById('d').value,
-ret:document.getElementById('e').value,
-cases:[]
-});
-
-closeM();
-save()
-}
-
-function openMov(id){
-
-const m=db.mov.find(x=>x.id===id);
-
-openM(m.name,`
-
-<p>
-<b>${esc(m.type)}</b> • ${esc(m.resp)}
-</p>
-
-<h3>Selecionar cases</h3>
-
-${db.cases.map(c=>
-`
-<label style="display:block;margin:8px">
+<label class="check-item">
 
 <input
 type="checkbox"
-${m.cases.includes(c.id)?'checked':''}
-onchange="toggleMov('${id}','${c.id}',this.checked)"
+class="case-select"
+value="${c.id}"
+${selected.includes(c.id)?'checked':''}
+${c.status!=='Disponível'&&!selected.includes(c.id)
+?'disabled'
+:''}
 >
 
-${esc(c.name)}
+<div>
+
+<b>${esc(c.name)}</b>
+
+<div class="muted">
+${esc(c.id)} • ${esc(c.status)}
+</div>
+
+<div class="case-items">
+${c.items.split(';').map(i=>
+`<span class="badge">${esc(i)}</span>`
+).join('')}
+</div>
+
+</div>
 
 </label>
+
+`).join('')}
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   NOVA SAÍDA
+========================================================= */
+
+function novoMov(){
+
+openM(
+
+'Nova saída',
+
 `
-).join('')}
 
-<br>
+<label>Tipo</label>
 
-<button onclick="printMov('${id}')">
-Imprimir relação / PDF
+<select id="movTipo">
+
+<option>Evento</option>
+
+<option>Empréstimo</option>
+
+</select>
+
+
+<label>Nome / destino</label>
+
+<input
+id="movNome"
+placeholder="Formatura XYZ / Empresa ABC"
+>
+
+
+<label>Data de saída</label>
+
+<input
+id="movData"
+type="date"
+>
+
+
+<label>Responsável</label>
+
+<input
+id="movResp"
+placeholder="Nome do responsável"
+>
+
+
+<label>Retorno previsto</label>
+
+<input
+id="movRet"
+type="date"
+>
+
+
+<h3>Cases que irão sair</h3>
+
+<div class="muted">
+
+Selecione os cases que serão levados.
+Os cases indisponíveis não podem ser selecionados.
+
+</div>
+
+${caseSelector()}
+
+
+<button
+class="primary"
+onclick="addMov()"
+>
+Criar saída
 </button>
 
-`);
-}
-
-function toggleMov(id,cid,on){
-
-const m=db.mov.find(x=>x.id===id);
-
-if(on&&!m.cases.includes(cid))
-m.cases.push(cid);
-
-if(!on)
-m.cases=m.cases.filter(x=>x!==cid);
-
-save();
-
-openMov(id)
-}
-
-function printMov(id){
-
-const m=db.mov.find(x=>x.id===id);
-
-const w=window.open('','_blank');
-
-w.document.write(
-
-'<html><body style="font-family:Arial;padding:30px">'+
-
-'<h1>STAR VISION</h1>'+
-
-'<h2>'+
-esc(m.type)+' — '+esc(m.name)+
-'</h2>'+
-
-'<p>Responsável: '+
-esc(m.resp)+
-'</p>'+
-
-'<table border="1" cellpadding="8" cellspacing="0" width="100%">'+
-
-'<tr><th>Case</th><th>Conteúdo</th></tr>'+
-
-m.cases.map(cid=>{
-
-const c=db.cases.find(x=>x.id===cid);
-
-return '<tr><td>'+
-esc(c.name)+
-'</td><td>'+
-esc(c.items.replaceAll(';',' • '))+
-'</td></tr>';
-
-}).join('')+
-
-'</table>'+
-
-'<script>window.print()<\/script>'+
-
-'</body></html>'
+`
 
 );
 
-w.document.close();
 }
+
+
+/* =========================================================
+   CRIA MOVIMENTAÇÃO
+========================================================= */
+
+function addMov(){
+
+const nome=
+document.getElementById('movNome')
+.value.trim();
+
+
+if(!nome){
+
+alert('Informe o nome ou destino.');
+
+return;
+
+}
+
+
+const cases=[
+...document.querySelectorAll('.case-select:checked')
+].map(x=>x.value);
+
+
+if(cases.length===0){
+
+alert('Selecione pelo menos um case.');
+
+return;
+
+}
+
+
+const mov={
+
+id:'MOV-'+
+String(db.mov.length+1).padStart(4,'0'),
+
+type:document.getElementById('movTipo').value,
+
+name:nome,
+
+date:document.getElementById('movData').value,
+
+resp:document.getElementById('movResp').value,
+
+ret:document.getElementById('movRet').value,
+
+cases:cases,
+
+returned:[],
+
+status:'Em andamento'
+
+};
+
+
+db.mov.push(mov);
+
+
+cases.forEach(cid=>{
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+if(c){
+
+c.status='Em evento';
+
+}
+
+});
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   LISTA DE MOVIMENTAÇÕES
+========================================================= */
+
+function renderMov(){
+
+const lista=
+document.getElementById('movList');
+
+
+if(!db.mov.length){
+
+lista.innerHTML=
+`
+<div class="card empty muted">
+Nenhuma movimentação registrada.
+</div>
+`;
+
+return;
+
+}
+
+
+lista.innerHTML=
+
+db.mov.map(m=>`
+
+<div class="card">
+
+<div class="between">
+
+<div>
+
+<h3>${esc(m.name)}</h3>
+
+<div class="muted">
+${esc(m.id)}
+</div>
+
+</div>
+
+<span class="badge ${
+m.status==='Concluída'
+?'ok'
+:m.status==='Retorno parcial'
+?'warn'
+:'blue'
+}">
+
+${esc(m.status)}
+
+</span>
+
+</div>
+
+
+<p>
+
+<span class="badge">
+${esc(m.type)}
+</span>
+
+</p>
+
+
+<p class="muted">
+
+Responsável:
+${esc(m.resp||'—')}
+
+<br>
+
+Saída:
+${esc(m.date||'—')}
+
+<br>
+
+Retorno previsto:
+${esc(m.ret||'—')}
+
+<br>
+
+Cases:
+${m.cases.length}
+
+</p>
+
+
+<div class="row">
+
+<button
+onclick="openMov('${m.id}')"
+>
+Abrir / conferir
+</button>
+
+<button
+onclick="printMov('${m.id}')"
+>
+Imprimir
+</button>
+
+</div>
+
+</div>
+
+`).join('');
+
+}
+
+
+/* =========================================================
+   CONFERÊNCIA DA SAÍDA
+========================================================= */
+
+function openMov(id){
+
+const m=db.mov.find(
+x=>x.id===id
+);
+
+if(!m)return;
+
+
+openM(
+
+'Conferência — '+m.name,
+
+`
+
+<div class="status-box">
+
+<b>${esc(m.type)}</b>
+
+<br>
+
+Responsável:
+${esc(m.resp||'—')}
+
+<br>
+
+Saída:
+${esc(m.date||'—')}
+
+<br>
+
+Retorno previsto:
+${esc(m.ret||'—')}
+
+</div>
+
+
+<h3>Cases desta saída</h3>
+
+
+${m.cases.map(cid=>{
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+if(!c)return '';
+
+
+const voltou=
+m.returned.includes(cid);
+
+
+return `
+
+<div class="case-box">
+
+<div class="between">
+
+<div>
+
+<h4>
+${esc(c.name)}
+</h4>
+
+<div class="muted">
+${esc(c.id)}
+</div>
+
+</div>
+
+<span class="badge ${
+voltou?'ok':'warn'
+}">
+
+${voltou
+?'RETORNOU'
+:'FORA'}
+
+</span>
+
+</div>
+
+
+<div>
+
+${c.items.split(';').map(i=>
+`<span class="badge">${esc(i)}</span>`
+).join('')}
+
+</div>
+
+</div>
+
+`;
+
+}).join('')}
+
+
+<div class="row">
+
+<button
+class="primary"
+onclick="registrarRetorno('${id}')"
+>
+Registrar retorno
+</button>
+
+<button
+onclick="printMov('${id}')"
+>
+Imprimir relação
+</button>
+
+</div>
+
+`
+
+);
+
+}
+
+
+/* =========================================================
+   RETORNO
+========================================================= */
+
+function registrarRetorno(id){
+
+const m=db.mov.find(
+x=>x.id===id
+);
+
+if(!m)return;
+
+
+const pendentes=
+m.cases.filter(
+cid=>!m.returned.includes(cid)
+);
+
+
+if(!pendentes.length){
+
+alert('Todos os cases desta saída já foram retornados.');
+
+return;
+
+}
+
+
+openM(
+
+'Registrar retorno',
+
+`
+
+<p class="muted">
+
+Marque os cases que efetivamente retornaram.
+
+</p>
+
+
+<div class="check-list">
+
+${pendentes.map(cid=>{
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+return `
+
+<label class="check-item">
+
+<input
+type="checkbox"
+class="retorno-select"
+value="${cid}"
+>
+
+<div>
+
+<b>
+${esc(c.name)}
+</b>
+
+<div class="muted">
+${esc(c.id)}
+</div>
+
+</div>
+
+</label>
+
+`;
+
+}).join('')}
+
+</div>
+
+
+<button
+class="primary"
+onclick="confirmarRetorno('${id}')"
+>
+Confirmar retorno
+</button>
+
+`
+
+);
+
+}
+
+
+/* =========================================================
+   CONFIRMA RETORNO
+========================================================= */
+
+function confirmarRetorno(id){
+
+const m=db.mov.find(
+x=>x.id===id
+);
+
+if(!m)return;
+
+
+const retornados=[
+
+...document.querySelectorAll(
+'.retorno-select:checked'
+)
+
+].map(x=>x.value);
+
+
+if(!retornados.length){
+
+alert('Selecione pelo menos um case.');
+
+return;
+
+}
+
+
+retornados.forEach(cid=>{
+
+if(!m.returned.includes(cid)){
+
+m.returned.push(cid);
+
+}
+
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+
+if(c){
+
+c.status='Disponível';
+
+}
+
+});
+
+
+const total=m.cases.length;
+
+const voltou=m.returned.length;
+
+
+if(voltou>=total){
+
+m.status='Concluída';
+
+}else{
+
+m.status='Retorno parcial';
+
+}
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   IMPRESSÃO
+========================================================= */
+
+function printMov(id){
+
+const m=db.mov.find(
+x=>x.id===id
+);
+
+if(!m)return;
+
+
+let rows=m.cases.map(cid=>{
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+if(!c)return '';
+
+const voltou=
+m.returned.includes(cid);
+
+
+return `
+
+<tr>
+
+<td>${esc(c.name)}</td>
+
+<td>${esc(c.id)}</td>
+
+<td>
+${esc(c.items.replaceAll(';',' • '))}
+</td>
+
+<td>
+${voltou?'RETORNOU':'FORA'}
+</td>
+
+</tr>
+
+`;
+
+}).join('');
+
+
+const w=window.open(
+'',
+'_blank'
+);
+
+
+w.document.write(`
+
+<html>
+
+<head>
+
+<title>Star Vision - ${esc(m.name)}</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:30px;
+color:#111
+}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th,td{
+border:1px solid #999;
+padding:8px;
+text-align:left
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>STAR VISION</h1>
+
+<h2>
+${esc(m.type)} — ${esc(m.name)}
+</h2>
+
+<p>
+Responsável:
+${esc(m.resp||'—')}
+</p>
+
+<p>
+Saída:
+${esc(m.date||'—')}
+</p>
+
+<table>
+
+<tr>
+<th>Case</th>
+<th>ID</th>
+<th>Conteúdo</th>
+<th>Status</th>
+</tr>
+
+${rows}
+
+</table>
+
+<script>
+window.print();
+<\/script>
+
+</body>
+
+</html>
+
+`);
+
+w.document.close();
+
+}
+
+
+/* =========================================================
+   MANUTENÇÃO
+========================================================= */
+
+function novaMan(){
+
+openM(
+
+'Registrar manutenção',
+
+`
+
+<label>Case</label>
+
+<select id="manCase">
+
+${db.cases.map(c=>`
+
+<option
+value="${c.id}"
+${c.status!=='Disponível'?'disabled':''}
+>
+${esc(c.name)} — ${esc(c.status)}
+</option>
+
+`).join('')}
+
+</select>
+
+
+<label>Tipo</label>
+
+<select id="manTipo">
+
+<option>Interna</option>
+
+<option>Externa</option>
+
+</select>
+
+
+<label>Descrição</label>
+
+<textarea
+id="manDesc"
+placeholder="Descreva o problema ou serviço..."
+></textarea>
+
+
+<button
+class="primary"
+onclick="addMan2()"
+>
+Registrar
+</button>
+
+`
+
+);
+
+}
+
+
+/* =========================================================
+   ADICIONA MANUTENÇÃO
+========================================================= */
+
+function addMan2(){
+
+const cid=
+document.getElementById('manCase').value;
+
+
+const c=db.cases.find(
+x=>x.id===cid
+);
+
+
+if(!c){
+
+alert('Selecione um case.');
+
+return;
+
+}
+
+
+const man={
+
+id:'MAN-'+
+String(db.maint.length+1)
+.padStart(4,'0'),
+
+name:c.name,
+
+case:cid,
+
+type:
+document.getElementById('manTipo').value,
+
+desc:
+document.getElementById('manDesc').value,
+
+status:'Pendente',
+
+date:new Date()
+.toISOString()
+.slice(0,10)
+
+};
+
+
+db.maint.push(man);
+
+
+c.status=
+man.type==='Externa'
+?'Em manutenção externa'
+:'Em manutenção interna';
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   LISTA MANUTENÇÃO
+========================================================= */
+
+function renderMaint(){
+
+const lista=
+document.getElementById('manList');
+
+
+if(!db.maint.length){
+
+lista.innerHTML=
+
+`
+<div class="card empty muted">
+Nenhuma manutenção registrada.
+</div>
+`;
+
+return;
+
+}
+
+
+lista.innerHTML=
+
+db.maint.map(m=>`
+
+<div class="card">
+
+<div class="between">
+
+<div>
+
+<h3>
+${esc(m.name)}
+</h3>
+
+<div class="muted">
+${esc(m.id)} • ${esc(m.case)}
+</div>
+
+</div>
+
+<span class="badge ${
+m.status==='Concluída'
+?'ok'
+:'warn'
+}">
+
+${esc(m.status)}
+
+</span>
+
+</div>
+
+
+<p>
+
+<span class="badge">
+${esc(m.type)}
+</span>
+
+</p>
+
+
+<p>
+${esc(m.desc||'Sem descrição.')}
+</p>
+
+
+<p class="muted">
+Registro: ${esc(m.date||'—')}
+</p>
+
+
+${m.status!=='Concluída'?
+
+`<button
+class="primary"
+onclick="concluirMan('${m.id}')"
+>
+Concluir manutenção
+</button>`
+
+:''}
+
+</div>
+
+`).join('');
+
+}
+
+
+/* =========================================================
+   CONCLUI MANUTENÇÃO
+========================================================= */
+
+function concluirMan(id){
+
+const m=db.maint.find(
+x=>x.id===id
+);
+
+if(!m)return;
+
+
+m.status='Concluída';
+
+
+const c=db.cases.find(
+x=>x.id===m.case
+);
+
+
+if(c){
+
+c.status='Disponível';
+
+}
+
+
+save();
+
+}
+
+
+/* =========================================================
+   ESTOQUE
+========================================================= */
+
+function renderStock(){
+
+const lista=
+document.getElementById('stockList');
+
+
+lista.innerHTML=
+
+db.stock.map((s,i)=>`
+
+<div class="card">
+
+<div class="between">
+
+<h3>
+${esc(s.name)}
+</h3>
+
+<b class="${
+s.qty<=s.min?'bad':'ok'
+}">
+
+${s.qty<=s.min?'REPOR':'OK'}
+
+</b>
+
+</div>
+
+
+<p>
+
+<b>${s.qty}</b>
+${esc(s.unit)}
+
+•
+
+mínimo
+${s.min}
+
+</p>
+
+
+<button
+onclick="stock('${i}')"
+>
+Movimentar
+</button>
+
+</div>
+
+`).join('');
+
+
+}
+
+
+/* =========================================================
+   NOVO ITEM ESTOQUE
+========================================================= */
 
 function novoEstoque(){
 
-openM('Novo item',`
+openM(
+
+'Novo item',
+
+`
 
 <label>Item</label>
-<input id="a">
+
+<input id="stockNome">
+
 
 <label>Unidade</label>
-<input id="b">
 
-<label>Quantidade</label>
-<input id="c" type="number">
+<input
+id="stockUnit"
+placeholder="un, kg, L, rolo..."
+>
 
-<label>Mínimo</label>
-<input id="d" type="number">
 
-<button class="primary" onclick="addStock()">
+<label>Quantidade inicial</label>
+
+<input
+id="stockQty"
+type="number"
+min="0"
+value="0"
+>
+
+
+<label>Estoque mínimo</label>
+
+<input
+id="stockMin"
+type="number"
+min="0"
+value="0"
+>
+
+
+<button
+class="primary"
+onclick="addStock()"
+>
 Cadastrar
 </button>
 
-`)
+`
+
+);
+
 }
+
+
+/* =========================================================
+   ADICIONA ESTOQUE
+========================================================= */
 
 function addStock(){
 
+const nome=
+document.getElementById('stockNome')
+.value.trim();
+
+
+if(!nome){
+
+alert('Informe o nome do item.');
+
+return;
+
+}
+
+
 db.stock.push({
-name:document.getElementById('a').value,
-unit:document.getElementById('b').value,
-qty:+document.getElementById('c').value,
-min:+document.getElementById('d').value
+
+name:nome,
+
+unit:
+document.getElementById('stockUnit').value,
+
+qty:
+Number(
+document.getElementById('stockQty').value
+),
+
+min:
+Number(
+document.getElementById('stockMin').value
+)
+
 });
 
+
 closeM();
-save()
+
+save();
+
 }
+
+
+/* =========================================================
+   MOVIMENTAR ESTOQUE
+========================================================= */
 
 function stock(i){
 
 const s=db.stock[i];
 
-openM('Estoque — '+s.name,`
+
+openM(
+
+'Estoque — '+s.name,
+
+`
 
 <p>
-Saldo:
-<b>${s.qty} ${esc(s.unit)}</b>
+Saldo atual:
+<b>
+${s.qty} ${esc(s.unit)}
+</b>
 </p>
 
-<select id="a">
-<option value="1">Entrada</option>
-<option value="-1">Saída</option>
+
+<label>Operação</label>
+
+<select id="stockOp">
+
+<option value="1">
+Entrada
+</option>
+
+<option value="-1">
+Saída
+</option>
+
 </select>
 
-<input id="b" type="number" value="1" min="1">
 
-<button class="primary" onclick="moveStock(${i})">
+<label>Quantidade</label>
+
+<input
+id="stockAmount"
+type="number"
+min="1"
+value="1"
+>
+
+
+<button
+class="primary"
+onclick="moveStock(${i})"
+>
 Aplicar
 </button>
 
-`)
+`
+
+);
+
 }
+
+
+/* =========================================================
+   APLICA ESTOQUE
+========================================================= */
 
 function moveStock(i){
 
 const s=db.stock[i];
 
-s.qty=Math.max(
-0,
-s.qty+
-(
-+document.getElementById('a').value*
-+document.getElementById('b').value
-)
+const op=
+Number(
+document.getElementById('stockOp').value
 );
 
-closeM();
-save()
+const amount=
+Number(
+document.getElementById('stockAmount').value
+);
+
+
+if(amount<=0){
+
+alert('Informe uma quantidade válida.');
+
+return;
+
 }
 
+
+if(op===-1 && amount>s.qty){
+
+alert('A quantidade de saída é maior que o estoque disponível.');
+
+return;
+
+}
+
+
+s.qty+=op*amount;
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   QR / IDENTIFICAÇÃO
+   O QR continua contextual, não no menu.
+========================================================= */
+
+function caseQR(id){
+
+const c=db.cases.find(
+x=>x.id===id
+);
+
+if(!c)return;
+
+
+openM(
+
+'Identificação do case',
+
+`
+
+<div class="center">
+
+<h2>
+${esc(c.name)}
+</h2>
+
+<div
+style="
+background:white;
+color:#111;
+padding:25px;
+border-radius:10px;
+font:bold 24px monospace;
+display:inline-block
+"
+>
+
+${esc(c.id)}
+
+</div>
+
+<p class="muted">
+Identificador permanente do case.
+</p>
+
+<p>
+Status:
+<b>${esc(c.status)}</b>
+</p>
+
+</div>
+
+`
+
+);
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
 render();
+
 show('home');
+
 </script>
 
 </body>
