@@ -76,3 +76,102 @@ if (document.readyState === 'loading') {
 } else {
   svStartAutoSync();
 }
+
+/* =========================================================
+   STATUS DE PENDÊNCIAS NOS EVENTOS
+========================================================= */
+
+function svPendingMaintenanceForMovement(movementId) {
+  if (!window.db || !Array.isArray(db.maintenance)) return [];
+
+  return db.maintenance.filter(m =>
+    m.movementId === movementId &&
+    m.status !== 'Concluída'
+  );
+}
+
+function renderEvents() {
+  const target = document.getElementById('eventList');
+  if (!target) return;
+
+  if (!db.movements.length) {
+    target.innerHTML = `<div class="empty">
+      Nenhum evento ou empréstimo cadastrado.
+    </div>`;
+    return;
+  }
+
+  target.innerHTML = `
+    <div class="grid">
+      ${[...db.movements].reverse().map(m => {
+        const pending = m.status === 'Retornado'
+          ? svPendingMaintenanceForMovement(m.id)
+          : [];
+
+        const pendingBadge = m.status === 'Retornado'
+          ? (pending.length
+              ? `<span class="badge bad" style="font-weight:bold">
+                   Pendências ⚠️${pending.length > 1 ? ` ${pending.length}` : ''}
+                 </span>`
+              : `<span class="badge ok" style="font-weight:bold">
+                   Pendências OK
+                 </span>`)
+          : '';
+
+        return `
+          <div class="card">
+            <div class="between">
+              <div>
+                <h3>${esc(m.name)}</h3>
+                <div class="muted">
+                  ${esc(m.id)} • ${esc(m.type)}
+                </div>
+              </div>
+
+              <span class="status-pill ${
+                m.status === 'Retornado'
+                  ? 'status-return'
+                  : m.status === 'Cancelado'
+                    ? 'status-cancel'
+                    : 'status-out'
+              }">
+                ${esc(m.status)}
+              </span>
+            </div>
+
+            ${pendingBadge ? `<div style="margin-top:8px">${pendingBadge}</div>` : ''}
+
+            <p class="muted">
+              Responsável:
+              ${esc(m.responsible || '—')}
+              <br>
+              Saída:
+              ${formatDate(m.date)}
+              <br>
+              Retorno previsto:
+              ${formatDate(m.returnDate)}
+              <br>
+              Cases:
+              ${m.cases.length}
+            </p>
+
+            <div class="row">
+              <button onclick="openMovement('${m.id}')">
+                ${m.status === 'Retornado' ? 'Ver conferência' : 'Abrir / conferir'}
+              </button>
+
+              ${m.status !== 'Cancelado'
+                ? `<button class="danger" onclick="deleteMovement('${m.id}')">
+                     Excluir
+                   </button>`
+                : ''}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+/* Atualiza o indicador do evento imediatamente após qualquer render. */
+window.svPendingMaintenanceForMovement = svPendingMaintenanceForMovement;
