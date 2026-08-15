@@ -525,6 +525,7 @@ tr:last-child td{
   margin-top:4px;
 }
 
+/* NOVO: área dinâmica do retorno */
 .return-extra{
   margin-top:8px;
   padding:12px;
@@ -1380,21 +1381,6 @@ function normalizeDB(){
 
     c.items ||= parseOldItems(c.content||"");
 
-    /*
-      Proteção contra registros antigos
-      com descrição salva como objeto.
-    */
-
-    c.items=(c.items||[])
-      .map(item=>({
-
-        name:safeItemName(item?.name ?? item),
-        qty:Number(item?.qty||0),
-        unit:String(item?.unit||"un")
-
-      }))
-      .filter(item=>item.name);
-
     c.description =
       c.description!==false;
 
@@ -1476,32 +1462,6 @@ function normalizeDB(){
       c.items ||= [];
       c.divergences ||= [];
       c.returned ||= false;
-
-      /*
-        Proteção também para conteúdos antigos
-        já gravados dentro dos eventos.
-      */
-
-      c.items=(c.items||[])
-        .map(item=>({
-
-          name:safeItemName(item?.name ?? item),
-          qty:Number(item?.qty||0),
-          unit:String(item?.unit||"un"),
-          originalQty:Number(
-            item?.originalQty ??
-            item?.qty ??
-            0
-          ),
-
-          returnQty:item?.returnQty,
-          returnStatus:item?.returnStatus,
-          qtyMissing:Number(item?.qtyMissing||0),
-          damageDescription:item?.damageDescription||"",
-          note:item?.note||""
-
-        }))
-        .filter(item=>item.name);
 
       return c;
 
@@ -2119,7 +2079,7 @@ function renderCases(){
               ? c.items.map(i=>
                 `<span class="badge">
 
-                  ${esc(safeItemName(i.name))}
+                  ${esc(i.name)}
 
                   ${
                     i.qty>0
@@ -2244,7 +2204,7 @@ function addCaseItemRow(){
 
         <input
           class="item-name"
-          placeholder="Descrição do item">
+          placeholder="Item">
 
         <input
           class="item-qty"
@@ -2286,11 +2246,9 @@ function collectItemRows(containerId){
   .map(row=>({
 
     name:
-      safeItemName(
-        row.querySelector(
-          ".item-name"
-        )?.value
-      ),
+      row.querySelector(
+        ".item-name"
+      )?.value.trim(),
 
     qty:
       Number(
@@ -2492,8 +2450,8 @@ function addEditCaseItemRow(item=null){
 
         <input
           class="item-name"
-          value="${attr(safeItemName(item?.name))}"
-          placeholder="Descrição do item">
+          value="${attr(item?.name||"")}"
+          placeholder="Item">
 
         <input
           class="item-qty"
@@ -2503,8 +2461,7 @@ function addEditCaseItemRow(item=null){
 
         <input
           class="item-unit"
-          value="${attr(item?.unit||"un")}"
-          placeholder="Un.">
+          value="${attr(item?.unit||"un")}">
 
         <button
           class="danger small"
@@ -3348,7 +3305,7 @@ function toggleEventCase(
     const eventItems=
       c.items.map(i=>({
 
-        name:safeItemName(i.name),
+        name:i.name,
         qty:i.qty||0,
         unit:i.unit||"un",
         originalQty:i.qty||0
@@ -3441,8 +3398,7 @@ function openCaseEventDescription(
 
             <input
               class="event-item-name"
-              value="${attr(safeItemName(item.name))}"
-              placeholder="Descrição do item">
+              value="${attr(item.name)}">
 
             <input
               class="event-item-qty"
@@ -3452,8 +3408,7 @@ function openCaseEventDescription(
 
             <input
               class="event-item-unit"
-              value="${attr(item.unit||"un")}"
-              placeholder="Un.">
+              value="${attr(item.unit)}">
 
             <button
               class="danger small"
@@ -3519,7 +3474,7 @@ function addEventItemRow(){
 
         <input
           class="event-item-name"
-          placeholder="Descrição do item">
+          placeholder="Item">
 
         <input
           class="event-item-qty"
@@ -3529,8 +3484,7 @@ function addEventItemRow(){
 
         <input
           class="event-item-unit"
-          value="un"
-          placeholder="Un.">
+          value="un">
 
         <button
           class="danger small"
@@ -3577,11 +3531,9 @@ function saveEventCaseDescription(
   .map(row=>({
 
     name:
-      safeItemName(
-        row.querySelector(
-          ".event-item-name"
-        ).value
-      ),
+      row.querySelector(
+        ".event-item-name"
+      ).value.trim(),
 
     qty:
       Number(
@@ -3712,7 +3664,7 @@ function renderMovementCasesHTML(m){
                 <tr>
 
                   <td>
-                    ${esc(safeItemName(item.name))}
+                    ${esc(item.name)}
                   </td>
 
                   <td>
@@ -3807,6 +3759,7 @@ function renderMovementCasesHTML(m){
 
 /* =========================================================
    RETORNO
+   NOVA VERSÃO COM FALTA E DANO
 ========================================================= */
 
 function returnMovement(id){
@@ -3875,7 +3828,7 @@ function returnMovement(id){
                     style="margin-bottom:9px">
 
                     <b>
-                      ${esc(safeItemName(item.name))}
+                      ${esc(item.name)}
                     </b>
 
                     <div class="muted">
@@ -3970,6 +3923,10 @@ function returnMovement(id){
 
 }
 
+
+/* =========================================================
+   CAMPOS DINÂMICOS DE FALTA / DANO
+========================================================= */
 
 function renderReturnExtraFields(
   item,
@@ -4088,7 +4045,6 @@ function renderReturnExtraFields(
       value="${item.returnQty??item.qty}">
 
   `;
-
 
 }
 
@@ -4217,6 +4173,12 @@ function saveReturn(id){
 
   if(!m)return;
 
+
+  /*
+    PRIMEIRO:
+    grava exatamente o resultado da conferência.
+  */
+
   m.cases.forEach(ec=>{
 
     ec.items.forEach((item,index)=>{
@@ -4230,6 +4192,11 @@ function saveReturn(id){
 
       item.returnStatus=
         status.value;
+
+
+      /* ================================================
+         OK
+      ================================================ */
 
       if(item.returnStatus==="ok"){
 
@@ -4252,6 +4219,11 @@ function saveReturn(id){
         item.note="";
 
       }
+
+
+      /* ================================================
+         FALTA
+      ================================================ */
 
       if(item.returnStatus==="falta"){
 
@@ -4290,6 +4262,11 @@ function saveReturn(id){
 
       }
 
+
+      /* ================================================
+         DANO
+      ================================================ */
+
       if(item.returnStatus==="dano"){
 
         const qty=
@@ -4326,6 +4303,10 @@ function saveReturn(id){
   });
 
 
+  /*
+    VALIDAÇÕES ANTES DE CRIAR AS OCORRÊNCIAS
+  */
+
   for(const ec of m.cases){
 
     for(const item of ec.items){
@@ -4337,7 +4318,7 @@ function saveReturn(id){
 
         alert(
           "Informe a quantidade faltante para o item:\n\n"+
-          safeItemName(item.name)
+          item.name
         );
 
         return;
@@ -4353,7 +4334,7 @@ function saveReturn(id){
 
         alert(
           "Descreva o dano encontrado no item:\n\n"+
-          safeItemName(item.name)
+          item.name
         );
 
         return;
@@ -4364,6 +4345,10 @@ function saveReturn(id){
 
   }
 
+
+  /*
+    Depois criamos as ocorrências.
+  */
 
   m.cases.forEach(ec=>{
 
@@ -4436,7 +4421,7 @@ function createReturnMaintenance(
 
       m.caseId===eventCase.caseId &&
 
-      m.itemName===safeItemName(item.name) &&
+      m.itemName===item.name &&
 
       m.issueType===issueType &&
 
@@ -4461,6 +4446,10 @@ function createReturnMaintenance(
   let description="";
 
 
+  /* ================================================
+     FALTA
+  ================================================ */
+
   if(issueType==="Falta"){
 
     description=
@@ -4469,6 +4458,10 @@ function createReturnMaintenance(
 
   }
 
+
+  /* ================================================
+     DANO
+  ================================================ */
 
   if(issueType==="Dano"){
 
@@ -4516,7 +4509,7 @@ function createReturnMaintenance(
       movement.name,
 
     itemName:
-      safeItemName(item.name),
+      item.name,
 
     qtyOut:
       Number(item.qty||0),
@@ -4733,7 +4726,7 @@ function printMovement(id){
           </td>
 
           <td>
-            ${esc(safeItemName(item.name))}
+            ${esc(item.name)}
           </td>
 
           <td>
@@ -5031,7 +5024,7 @@ function renderMaintenance(){
 
               ? `<br>
                  Item:
-                 ${esc(safeItemName(m.itemName))}`
+                 ${esc(m.itemName)}`
 
               : ""
             }
@@ -5332,7 +5325,7 @@ function editMaintenance(index){
             m.itemName
               ? `<br>
                  Item:
-                 ${esc(safeItemName(m.itemName))}`
+                 ${esc(m.itemName)}`
               : ""
           }
 
@@ -5909,56 +5902,6 @@ document.getElementById(
 /* =========================================================
    UTILITÁRIOS
 ========================================================= */
-
-/*
-  NOVO:
-  Normaliza nomes de itens para impedir que
-  objetos antigos apareçam como [object Object].
-
-  Se receber uma string:
-    retorna a própria string.
-
-  Se receber um objeto:
-    tenta encontrar name, description ou value.
-
-  Se não encontrar texto válido:
-    retorna vazio.
-*/
-
-function safeItemName(value){
-
-  if(value===null || value===undefined){
-    return "";
-  }
-
-  if(typeof value==="string"){
-    return value.trim();
-  }
-
-  if(typeof value==="number"){
-    return String(value);
-  }
-
-  if(typeof value==="object"){
-
-    if(typeof value.name==="string"){
-      return value.name.trim();
-    }
-
-    if(typeof value.description==="string"){
-      return value.description.trim();
-    }
-
-    if(typeof value.value==="string"){
-      return value.value.trim();
-    }
-
-    return "";
-  }
-
-  return String(value);
-}
-
 
 function uid(prefix){
 
