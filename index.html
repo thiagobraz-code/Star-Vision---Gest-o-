@@ -40,10 +40,6 @@ button{
   cursor:pointer;
 }
 
-/* =========================================================
-   CABEÇALHO
-========================================================= */
-
 header{
   position:sticky;
   top:0;
@@ -153,10 +149,6 @@ button:hover{
   font-size:22px;
   line-height:1;
 }
-
-/* =========================================================
-   PRINCIPAL
-========================================================= */
 
 main{
   max-width:1150px;
@@ -533,6 +525,36 @@ tr:last-child td{
   margin-top:4px;
 }
 
+/* NOVO: área dinâmica do retorno */
+.return-extra{
+  margin-top:8px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#101014;
+}
+
+.return-extra-title{
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.return-result{
+  margin-top:5px;
+  padding:9px;
+  border-radius:8px;
+  background:#19191e;
+  font-size:13px;
+}
+
+.return-warning{
+  color:var(--warn);
+}
+
+.return-danger{
+  color:var(--bad);
+}
+
 @media(max-width:800px){
 
   .kpis{
@@ -653,17 +675,13 @@ tr:last-child td{
 
 <body>
 
-<!-- =======================================================
-     LOGIN
-======================================================= -->
-
 <div id="loginScreen" class="login">
 
   <div class="login-box">
 
     <div class="login-brand">
 
-      <svg class="logo-mark" viewBox="0 0 100 100" aria-label="Star Vision">
+      <svg class="logo-mark" viewBox="0 0 100 100">
 
         <rect x="3" y="3" width="94" height="94" rx="22"
               fill="#151519"
@@ -713,10 +731,6 @@ tr:last-child td{
 
 </div>
 
-
-<!-- =======================================================
-     SISTEMA
-======================================================= -->
 
 <div id="app" class="hidden">
 
@@ -1277,15 +1291,10 @@ if(!db){
         cases:(old.cases||[]).map(c=>({
 
           id:c.id,
-
           name:c.name,
-
           description:true,
-
           items:parseOldItems(c.items),
-
           status:c.status||"Disponível",
-
           maintenanceIds:[]
 
         })),
@@ -1293,21 +1302,15 @@ if(!db){
         equipment:(old.equipment||[]).map(e=>({
 
           name:e[0]||e.name,
-
           pat:e[1]||e.pat,
-
           caseId:e[2]||e.caseId,
-
           status:e[3]||e.status||"Disponível"
 
         })),
 
         maintenance:old.maint||[],
-
         movements:old.mov||[],
-
         stock:old.stock||[],
-
         users:defaultDB.users
 
       };
@@ -1335,13 +1338,9 @@ function parseOldItems(value){
   if(!value)return[];
 
   return String(value)
-
     .split(";")
-
     .map(x=>x.trim())
-
     .filter(Boolean)
-
     .map(x=>{
 
       const match=x.match(
@@ -1351,25 +1350,17 @@ function parseOldItems(value){
       if(match){
 
         return {
-
           name:match[1].trim(),
-
           qty:Number(match[2]),
-
           unit:"un"
-
         };
 
       }
 
       return {
-
         name:x,
-
         qty:0,
-
         unit:"un"
-
       };
 
     });
@@ -1380,15 +1371,10 @@ function parseOldItems(value){
 function normalizeDB(){
 
   db.cases ||= [];
-
   db.equipment ||= [];
-
   db.maintenance ||= db.maint||[];
-
   db.movements ||= db.mov||[];
-
   db.stock ||= [];
-
   db.users ||= defaultDB.users;
 
   db.cases.forEach(c=>{
@@ -1407,25 +1393,15 @@ function normalizeDB(){
   db.maintenance.forEach(m=>{
 
     m.id ||= uid("MT");
-
     m.name ||= "Case";
-
     m.case ||= m.caseId||"";
-
     m.caseId ||= m.case||"";
-
     m.type ||= "Interna";
-
     m.issueType ||= m.tipoOcorrencia||"Manutenção";
-
     m.desc ||= m.description||"";
-
     m.status ||= "Pendente";
-
     m.date ||= today();
-
     m.movementId ||= "";
-
     m.itemName ||= "";
 
     m.qtyOut =
@@ -1442,7 +1418,15 @@ function normalizeDB(){
         0
       );
 
+    m.qtyMissing =
+      Number(
+        m.qtyMissing ??
+        m.quantityMissing ??
+        0
+      );
+
     m.note ||= "";
+    m.damageDescription ||= "";
 
     m.alert =
       m.alert!==false;
@@ -1452,21 +1436,13 @@ function normalizeDB(){
   db.movements.forEach(m=>{
 
     m.id ||= uid("MOV");
-
     m.type ||= "Evento";
-
     m.name ||= "Sem nome";
-
     m.responsible ||= m.resp||"";
-
     m.date ||= "";
-
     m.returnDate ||= m.ret||"";
-
     m.cases ||= [];
-
     m.status ||= "Aberto";
-
     m.returned ||= false;
 
     m.cases=m.cases.map(c=>{
@@ -1474,25 +1450,17 @@ function normalizeDB(){
       if(typeof c==="string"){
 
         return {
-
           caseId:c,
-
           items:[],
-
           checked:false,
-
           returned:false,
-
           divergences:[]
-
         };
 
       }
 
       c.items ||= [];
-
       c.divergences ||= [];
-
       c.returned ||= false;
 
       return c;
@@ -1502,9 +1470,7 @@ function normalizeDB(){
   });
 
   db.users.forEach(u=>{
-
     u.active=u.active!==false;
-
   });
 
 }
@@ -1646,17 +1612,11 @@ function isAdmin(){
 ========================================================= */
 
 const navigation=[
-
   ["home","Início"],
-
   ["inventory","Inventário"],
-
   ["events","Eventos"],
-
   ["maintenance","Manutenção"],
-
   ["stock","Estoque"]
-
 ];
 
 
@@ -1806,11 +1766,8 @@ function render(){
     ).length;
 
   renderInventory();
-
   renderEvents();
-
   renderMaintenance();
-
   renderStock();
 
 }
@@ -1906,7 +1863,6 @@ function renderInventory(){
   `;
 
   renderEquipmentTable();
-
   renderCases();
 
 }
@@ -1958,11 +1914,8 @@ function renderEquipmentTable(){
           <tr>
 
             <th>Equipamento</th>
-
             <th>Patrimônio</th>
-
             <th>Case</th>
-
             <th>Status</th>
 
             ${isAdmin()?`<th></th>`:""}
@@ -2366,9 +2319,7 @@ function createCase(){
   });
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -2543,12 +2494,6 @@ function saveCaseEdit(id){
       "editCaseName"
     ).value.trim();
 
-  /*
-    Se houver manutenção pendente ou saída ativa,
-    não permitimos que uma edição manual devolva
-    o case para Disponível.
-  */
-
   const requestedStatus=
     document.getElementById(
       "editCaseStatus"
@@ -2569,9 +2514,7 @@ function saveCaseEdit(id){
   updateCaseStatus(c.id);
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -2614,9 +2557,7 @@ function deleteCase(id){
     );
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -2717,19 +2658,14 @@ function createEquipment(){
   db.equipment.push({
 
     name,
-
     pat,
-
     caseId,
-
     status:"Disponível"
 
   });
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -2890,9 +2826,7 @@ function saveEquipment(oldPat){
     ).value;
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -2910,9 +2844,7 @@ function deleteEquipment(pat){
     );
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -3033,19 +2965,14 @@ function createMovement(){
       ).value,
 
     cases:[],
-
     status:"Aberto",
-
     returned:false
 
   });
 
   closeModal();
-
   saveDB();
-
   render();
-
   openMovement(id);
 
 }
@@ -3379,11 +3306,8 @@ function toggleEventCase(
       c.items.map(i=>({
 
         name:i.name,
-
         qty:i.qty||0,
-
         unit:i.unit||"un",
-
         originalQty:i.qty||0
 
       }));
@@ -3401,10 +3325,6 @@ function toggleEventCase(
       divergences:[]
 
     });
-
-    /*
-      Ao sair, o case fica reservado.
-    */
 
     c.status="Reservado";
 
@@ -3724,9 +3644,7 @@ function renderMovementCasesHTML(m){
               <tr>
 
                 <th>Item</th>
-
                 <th>Qtd.</th>
-
                 <th>Un.</th>
 
                 ${
@@ -3773,6 +3691,11 @@ function renderMovementCasesHTML(m){
 
                           ? `<span class="bad">
                                ⚠️ FALTA
+                               ${
+                                 item.qtyMissing>0
+                                 ? `(${item.qtyMissing} ${esc(item.unit)})`
+                                 : ""
+                               }
                              </span>`
 
                           : item.returnStatus==="dano"
@@ -3784,6 +3707,17 @@ function renderMovementCasesHTML(m){
                             : `<span class="ok">
                                  ✓ OK
                                </span>`
+                        }
+
+                        ${
+                          item.damageDescription
+
+                          ? `<br>
+                             <span class="muted">
+                               ${esc(item.damageDescription)}
+                             </span>`
+
+                          : ""
                         }
 
                         ${
@@ -3825,6 +3759,7 @@ function renderMovementCasesHTML(m){
 
 /* =========================================================
    RETORNO
+   NOVA VERSÃO COM FALTA E DANO
 ========================================================= */
 
 function returnMovement(id){
@@ -3844,14 +3779,18 @@ function returnMovement(id){
 
       <p class="muted">
 
-        Confira cada item. Você pode registrar
-        quantidade encontrada, falta ou dano.
+        Confira cada item.
 
         <br><br>
 
         <b>
-          Falta ou dano gerarão automaticamente
-          uma ocorrência na Manutenção.
+          Em caso de falta, informe a quantidade que faltou.
+        </b>
+
+        <br>
+
+        <b>
+          Em caso de dano, descreva o dano encontrado.
         </b>
 
       </p>
@@ -3899,25 +3838,19 @@ function returnMovement(id){
                     </div>
 
                     <label>
-                      Quantidade retornada
-                    </label>
-
-                    <input
-                      class="return-qty"
-                      data-case="${ec.caseId}"
-                      data-index="${index}"
-                      type="number"
-                      min="0"
-                      value="${item.returnQty??item.qty}">
-
-                    <label>
                       Situação
                     </label>
 
                     <select
                       class="return-status"
                       data-case="${ec.caseId}"
-                      data-index="${index}">
+                      data-index="${index}"
+                      onchange="
+                        updateReturnFields(
+                          '${ec.caseId}',
+                          ${index}
+                        )
+                      ">
 
                       <option
                         value="ok"
@@ -3952,16 +3885,17 @@ function returnMovement(id){
 
                     </select>
 
-                    <label>
-                      Observação
-                    </label>
+                    <div
+                      id="return-extra-${ec.caseId}-${index}"
+                      class="return-extra">
 
-                    <input
-                      class="return-note"
-                      data-case="${ec.caseId}"
-                      data-index="${index}"
-                      value="${attr(item.note||"")}"
-                      placeholder="Opcional">
+                      ${renderReturnExtraFields(
+                        item,
+                        ec.caseId,
+                        index
+                      )}
+
+                    </div>
 
                   </div>
 
@@ -3991,6 +3925,242 @@ function returnMovement(id){
 
 
 /* =========================================================
+   CAMPOS DINÂMICOS DE FALTA / DANO
+========================================================= */
+
+function renderReturnExtraFields(
+  item,
+  caseId,
+  index
+){
+
+  const status=
+    item.returnStatus||"ok";
+
+  if(status==="falta"){
+
+    const missing=
+      Number(
+        item.qtyMissing ??
+        Math.max(
+          0,
+          Number(item.qty||0)-
+          Number(item.returnQty??item.qty)
+        )
+      );
+
+    const returned=
+      Math.max(
+        0,
+        Number(item.qty||0)-missing
+      );
+
+    return `
+
+      <div class="return-extra-title bad">
+        ⚠️ Informar quantidade faltante
+      </div>
+
+      <label>
+        Quantidade faltante
+      </label>
+
+      <input
+        class="return-missing"
+        data-case="${caseId}"
+        data-index="${index}"
+        type="number"
+        min="0"
+        max="${item.qty}"
+        value="${missing}"
+        oninput="
+          updateMissingReturn(
+            '${caseId}',
+            ${index}
+          )
+        ">
+
+      <div
+        id="return-result-${caseId}-${index}"
+        class="return-result">
+
+        Retorno calculado:
+        <b>
+          ${returned}
+          ${esc(item.unit)}
+        </b>
+
+      </div>
+
+    `;
+
+  }
+
+  if(status==="dano"){
+
+    return `
+
+      <div class="return-extra-title warn">
+        ⚠️ Descrever o dano
+      </div>
+
+      <label>
+        Quantidade retornada
+      </label>
+
+      <input
+        class="return-qty"
+        data-case="${caseId}"
+        data-index="${index}"
+        type="number"
+        min="0"
+        value="${item.returnQty??item.qty}">
+
+      <label>
+        Descrição do dano
+      </label>
+
+      <textarea
+        class="return-damage"
+        data-case="${caseId}"
+        data-index="${index}"
+        placeholder="Ex.: Antena quebrada, conector danificado, carcaça trincada...">${esc(item.damageDescription||"")}</textarea>
+
+    `;
+
+  }
+
+  return `
+
+    <label>
+      Quantidade retornada
+    </label>
+
+    <input
+      class="return-qty"
+      data-case="${caseId}"
+      data-index="${index}"
+      type="number"
+      min="0"
+      value="${item.returnQty??item.qty}">
+
+  `;
+
+}
+
+
+function updateReturnFields(
+  caseId,
+  index
+){
+
+  const select=
+    document.querySelector(
+      `.return-status[data-case="${caseId}"][data-index="${index}"]`
+    );
+
+  const extra=
+    document.getElementById(
+      `return-extra-${caseId}-${index}`
+    );
+
+  if(!select||!extra)return;
+
+  const m=
+    db.movements.find(
+      x=>x.cases.some(
+        ec=>ec.caseId===caseId
+      )
+    );
+
+  const ec=
+    m?.cases.find(
+      x=>x.caseId===caseId
+    );
+
+  const item=
+    ec?.items[index];
+
+  if(!item)return;
+
+  item.returnStatus=
+    select.value;
+
+  extra.innerHTML=
+    renderReturnExtraFields(
+      item,
+      caseId,
+      index
+    );
+
+}
+
+
+function updateMissingReturn(
+  caseId,
+  index
+){
+
+  const input=
+    document.querySelector(
+      `.return-missing[data-case="${caseId}"][data-index="${index}"]`
+    );
+
+  const result=
+    document.getElementById(
+      `return-result-${caseId}-${index}`
+    );
+
+  if(!input||!result)return;
+
+  const m=
+    db.movements.find(
+      x=>x.cases.some(
+        ec=>ec.caseId===caseId
+      )
+    );
+
+  const ec=
+    m?.cases.find(
+      x=>x.caseId===caseId
+    );
+
+  const item=
+    ec?.items[index];
+
+  if(!item)return;
+
+  let missing=
+    Number(input.value||0);
+
+  const out=
+    Number(item.qty||0);
+
+  if(missing<0)
+    missing=0;
+
+  if(missing>out)
+    missing=out;
+
+  input.value=missing;
+
+  const returned=
+    out-missing;
+
+  result.innerHTML=`
+
+    Retorno calculado:
+    <b>
+      ${returned}
+      ${esc(item.unit)}
+    </b>
+
+  `;
+
+}
+
+
+/* =========================================================
    RETORNO + CRIAÇÃO AUTOMÁTICA DE MANUTENÇÃO
 ========================================================= */
 
@@ -4003,37 +4173,128 @@ function saveReturn(id){
 
   if(!m)return;
 
+
   /*
-    Primeiro gravamos exatamente o que voltou.
+    PRIMEIRO:
+    grava exatamente o resultado da conferência.
   */
 
   m.cases.forEach(ec=>{
 
     ec.items.forEach((item,index)=>{
 
-      const qty=
-        document.querySelector(
-          `.return-qty[data-case="${ec.caseId}"][data-index="${index}"]`
-        );
-
       const status=
         document.querySelector(
           `.return-status[data-case="${ec.caseId}"][data-index="${index}"]`
         );
 
-      const note=
-        document.querySelector(
-          `.return-note[data-case="${ec.caseId}"][data-index="${index}"]`
-        );
-
-      item.returnQty=
-        Number(qty?.value||0);
+      if(!status)return;
 
       item.returnStatus=
-        status?.value||"ok";
+        status.value;
 
-      item.note=
-        note?.value||"";
+
+      /* ================================================
+         OK
+      ================================================ */
+
+      if(item.returnStatus==="ok"){
+
+        const qty=
+          document.querySelector(
+            `.return-qty[data-case="${ec.caseId}"][data-index="${index}"]`
+          );
+
+        item.returnQty=
+          Number(
+            qty?.value ??
+            item.qty ??
+            0
+          );
+
+        item.qtyMissing=0;
+
+        item.damageDescription="";
+
+        item.note="";
+
+      }
+
+
+      /* ================================================
+         FALTA
+      ================================================ */
+
+      if(item.returnStatus==="falta"){
+
+        const missingInput=
+          document.querySelector(
+            `.return-missing[data-case="${ec.caseId}"][data-index="${index}"]`
+          );
+
+        let missing=
+          Number(
+            missingInput?.value||0
+          );
+
+        const out=
+          Number(item.qty||0);
+
+        if(missing<0)
+          missing=0;
+
+        if(missing>out)
+          missing=out;
+
+        item.qtyMissing=
+          missing;
+
+        item.returnQty=
+          Math.max(
+            0,
+            out-missing
+          );
+
+        item.damageDescription="";
+
+        item.note=
+          `Faltante: ${missing} ${item.unit||"un"}`;
+
+      }
+
+
+      /* ================================================
+         DANO
+      ================================================ */
+
+      if(item.returnStatus==="dano"){
+
+        const qty=
+          document.querySelector(
+            `.return-qty[data-case="${ec.caseId}"][data-index="${index}"]`
+          );
+
+        const damage=
+          document.querySelector(
+            `.return-damage[data-case="${ec.caseId}"][data-index="${index}"]`
+          );
+
+        item.returnQty=
+          Number(
+            qty?.value ??
+            item.qty ??
+            0
+          );
+
+        item.damageDescription=
+          damage?.value.trim()||"";
+
+        item.qtyMissing=0;
+
+        item.note=
+          item.damageDescription;
+
+      }
 
     });
 
@@ -4043,13 +4304,50 @@ function saveReturn(id){
 
 
   /*
-    Depois criamos as ocorrências.
+    VALIDAÇÕES ANTES DE CRIAR AS OCORRÊNCIAS
+  */
 
-    IMPORTANTE:
-    A função verifica se já existe uma ocorrência
-    para o mesmo movimento + case + item + tipo.
-    Isso impede duplicação caso o retorno seja processado
-    novamente.
+  for(const ec of m.cases){
+
+    for(const item of ec.items){
+
+      if(
+        item.returnStatus==="falta" &&
+        Number(item.qtyMissing||0)<=0
+      ){
+
+        alert(
+          "Informe a quantidade faltante para o item:\n\n"+
+          item.name
+        );
+
+        return;
+
+      }
+
+      if(
+        item.returnStatus==="dano" &&
+        !String(
+          item.damageDescription||""
+        ).trim()
+      ){
+
+        alert(
+          "Descreva o dano encontrado no item:\n\n"+
+          item.name
+        );
+
+        return;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    Depois criamos as ocorrências.
   */
 
   m.cases.forEach(ec=>{
@@ -4082,11 +4380,6 @@ function saveReturn(id){
     new Date().toISOString();
 
 
-  /*
-    Agora o status dos cases é recalculado.
-    Se houver manutenção pendente, NÃO volta para disponível.
-  */
-
   m.cases.forEach(ec=>{
 
     updateCaseStatus(
@@ -4105,6 +4398,10 @@ function saveReturn(id){
 }
 
 
+/* =========================================================
+   MANUTENÇÃO AUTOMÁTICA DO RETORNO
+========================================================= */
+
 function createReturnMaintenance(
   movement,
   eventCase,
@@ -4115,6 +4412,7 @@ function createReturnMaintenance(
     item.returnStatus==="falta"
       ?"Falta"
       :"Dano";
+
 
   const alreadyExists=
     db.maintenance.some(m=>
@@ -4131,16 +4429,54 @@ function createReturnMaintenance(
 
     );
 
+
   if(alreadyExists){
 
     return;
 
   }
 
+
   const caseObj=
     db.cases.find(
       c=>c.id===eventCase.caseId
     );
+
+
+  let description="";
+
+
+  /* ================================================
+     FALTA
+  ================================================ */
+
+  if(issueType==="Falta"){
+
+    description=
+      `Falta identificada no retorno do evento "${movement.name}". `+
+      `Faltante: ${Number(item.qtyMissing||0)} ${item.unit||"un"}.`;
+
+  }
+
+
+  /* ================================================
+     DANO
+  ================================================ */
+
+  if(issueType==="Dano"){
+
+    description=
+      `Dano identificado no retorno do evento "${movement.name}".`;
+
+    if(item.damageDescription){
+
+      description+=
+        ` ${item.damageDescription}`;
+
+    }
+
+  }
+
 
   const maintenance={
 
@@ -4158,20 +4494,9 @@ function createReturnMaintenance(
 
     type:"Interna",
 
-    /*
-      issueType é a ocorrência que originou
-      a manutenção:
-      Falta ou Dano.
-    */
-
     issueType,
 
-    desc:
-      issueType==="Falta"
-
-      ? `Falta identificada no retorno do evento "${movement.name}".`
-
-      : `Dano identificado no retorno do evento "${movement.name}".`,
+    desc:description,
 
     status:"Pendente",
 
@@ -4192,16 +4517,24 @@ function createReturnMaintenance(
     qtyReturned:
       Number(item.returnQty||0),
 
+    qtyMissing:
+      Number(item.qtyMissing||0),
+
     note:
       item.note||"",
+
+    damageDescription:
+      item.damageDescription||"",
 
     alert:true
 
   };
 
+
   db.maintenance.push(
     maintenance
   );
+
 
   caseObj?.maintenanceIds?.push(
     maintenance.id
@@ -4264,13 +4597,6 @@ function updateCaseStatus(caseId){
       caseId
     );
 
-  /*
-    Prioridade:
-
-    1. Manutenção pendente
-    2. Saída aberta
-    3. Disponível
-  */
 
   if(pending.length){
 
@@ -4288,6 +4614,7 @@ function updateCaseStatus(caseId){
 
   }
 
+
   if(active){
 
     c.status="Reservado";
@@ -4295,6 +4622,7 @@ function updateCaseStatus(caseId){
     return;
 
   }
+
 
   c.status="Disponível";
 
@@ -4330,19 +4658,12 @@ function deleteMovement(id){
 
   });
 
+
   db.movements=
     db.movements.filter(
       x=>x.id!==id
     );
 
-  /*
-    Ocorrências de falta/dano ligadas ao evento
-    também deixam de fazer sentido se o evento
-    for apagado.
-
-    Portanto, removemos somente as ocorrências
-    ainda pendentes ligadas a este evento.
-  */
 
   db.maintenance=
     db.maintenance.filter(
@@ -4351,11 +4672,13 @@ function deleteMovement(id){
         mt.status==="Concluída"
     );
 
+
   db.cases.forEach(c=>{
 
     updateCaseStatus(c.id);
 
   });
+
 
   closeModal();
 
@@ -4429,7 +4752,7 @@ function printMovement(id){
 
               ? esc(
                   item.returnStatus==="falta"
-                    ?"FALTA"
+                    ?`FALTA — ${item.qtyMissing||0}`
                     :item.returnStatus==="dano"
                       ?"DANO"
                       :"OK"
@@ -4446,14 +4769,17 @@ function printMovement(id){
 
     }).join("");
 
+
   const title=
     m.type+" — "+m.name;
+
 
   const w=
     window.open(
       "",
       "_blank"
     );
+
 
   w.document.write(`
 
@@ -4512,9 +4838,11 @@ function printMovement(id){
         }
 
         @media print{
+
           body{
             padding:15px;
           }
+
         }
 
       </style>
@@ -4557,17 +4885,11 @@ function printMovement(id){
           <tr>
 
             <th>Case</th>
-
             <th>ID</th>
-
             <th>Item</th>
-
             <th>Qtd. saída</th>
-
             <th>Un.</th>
-
             <th>Qtd. retorno</th>
-
             <th>Status</th>
 
           </tr>
@@ -4631,7 +4953,7 @@ function renderMaintenance(){
 
       ${[...db.maintenance]
         .reverse()
-        .map((m,reverseIndex)=>{
+        .map(m=>{
 
           const realIndex=
             db.maintenance.indexOf(m);
@@ -4723,17 +5045,45 @@ function renderMaintenance(){
               ? `<br>
                  Saiu:
                  ${m.qtyOut}
+
                  • Retornou:
                  ${m.qtyReturned}`
 
               : ""
             }
 
+            ${
+              issueType==="Falta" &&
+              Number(m.qtyMissing||0)>0
+
+              ? `<br>
+                 Faltante:
+                 <b class="bad">
+                   ${m.qtyMissing}
+                 </b>`
+
+              : ""
+            }
+
           </p>
+
 
           <p>
             ${esc(m.desc||"")}
           </p>
+
+
+          ${
+            m.damageDescription
+
+            ? `<p class="muted">
+                 <b>Descrição do dano:</b><br>
+                 ${esc(m.damageDescription)}
+               </p>`
+
+            : ""
+          }
+
 
           ${
             m.note
@@ -4745,6 +5095,7 @@ function renderMaintenance(){
 
             : ""
           }
+
 
           ${
             m.status!=="Concluída"
@@ -4825,7 +5176,6 @@ function newMaintenance(){
       <select id="maintType">
 
         <option>Interna</option>
-
         <option>Externa</option>
 
       </select>
@@ -4835,9 +5185,7 @@ function newMaintenance(){
       <select id="maintIssueType">
 
         <option>Manutenção</option>
-
         <option>Falta</option>
-
         <option>Dano</option>
 
       </select>
@@ -4916,7 +5264,11 @@ function createMaintenance(){
 
     qtyReturned:0,
 
+    qtyMissing:0,
+
     note:"",
+
+    damageDescription:"",
 
     alert:false
 
@@ -4990,12 +5342,34 @@ function editMaintenance(index){
               ? `<br>
                  Quantidade saída:
                  ${m.qtyOut}
+
                  • Retornada:
                  ${m.qtyReturned}`
               : ""
           }
 
+          ${
+            m.qtyMissing
+              ? `<br>
+                 <span class="bad">
+                   Faltante:
+                   ${m.qtyMissing}
+                 </span>`
+              : ""
+          }
+
         </p>
+
+        ${
+          m.damageDescription
+
+          ? `<p>
+               <b>Descrição do dano:</b><br>
+               ${esc(m.damageDescription)}
+             </p>`
+
+          : ""
+        }
 
         ${
           m.note
@@ -5111,12 +5485,6 @@ function finishMaintenance(index){
   m.status="Concluída";
 
   m.finishedDate=today();
-
-  /*
-    O case só volta para disponível se:
-    - não houver outra manutenção pendente;
-    - não houver saída aberta.
-  */
 
   const caseId=
     m.caseId||m.case;
@@ -5309,9 +5677,7 @@ function createStock(){
   });
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -5398,9 +5764,7 @@ function applyStock(index){
     );
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -5486,9 +5850,7 @@ function saveStockEdit(index){
     );
 
   closeModal();
-
   saveDB();
-
   render();
 
 }
@@ -5562,13 +5924,9 @@ function esc(value){
       m=>({
 
         "&":"&amp;",
-
         "<":"&lt;",
-
         ">":"&gt;",
-
         '"':"&quot;",
-
         "'":"&#039;"
 
       }[m])
