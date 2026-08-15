@@ -103,7 +103,7 @@ function svPendingMaintenanceForMovement(movementId) {
   });
 
   // Proteção: se houve falta/dano registrado no retorno, o evento nunca
-  // pode aparecer como "Pendências OK" antes de existir uma manutenção
+  // pode aparecer como "SEM PENDÊNCIAS" antes de existir uma manutenção
   // concluída correspondente.
   const unresolvedReturnIssues = [];
 
@@ -159,10 +159,10 @@ function renderEvents() {
         const pendingBadge = m.status === 'Retornado'
           ? (pending.length
               ? `<span class="badge bad" style="font-weight:bold">
-                   Pendências ⚠️${pending.length > 1 ? ` ${pending.length}` : ''}
+                   EXISTEM PENDÊNCIAS
                  </span>`
               : `<span class="badge ok" style="font-weight:bold">
-                   Pendências OK
+                   SEM PENDÊNCIAS
                  </span>`)
           : '';
 
