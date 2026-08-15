@@ -87,17 +87,55 @@ function svPendingMaintenanceForMovement(movementId) {
   const movement = db.movements?.find(m => m.id === movementId);
   if (!movement) return [];
 
-  return db.maintenance.filter(m => {
-    if (m.status === 'Concluída') return false;
+  const pending = db.maintenance.filter(mt => {
+    if (mt.status === 'Concluída') return false;
 
-    // Regra principal: a manutenção foi criada pelo retorno deste evento.
-    if (m.movementId === movementId) return true;
+    // Vínculo oficial com a movimentação.
+    if (mt.movementId === movementId) return true;
 
-    // Compatibilidade com ocorrências antigas que não possuíam movementId.
-    if (m.movementName && m.movementName === movement.name) return true;
+    // Compatibilidade com registros antigos.
+    if (mt.movementName && mt.movementName === movement.name) return true;
 
-    return false;
+    // Último fallback: manutenção ligada a um case que pertence ao evento.
+    return movement.cases?.some(ec =>
+      ec.caseId && (mt.caseId === ec.caseId || mt.case === ec.caseId)
+    );
   });
+
+  // Proteção: se houve falta/dano registrado no retorno, o evento nunca
+  // pode aparecer como "Pendências OK" antes de existir uma manutenção
+  // concluída correspondente.
+  const unresolvedReturnIssues = [];
+
+  (movement.cases || []).forEach(ec => {
+    (ec.items || []).forEach(item => {
+      if (item.returnStatus === 'falta' || item.returnStatus === 'dano') {
+        const issueType = item.returnStatus === 'falta' ? 'Falta' : 'Dano';
+        const itemName = String(item.name || '').trim();
+
+        const relatedMaintenance = db.maintenance.some(mt =>
+          mt.status === 'Concluída' &&
+          (mt.movementId === movementId ||
+           mt.movementName === movement.name ||
+           mt.caseId === ec.caseId ||
+           mt.case === ec.caseId) &&
+          mt.issueType === issueType &&
+          String(mt.itemName || '').trim() === itemName
+        );
+
+        if (!relatedMaintenance) {
+          unresolvedReturnIssues.push({
+            movementId,
+            caseId: ec.caseId,
+            itemName,
+            issueType
+          });
+        }
+      }
+    });
+  });
+
+  return pending.concat(unresolvedReturnIssues);
 }
 
 function renderEvents() {
