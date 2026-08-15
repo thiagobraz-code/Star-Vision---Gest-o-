@@ -10,36 +10,26 @@ permissions:
 
 jobs:
   patch-app:
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch central database synchronization
+      - name: Patch index with central sync client
+        shell: bash
         run: |
-          python3 <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
           import re
 
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
 
-          new_save = r'''let saveQueue=Promise.resolve();
+          new_save = '''let saveQueue=Promise.resolve();
 
           function mergeDatabases(local, remote){
-
             const result={...remote};
-
-            const keys=[
-              "cases",
-              "equipment",
-              "maintenance",
-              "movements",
-              "stock",
-              "users"
-            ];
-
+            const keys=["cases","equipment","maintenance","movements","stock","users"];
             const keyFor=(key,item)=>{
               if(key==="cases") return "id:"+(item?.id||"");
               if(key==="equipment") return "pat:"+(item?.pat||item?.name||"");
@@ -48,128 +38,69 @@ jobs:
               if(key==="stock") return "name:"+(item?.name||"");
               return JSON.stringify(item);
             };
-
             keys.forEach(key=>{
               const remoteItems=Array.isArray(remote?.[key]) ? remote[key] : [];
               const localItems=Array.isArray(local?.[key]) ? local[key] : [];
               const map=new Map();
-
               remoteItems.forEach(item=>map.set(keyFor(key,item),item));
               localItems.forEach(item=>map.set(keyFor(key,item),item));
-
               result[key]=Array.from(map.values());
             });
-
             result._version=Number(remote?._version||0);
             result._updatedAt=remote?._updatedAt||null;
-
             return result;
           }
 
           function saveDB(){
-
-            localStorage.setItem(
-              "starVisionDB",
-              JSON.stringify(db)
-            );
-
+            localStorage.setItem("starVisionDB",JSON.stringify(db));
             saveQueue=saveQueue.then(async()=>{
-
               let attempts=0;
-
               while(attempts<2){
-
                 try{
-
-                  const payload=JSON.stringify(db);
-
                   const response=await fetch("/api/db",{
                     method:"PUT",
-                    headers:{
-                      "Content-Type":"application/json"
-                    },
-                    body:payload,
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify(db),
                     cache:"no-store",
                     keepalive:true
                   });
-
                   if(response.ok){
-
-                    const saved=await response.json();
-
-                    db=saved;
+                    db=await response.json();
                     normalizeDB();
-
-                    localStorage.setItem(
-                      "starVisionDB",
-                      JSON.stringify(db)
-                    );
-
+                    localStorage.setItem("starVisionDB",JSON.stringify(db));
                     return;
                   }
-
                   if(response.status===409){
-
                     const conflict=await response.json();
-                    const remote=conflict?.current;
-
-                    if(remote){
-
-                      db=mergeDatabases(db,remote);
+                    if(conflict?.current){
+                      db=mergeDatabases(db,conflict.current);
                       normalizeDB();
-
-                      localStorage.setItem(
-                        "starVisionDB",
-                        JSON.stringify(db)
-                      );
-
+                      localStorage.setItem("starVisionDB",JSON.stringify(db));
                       attempts++;
                       continue;
                     }
                   }
-
                   throw new Error("HTTP "+response.status);
-
                 }catch(e){
-
-                  console.warn(
-                    "Servidor indisponível; dados mantidos localmente.",
-                    e
-                  );
-
+                  console.warn("Servidor indisponível; dados mantidos localmente.",e);
                   return;
                 }
               }
             });
+          }'''
 
-          }
-'''
-
-          pattern = re.compile(
-              r'let saveQueue=Promise\.resolve\(\);\s*\n\s*function saveDB\(\)\{.*?\n\s*\}\s*\n\s*\n\s*async function loadServerDB\(\)',
-              re.S
-          )
-
-          replacement = new_save + '\n\n          async function loadServerDB(){'
-          text, count = pattern.subn(replacement, text, count=1)
-
+          pattern = re.compile(r'let saveQueue=Promise\\.resolve\\(\\);.*?async function loadServerDB\\(\\)', re.S)
+          text, count = pattern.subn(new_save + '\n\n          async function loadServerDB()', text, count=1)
           if count != 1:
-              raise SystemExit('Expected saveDB/loadServerDB block not found')
+              raise SystemExit('saveDB block not found')
 
           if '<script src="sync.js"></script>' not in text:
-              marker='</body>'
-              if marker not in text:
-                  raise SystemExit('Closing body tag not found')
-              text=text.replace(
-                  marker,
-                  '  <script src="sync.js"></script>\n'+marker,
-                  1
-              )
+              text=text.replace('</body>','  <script src="sync.js"></script>\n</body>',1)
 
-          path.write_text(text, encoding='utf-8')
+          path.write_text(text,encoding='utf-8')
           PY
 
-      - name: Commit patch
+      - name: Commit patched index
         run: |
           if git diff --quiet; then
             echo "No changes needed."
@@ -178,5 +109,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "fix: central sync client and conflict handling [skip ci]"
+          git commit -m "fix: enable live central database sync [skip ci]"
           git push
