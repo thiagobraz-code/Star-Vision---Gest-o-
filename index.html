@@ -111,8 +111,6 @@ header{
   padding:9px 14px;
 }
 
-/* MENU */
-
 nav{
   display:flex;
   align-items:center;
@@ -523,9 +521,17 @@ tr:last-child td{
   font-size:24px;
 }
 
-/* =========================================================
-   RESPONSIVO
-========================================================= */
+.maintenance-pending{
+  border-color:#753039;
+}
+
+.maintenance-alert{
+  display:inline-block;
+  color:var(--bad);
+  font-weight:bold;
+  font-size:12px;
+  margin-top:4px;
+}
 
 @media(max-width:800px){
 
@@ -543,10 +549,6 @@ tr:last-child td{
   .header-inner{
     padding:12px;
   }
-
-  /* PRIMEIRA LINHA:
-     LOGO ---------------- SAIR
-  */
 
   .topbar{
     width:100%;
@@ -581,8 +583,6 @@ tr:last-child td{
     font-size:14px;
   }
 
-  /* SEGUNDA LINHA */
-
   nav{
     margin-top:12px;
     display:flex;
@@ -592,11 +592,6 @@ tr:last-child td{
     overflow:visible;
     flex-wrap:nowrap;
   }
-
-  /*
-    No modo fechado:
-    aparece apenas o menu e o botão ativo.
-  */
 
   nav .nav-btn{
     display:none;
@@ -612,11 +607,6 @@ tr:last-child td{
     order:1;
     flex:none;
   }
-
-  /*
-    Quando abrir:
-    mostra todos os itens.
-  */
 
   nav.open{
     flex-wrap:wrap;
@@ -734,11 +724,7 @@ tr:last-child td{
 
   <div class="header-inner">
 
-    <!-- PRIMEIRA LINHA -->
-
     <div class="topbar">
-
-      <!-- LOGO -->
 
       <div class="brand">
 
@@ -775,13 +761,7 @@ tr:last-child td{
 
       </div>
 
-
-      <!-- SAIR -->
-
       <div class="account">
-
-        <!-- Mantido apenas para o sistema,
-             mas não aparece visualmente -->
 
         <span id="currentUser"
               class="user-badge"></span>
@@ -793,9 +773,6 @@ tr:last-child td{
       </div>
 
     </div>
-
-
-    <!-- SEGUNDA LINHA -->
 
     <nav id="nav">
 
@@ -814,10 +791,6 @@ tr:last-child td{
 
 <main>
 
-<!-- =======================================================
-     INÍCIO
-======================================================= -->
-
 <section id="home" class="view active">
 
   <div class="section-head">
@@ -833,7 +806,6 @@ tr:last-child td{
     </div>
 
   </div>
-
 
   <div class="kpis">
 
@@ -862,10 +834,6 @@ tr:last-child td{
 </section>
 
 
-<!-- =======================================================
-     INVENTÁRIO
-======================================================= -->
-
 <section id="inventory" class="view">
 
   <div class="section-head">
@@ -881,7 +849,6 @@ tr:last-child td{
     </div>
 
   </div>
-
 
   <div class="tabs">
 
@@ -899,7 +866,6 @@ tr:last-child td{
 
   </div>
 
-
   <div id="equipmentPanel"></div>
 
   <div id="casesPanel"
@@ -907,10 +873,6 @@ tr:last-child td{
 
 </section>
 
-
-<!-- =======================================================
-     EVENTOS
-======================================================= -->
 
 <section id="events" class="view">
 
@@ -933,15 +895,10 @@ tr:last-child td{
 
   </div>
 
-
   <div id="eventList"></div>
 
 </section>
 
-
-<!-- =======================================================
-     MANUTENÇÃO
-======================================================= -->
 
 <section id="maintenance" class="view">
 
@@ -964,15 +921,10 @@ tr:last-child td{
 
   </div>
 
-
   <div id="maintenanceList"></div>
 
 </section>
 
-
-<!-- =======================================================
-     ESTOQUE
-======================================================= -->
 
 <section id="stock" class="view">
 
@@ -995,7 +947,6 @@ tr:last-child td{
 
   </div>
 
-
   <div id="stockList"></div>
 
 </section>
@@ -1004,10 +955,6 @@ tr:last-child td{
 
 </div>
 
-
-<!-- =======================================================
-     MODAL
-======================================================= -->
 
 <div id="modal" class="modal">
 
@@ -1337,7 +1284,9 @@ if(!db){
 
           items:parseOldItems(c.items),
 
-          status:c.status||"Disponível"
+          status:c.status||"Disponível",
+
+          maintenanceIds:[]
 
         })),
 
@@ -1451,11 +1400,58 @@ function normalizeDB(){
 
     c.status ||= "Disponível";
 
+    c.maintenanceIds ||= [];
+
+  });
+
+  db.maintenance.forEach(m=>{
+
+    m.id ||= uid("MT");
+
+    m.name ||= "Case";
+
+    m.case ||= m.caseId||"";
+
+    m.caseId ||= m.case||"";
+
+    m.type ||= "Interna";
+
+    m.issueType ||= m.tipoOcorrencia||"Manutenção";
+
+    m.desc ||= m.description||"";
+
+    m.status ||= "Pendente";
+
+    m.date ||= today();
+
+    m.movementId ||= "";
+
+    m.itemName ||= "";
+
+    m.qtyOut =
+      Number(
+        m.qtyOut ??
+        m.quantityOut ??
+        0
+      );
+
+    m.qtyReturned =
+      Number(
+        m.qtyReturned ??
+        m.quantityReturned ??
+        0
+      );
+
+    m.note ||= "";
+
+    m.alert =
+      m.alert!==false;
+
   });
 
   db.movements.forEach(m=>{
 
-    m.id ||= "MOV-"+Date.now();
+    m.id ||= uid("MOV");
 
     m.type ||= "Evento";
 
@@ -1496,6 +1492,8 @@ function normalizeDB(){
       c.items ||= [];
 
       c.divergences ||= [];
+
+      c.returned ||= false;
 
       return c;
 
@@ -1724,11 +1722,6 @@ function show(view){
       );
 
     });
-
-  /*
-    No celular, depois de selecionar uma opção,
-    fecha o menu novamente.
-  */
 
   const nav=
     document.getElementById("nav");
@@ -2077,9 +2070,18 @@ function renderCases(){
 
     <div class="grid">
 
-      ${list.map(c=>`
+      ${list.map(c=>{
 
-        <div class="card">
+        const pending=
+          pendingMaintenanceForCase(c.id);
+
+        return `
+
+        <div class="card ${
+          pending.length
+            ?"maintenance-pending"
+            :""
+        }">
 
           <div class="between">
 
@@ -2104,6 +2106,17 @@ function renderCases(){
             </span>
 
           </div>
+
+          ${
+            pending.length
+
+            ? `<div class="maintenance-alert">
+                 ⚠️ ${pending.length}
+                 ocorrência(s) pendente(s)
+               </div>`
+
+            : ""
+          }
 
           <div style="margin:12px 0">
 
@@ -2146,7 +2159,7 @@ function renderCases(){
 
         </div>
 
-      `).join("")}
+      `}).join("")}
 
     </div>
 
@@ -2346,7 +2359,9 @@ function createCase(){
         "caseItems"
       ),
 
-    status:"Disponível"
+    status:"Disponível",
+
+    maintenanceIds:[]
 
   });
 
@@ -2528,7 +2543,13 @@ function saveCaseEdit(id){
       "editCaseName"
     ).value.trim();
 
-  c.status=
+  /*
+    Se houver manutenção pendente ou saída ativa,
+    não permitimos que uma edição manual devolva
+    o case para Disponível.
+  */
+
+  const requestedStatus=
     document.getElementById(
       "editCaseStatus"
     ).value;
@@ -2542,6 +2563,10 @@ function saveCaseEdit(id){
     collectItemRows(
       "editCaseItems"
     );
+
+  c.status=requestedStatus;
+
+  updateCaseStatus(c.id);
 
   closeModal();
 
@@ -3170,7 +3195,11 @@ function openMovement(id){
 
         </div>
 
-        <span class="status-pill status-out">
+        <span class="status-pill ${
+          m.status==="Retornado"
+            ?"status-return"
+            :"status-out"
+        }">
           ${esc(m.status)}
         </span>
 
@@ -3192,6 +3221,11 @@ function openMovement(id){
               const selected=
                 m.cases.some(
                   x=>x.caseId===c.id
+                );
+
+              const pending=
+                pendingMaintenanceForCase(
+                  c.id
                 );
 
               return `
@@ -3224,6 +3258,18 @@ function openMovement(id){
                     <span class="muted">
                       ${esc(c.id)}
                     </span>
+
+                    ${
+                      pending.length
+
+                      ? `<br>
+                         <span class="maintenance-alert">
+                           ⚠️ ${pending.length}
+                           manutenção(ões) pendente(s)
+                         </span>`
+
+                      : ""
+                    }
 
                   </span>
 
@@ -3355,6 +3401,10 @@ function toggleEventCase(
       divergences:[]
 
     });
+
+    /*
+      Ao sair, o case fica reservado.
+    */
 
     c.status="Reservado";
 
@@ -3609,6 +3659,11 @@ function renderMovementCasesHTML(m){
         x=>x.id===ec.caseId
       );
 
+    const pending=
+      pendingMaintenanceForCase(
+        ec.caseId
+      );
+
     return `
 
       <div class="event-case">
@@ -3627,6 +3682,17 @@ function renderMovementCasesHTML(m){
             <div class="muted">
               ${esc(ec.caseId)}
             </div>
+
+            ${
+              pending.length
+
+              ? `<div class="maintenance-alert">
+                   ⚠️ ${pending.length}
+                   ocorrência(s) pendente(s)
+                 </div>`
+
+              : ""
+            }
 
           </div>
 
@@ -3665,7 +3731,7 @@ function renderMovementCasesHTML(m){
 
                 ${
                   m.status==="Retornado"
-                  ? "<th>Conferência</th>"
+                  ? "<th>Retorno</th><th>Conferência</th>"
                   : ""
                 }
 
@@ -3694,27 +3760,46 @@ function renderMovementCasesHTML(m){
                   ${
                     m.status==="Retornado"
 
-                    ? `<td>
+                    ? `
+
+                      <td>
+                        ${item.returnQty??item.qty}
+                      </td>
+
+                      <td>
 
                         ${
                           item.returnStatus==="falta"
 
                           ? `<span class="bad">
-                               FALTA
+                               ⚠️ FALTA
                              </span>`
 
                           : item.returnStatus==="dano"
 
                             ? `<span class="warn">
-                                 DANO
+                                 ⚠️ DANO
                                </span>`
 
                             : `<span class="ok">
-                                 OK
+                                 ✓ OK
                                </span>`
                         }
 
-                       </td>`
+                        ${
+                          item.note
+
+                          ? `<br>
+                             <span class="muted">
+                               ${esc(item.note)}
+                             </span>`
+
+                          : ""
+                        }
+
+                      </td>
+
+                    `
 
                     : ""
                   }
@@ -3761,6 +3846,13 @@ function returnMovement(id){
 
         Confira cada item. Você pode registrar
         quantidade encontrada, falta ou dano.
+
+        <br><br>
+
+        <b>
+          Falta ou dano gerarão automaticamente
+          uma ocorrência na Manutenção.
+        </b>
 
       </p>
 
@@ -3816,7 +3908,7 @@ function returnMovement(id){
                       data-index="${index}"
                       type="number"
                       min="0"
-                      value="${item.qty}">
+                      value="${item.returnQty??item.qty}">
 
                     <label>
                       Situação
@@ -3845,7 +3937,7 @@ function returnMovement(id){
                           ?"selected"
                           :""
                         }>
-                        Falta
+                        ⚠️ Falta
                       </option>
 
                       <option
@@ -3855,7 +3947,7 @@ function returnMovement(id){
                           ?"selected"
                           :""
                         }>
-                        Dano
+                        ⚠️ Dano
                       </option>
 
                     </select>
@@ -3898,6 +3990,10 @@ function returnMovement(id){
 }
 
 
+/* =========================================================
+   RETORNO + CRIAÇÃO AUTOMÁTICA DE MANUTENÇÃO
+========================================================= */
+
 function saveReturn(id){
 
   const m=
@@ -3906,6 +4002,10 @@ function saveReturn(id){
     );
 
   if(!m)return;
+
+  /*
+    Primeiro gravamos exatamente o que voltou.
+  */
 
   m.cases.forEach(ec=>{
 
@@ -3941,12 +4041,51 @@ function saveReturn(id){
 
   });
 
+
+  /*
+    Depois criamos as ocorrências.
+
+    IMPORTANTE:
+    A função verifica se já existe uma ocorrência
+    para o mesmo movimento + case + item + tipo.
+    Isso impede duplicação caso o retorno seja processado
+    novamente.
+  */
+
+  m.cases.forEach(ec=>{
+
+    ec.items.forEach(item=>{
+
+      if(
+        item.returnStatus==="falta" ||
+        item.returnStatus==="dano"
+      ){
+
+        createReturnMaintenance(
+          m,
+          ec,
+          item
+        );
+
+      }
+
+    });
+
+  });
+
+
   m.status="Retornado";
 
   m.returned=true;
 
   m.returnedAt=
     new Date().toISOString();
+
+
+  /*
+    Agora o status dos cases é recalculado.
+    Se houver manutenção pendente, NÃO volta para disponível.
+  */
 
   m.cases.forEach(ec=>{
 
@@ -3956,11 +4095,152 @@ function saveReturn(id){
 
   });
 
+
   saveDB();
 
   closeModal();
 
   render();
+
+}
+
+
+function createReturnMaintenance(
+  movement,
+  eventCase,
+  item
+){
+
+  const issueType=
+    item.returnStatus==="falta"
+      ?"Falta"
+      :"Dano";
+
+  const alreadyExists=
+    db.maintenance.some(m=>
+
+      m.movementId===movement.id &&
+
+      m.caseId===eventCase.caseId &&
+
+      m.itemName===item.name &&
+
+      m.issueType===issueType &&
+
+      m.status!=="Concluída"
+
+    );
+
+  if(alreadyExists){
+
+    return;
+
+  }
+
+  const caseObj=
+    db.cases.find(
+      c=>c.id===eventCase.caseId
+    );
+
+  const maintenance={
+
+    id:uid("MT"),
+
+    name:
+      caseObj?.name||
+      eventCase.caseId,
+
+    case:
+      eventCase.caseId,
+
+    caseId:
+      eventCase.caseId,
+
+    type:"Interna",
+
+    /*
+      issueType é a ocorrência que originou
+      a manutenção:
+      Falta ou Dano.
+    */
+
+    issueType,
+
+    desc:
+      issueType==="Falta"
+
+      ? `Falta identificada no retorno do evento "${movement.name}".`
+
+      : `Dano identificado no retorno do evento "${movement.name}".`,
+
+    status:"Pendente",
+
+    date:today(),
+
+    movementId:
+      movement.id,
+
+    movementName:
+      movement.name,
+
+    itemName:
+      item.name,
+
+    qtyOut:
+      Number(item.qty||0),
+
+    qtyReturned:
+      Number(item.returnQty||0),
+
+    note:
+      item.note||"",
+
+    alert:true
+
+  };
+
+  db.maintenance.push(
+    maintenance
+  );
+
+  caseObj?.maintenanceIds?.push(
+    maintenance.id
+  );
+
+}
+
+
+/* =========================================================
+   STATUS DO CASE
+========================================================= */
+
+function pendingMaintenanceForCase(caseId){
+
+  return db.maintenance.filter(m=>
+
+    (
+      m.caseId===caseId ||
+      m.case===caseId
+    ) &&
+
+    m.status!=="Concluída"
+
+  );
+
+}
+
+
+function caseHasOpenMovement(caseId){
+
+  return db.movements.some(m=>
+
+    m.status==="Aberto" &&
+
+    m.cases.some(
+      ec=>ec.caseId===caseId
+    )
+
+  );
 
 }
 
@@ -3974,23 +4254,49 @@ function updateCaseStatus(caseId){
 
   if(!c)return;
 
-  const active=
-    db.movements.some(m=>
-      m.status==="Aberto" &&
-      m.cases.some(
-        ec=>ec.caseId===caseId
-      )
+  const pending=
+    pendingMaintenanceForCase(
+      caseId
     );
+
+  const active=
+    caseHasOpenMovement(
+      caseId
+    );
+
+  /*
+    Prioridade:
+
+    1. Manutenção pendente
+    2. Saída aberta
+    3. Disponível
+  */
+
+  if(pending.length){
+
+    const hasExternal=
+      pending.some(
+        m=>m.type==="Externa"
+      );
+
+    c.status=
+      hasExternal
+        ?"Em manutenção externa"
+        :"Em manutenção interna";
+
+    return;
+
+  }
 
   if(active){
 
     c.status="Reservado";
 
-  }else{
-
-    c.status="Disponível";
+    return;
 
   }
+
+  c.status="Disponível";
 
 }
 
@@ -4027,6 +4333,22 @@ function deleteMovement(id){
   db.movements=
     db.movements.filter(
       x=>x.id!==id
+    );
+
+  /*
+    Ocorrências de falta/dano ligadas ao evento
+    também deixam de fazer sentido se o evento
+    for apagado.
+
+    Portanto, removemos somente as ocorrências
+    ainda pendentes ligadas a este evento.
+  */
+
+  db.maintenance=
+    db.maintenance.filter(
+      mt=>
+        mt.movementId!==id ||
+        mt.status==="Concluída"
     );
 
   db.cases.forEach(c=>{
@@ -4309,9 +4631,27 @@ function renderMaintenance(){
 
       ${[...db.maintenance]
         .reverse()
-        .map(m=>`
+        .map((m,reverseIndex)=>{
 
-        <div class="card">
+          const realIndex=
+            db.maintenance.indexOf(m);
+
+          const issueType=
+            m.issueType||
+            "Manutenção";
+
+          const isProblem=
+            issueType==="Falta"||
+            issueType==="Dano";
+
+          return `
+
+        <div class="card ${
+          m.status!=="Concluída" &&
+          isProblem
+            ?"maintenance-pending"
+            :""
+        }">
 
           <div class="between">
 
@@ -4331,14 +4671,63 @@ function renderMaintenance(){
 
           </div>
 
+          ${
+            isProblem
+
+            ? `<div class="${
+                issueType==="Dano"
+                  ?"warn"
+                  :"bad"
+              }" style="font-weight:bold;margin:7px 0">
+
+                ⚠️ ${esc(issueType)}
+
+              </div>`
+
+            : ""
+          }
+
           <p class="muted">
 
-            Tipo:
-            ${esc(m.type)}
+            Tipo de tratamento:
+            <b>${esc(m.type||"Interna")}</b>
+
             <br>
 
             Case:
-            ${esc(m.case||"—")}
+            ${esc(m.case||m.caseId||"—")}
+
+            ${
+              m.itemName
+
+              ? `<br>
+                 Item:
+                 ${esc(m.itemName)}`
+
+              : ""
+            }
+
+            ${
+              m.movementName
+
+              ? `<br>
+                 Evento:
+                 ${esc(m.movementName)}`
+
+              : ""
+            }
+
+            ${
+              isProblem
+
+              ? `<br>
+                 Saiu:
+                 ${m.qtyOut}
+                 • Retornou:
+                 ${m.qtyReturned}`
+
+              : ""
+            }
 
           </p>
 
@@ -4347,24 +4736,60 @@ function renderMaintenance(){
           </p>
 
           ${
-            m.status!=="Concluída"
+            m.note
 
-            ? `<button
-                 class="success"
-                 onclick="
-                   finishMaintenance(
-                     ${db.maintenance.indexOf(m)}
-                   )
-                 ">
-                 Marcar concluída
-               </button>`
+            ? `<p class="muted">
+                 <b>Observação do retorno:</b><br>
+                 ${esc(m.note)}
+               </p>`
 
             : ""
           }
 
+          ${
+            m.status!=="Concluída"
+
+            ? `
+
+              <div class="row">
+
+                <button
+                  onclick="
+                    editMaintenance(
+                      ${realIndex}
+                    )
+                  ">
+                  Tratar ocorrência
+                </button>
+
+                <button
+                  class="success"
+                  onclick="
+                    finishMaintenance(
+                      ${realIndex}
+                    )
+                  ">
+                  Marcar concluída
+                </button>
+
+              </div>
+
+            `
+
+            : `
+
+              <div class="muted">
+                Concluída em
+                ${formatDate(m.finishedDate||m.date)}
+              </div>
+
+            `
+
+          }
+
         </div>
 
-      `).join("")}
+      `}).join("")}
 
     </div>
 
@@ -4395,13 +4820,25 @@ function newMaintenance(){
 
       </select>
 
-      <label>Tipo</label>
+      <label>Tipo de tratamento</label>
 
       <select id="maintType">
 
         <option>Interna</option>
 
         <option>Externa</option>
+
+      </select>
+
+      <label>Tipo da ocorrência</label>
+
+      <select id="maintIssueType">
+
+        <option>Manutenção</option>
+
+        <option>Falta</option>
+
+        <option>Dano</option>
 
       </select>
 
@@ -4426,15 +4863,19 @@ function newMaintenance(){
 
 function createMaintenance(){
 
+  const caseId=
+    document.getElementById(
+      "maintCase"
+    ).value;
+
   const c=
     db.cases.find(
-      x=>x.id===
-        document.getElementById(
-          "maintCase"
-        ).value
+      x=>x.id===caseId
     );
 
-  db.maintenance.push({
+  const maintenance={
+
+    id:uid("MT"),
 
     name:
       c?.name||
@@ -4444,9 +4885,18 @@ function createMaintenance(){
       c?.id||
       "",
 
+    caseId:
+      c?.id||
+      "",
+
     type:
       document.getElementById(
         "maintType"
+      ).value,
+
+    issueType:
+      document.getElementById(
+        "maintIssueType"
       ).value,
 
     desc:
@@ -4456,22 +4906,191 @@ function createMaintenance(){
 
     status:"Pendente",
 
-    date:today()
+    date:today(),
 
-  });
+    movementId:"",
+
+    itemName:"",
+
+    qtyOut:0,
+
+    qtyReturned:0,
+
+    note:"",
+
+    alert:false
+
+  };
+
+  db.maintenance.push(
+    maintenance
+  );
 
   if(c){
 
-    c.status=
-      document.getElementById(
-        "maintType"
-      ).value==="Externa"
-
-      ?"Em manutenção externa"
-
-      :"Em manutenção interna";
+    updateCaseStatus(c.id);
 
   }
+
+  closeModal();
+
+  saveDB();
+
+  render();
+
+}
+
+
+function editMaintenance(index){
+
+  const m=
+    db.maintenance[index];
+
+  if(!m)return;
+
+  openModal(
+
+    "Tratar ocorrência",
+
+    `
+
+      <div class="card">
+
+        <h3>
+          ${
+            m.issueType
+              ? "⚠️ "+esc(m.issueType)
+              : "Manutenção"
+          }
+        </h3>
+
+        <p class="muted">
+
+          Case:
+          ${esc(m.case||m.caseId||"—")}
+
+          ${
+            m.itemName
+              ? `<br>
+                 Item:
+                 ${esc(m.itemName)}`
+              : ""
+          }
+
+          ${
+            m.movementName
+              ? `<br>
+                 Evento:
+                 ${esc(m.movementName)}`
+              : ""
+          }
+
+          ${
+            m.qtyOut
+              ? `<br>
+                 Quantidade saída:
+                 ${m.qtyOut}
+                 • Retornada:
+                 ${m.qtyReturned}`
+              : ""
+          }
+
+        </p>
+
+        ${
+          m.note
+
+          ? `<p>
+               <b>Observação do retorno:</b><br>
+               ${esc(m.note)}
+             </p>`
+
+          : ""
+        }
+
+      </div>
+
+      <label>
+        Tipo de tratamento
+      </label>
+
+      <select id="editMaintType">
+
+        <option ${
+          m.type==="Interna"
+            ?"selected"
+            :""
+        }>
+          Interna
+        </option>
+
+        <option ${
+          m.type==="Externa"
+            ?"selected"
+            :""
+        }>
+          Externa
+        </option>
+
+      </select>
+
+      <label>
+        Descrição / providência
+      </label>
+
+      <textarea id="editMaintDesc">${esc(m.desc||"")}</textarea>
+
+      <div class="row">
+
+        <button
+          class="primary"
+          onclick="
+            saveMaintenanceEdit(
+              ${index}
+            )
+          ">
+          Salvar
+        </button>
+
+        <button
+          class="success"
+          onclick="
+            finishMaintenance(
+              ${index}
+            )
+          ">
+          Concluir ocorrência
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function saveMaintenanceEdit(index){
+
+  const m=
+    db.maintenance[index];
+
+  if(!m)return;
+
+  m.type=
+    document.getElementById(
+      "editMaintType"
+    ).value;
+
+  m.desc=
+    document.getElementById(
+      "editMaintDesc"
+    ).value;
+
+  updateCaseStatus(
+    m.caseId||m.case
+  );
 
   closeModal();
 
@@ -4491,15 +5110,22 @@ function finishMaintenance(index){
 
   m.status="Concluída";
 
-  if(m.case){
+  m.finishedDate=today();
 
-    const c=
-      db.cases.find(
-        x=>x.id===m.case
-      );
+  /*
+    O case só volta para disponível se:
+    - não houver outra manutenção pendente;
+    - não houver saída aberta.
+  */
 
-    if(c)
-      c.status="Disponível";
+  const caseId=
+    m.caseId||m.case;
+
+  if(caseId){
+
+    updateCaseStatus(
+      caseId
+    );
 
   }
 
@@ -4914,6 +5540,19 @@ document.getElementById(
 /* =========================================================
    UTILITÁRIOS
 ========================================================= */
+
+function uid(prefix){
+
+  return prefix+"-"+
+
+    Date.now().toString(36)+"-"+
+
+    Math.random()
+      .toString(36)
+      .substring(2,8);
+
+}
+
 
 function esc(value){
 
