@@ -16,171 +16,155 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch automatic server sync
+      - name: Patch central database synchronization
         run: |
           python3 <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
 
-          old_boot_save = '''normalizeDB();
-          saveDB();'''
-          new_boot_save = '''normalizeDB();'''
+          new_save = r'''let saveQueue=Promise.resolve();
 
-          if old_boot_save not in text:
-              raise SystemExit('Expected initial normalize/save block not found')
-          text = text.replace(old_boot_save, new_boot_save, 1)
+          function mergeDatabases(local, remote){
 
-          old_save = '''function saveDB(){
+            const result={...remote};
+
+            const keys=[
+              "cases",
+              "equipment",
+              "maintenance",
+              "movements",
+              "stock",
+              "users"
+            ];
+
+            const keyFor=(key,item)=>{
+              if(key==="cases") return "id:"+(item?.id||"");
+              if(key==="equipment") return "pat:"+(item?.pat||item?.name||"");
+              if(key==="maintenance"||key==="movements") return "id:"+(item?.id||"");
+              if(key==="users") return "user:"+(item?.user||item?.name||"");
+              if(key==="stock") return "name:"+(item?.name||"");
+              return JSON.stringify(item);
+            };
+
+            keys.forEach(key=>{
+              const remoteItems=Array.isArray(remote?.[key]) ? remote[key] : [];
+              const localItems=Array.isArray(local?.[key]) ? local[key] : [];
+              const map=new Map();
+
+              remoteItems.forEach(item=>map.set(keyFor(key,item),item));
+              localItems.forEach(item=>map.set(keyFor(key,item),item));
+
+              result[key]=Array.from(map.values());
+            });
+
+            result._version=Number(remote?._version||0);
+            result._updatedAt=remote?._updatedAt||null;
+
+            return result;
+          }
+
+          function saveDB(){
 
             localStorage.setItem(
               "starVisionDB",
               JSON.stringify(db)
             );
 
-          }'''
-
-          new_save = '''let saveQueue=Promise.resolve();
-
-          function saveDB(){
-
-            const payload=JSON.stringify(db);
-
-            localStorage.setItem(
-              "starVisionDB",
-              payload
-            );
-
             saveQueue=saveQueue.then(async()=>{
 
-              try{
+              let attempts=0;
 
-                await fetch("/api/db",{
-                  method:"PUT",
-                  headers:{
-                    "Content-Type":"application/json"
-                  },
-                  body:payload,
-                  cache:"no-store",
-                  keepalive:true
-                });
+              while(attempts<2){
 
-              }catch(e){
+                try{
 
-                console.warn("Servidor indisponível; dados mantidos localmente.",e);
+                  const payload=JSON.stringify(db);
 
+                  const response=await fetch("/api/db",{
+                    method:"PUT",
+                    headers:{
+                      "Content-Type":"application/json"
+                    },
+                    body:payload,
+                    cache:"no-store",
+                    keepalive:true
+                  });
+
+                  if(response.ok){
+
+                    const saved=await response.json();
+
+                    db=saved;
+                    normalizeDB();
+
+                    localStorage.setItem(
+                      "starVisionDB",
+                      JSON.stringify(db)
+                    );
+
+                    return;
+                  }
+
+                  if(response.status===409){
+
+                    const conflict=await response.json();
+                    const remote=conflict?.current;
+
+                    if(remote){
+
+                      db=mergeDatabases(db,remote);
+                      normalizeDB();
+
+                      localStorage.setItem(
+                        "starVisionDB",
+                        JSON.stringify(db)
+                      );
+
+                      attempts++;
+                      continue;
+                    }
+                  }
+
+                  throw new Error("HTTP "+response.status);
+
+                }catch(e){
+
+                  console.warn(
+                    "Servidor indisponível; dados mantidos localmente.",
+                    e
+                  );
+
+                  return;
+                }
               }
-
             });
 
           }
+'''
 
+          pattern = re.compile(
+              r'let saveQueue=Promise\.resolve\(\);\s*\n\s*function saveDB\(\)\{.*?\n\s*\}\s*\n\s*\n\s*async function loadServerDB\(\)',
+              re.S
+          )
 
-          async function loadServerDB(){
+          replacement = new_save + '\n\n          async function loadServerDB(){'
+          text, count = pattern.subn(replacement, text, count=1)
 
-            let localSnapshot=null;
+          if count != 1:
+              raise SystemExit('Expected saveDB/loadServerDB block not found')
 
-            try{
-
-              localSnapshot=JSON.parse(
-                localStorage.getItem("starVisionDB")||"null"
-              );
-
-            }catch(e){
-
-              localSnapshot=null;
-
-            }
-
-            try{
-
-              const response=await fetch("/api/db",{
-                method:"GET",
-                cache:"no-store"
-              });
-
-              if(!response.ok)
-                throw new Error("HTTP "+response.status);
-
-              const serverDB=await response.json();
-
-              const hasServerData=
-                Array.isArray(serverDB?.cases) && serverDB.cases.length>0 ||
-                Array.isArray(serverDB?.equipment) && serverDB.equipment.length>0 ||
-                Array.isArray(serverDB?.movements) && serverDB.movements.length>0 ||
-                Array.isArray(serverDB?.maintenance) && serverDB.maintenance.length>0 ||
-                Array.isArray(serverDB?.stock) && serverDB.stock.length>0;
-
-              if(hasServerData){
-
-                db=serverDB;
-                normalizeDB();
-
-                localStorage.setItem(
-                  "starVisionDB",
-                  JSON.stringify(db)
-                );
-
-              }else if(localSnapshot){
-
-                db=localSnapshot;
-                normalizeDB();
-                saveDB();
-
-              }else{
-
-                normalizeDB();
-                saveDB();
-
-              }
-
-            }catch(e){
-
-              if(localSnapshot){
-
-                db=localSnapshot;
-                normalizeDB();
-
-              }else{
-
-                normalizeDB();
-
-              }
-
-              console.warn("Não foi possível carregar o banco do servidor.",e);
-
-            }
-
-          }
-
-
-          async function boot(){
-
-            await loadServerDB();
-            restoreLogin();
-
-          }'''
-
-          if old_save not in text:
-              raise SystemExit('Expected saveDB function not found')
-          text = text.replace(old_save, new_save, 1)
-
-          old_init = '''/* =========================================================
-             INICIALIZAÇÃO
-          ========================================================= */
-
-          restoreLogin();'''
-
-          new_init = '''/* =========================================================
-             INICIALIZAÇÃO
-          ========================================================= */
-
-          boot();'''
-
-          if old_init not in text:
-              raise SystemExit('Expected initialization block not found')
-          text = text.replace(old_init, new_init, 1)
+          if '<script src="sync.js"></script>' not in text:
+              marker='</body>'
+              if marker not in text:
+                  raise SystemExit('Closing body tag not found')
+              text=text.replace(
+                  marker,
+                  '  <script src="sync.js"></script>\n'+marker,
+                  1
+              )
 
           path.write_text(text, encoding='utf-8')
           PY
@@ -194,5 +178,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "fix: sync Star Vision database automatically [skip ci]"
+          git commit -m "fix: central sync client and conflict handling [skip ci]"
           git push
