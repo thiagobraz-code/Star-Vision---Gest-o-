@@ -40,6 +40,10 @@ button{
   cursor:pointer;
 }
 
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
 header{
   position:sticky;
   top:0;
@@ -92,35 +96,35 @@ header{
 .account{
   display:flex;
   align-items:center;
-  gap:8px;
+  margin-left:auto;
 }
 
 .user-badge{
-  border:1px solid var(--line);
-  border-radius:999px;
-  padding:8px 12px;
-  color:#ddd;
-  font-size:13px;
+  display:none;
 }
 
-.menu-toggle{
-  display:none;
+.account button{
   border:1px solid var(--line);
   background:var(--panel2);
   color:white;
   border-radius:9px;
-  padding:9px 11px;
+  padding:9px 14px;
 }
+
+/* MENU */
 
 nav{
   display:flex;
+  align-items:center;
   gap:7px;
-  margin-top:13px;
+  margin-top:12px;
   overflow-x:auto;
   scrollbar-width:none;
 }
 
-nav::-webkit-scrollbar{display:none}
+nav::-webkit-scrollbar{
+  display:none;
+}
 
 .nav-btn{
   border:1px solid var(--line);
@@ -140,6 +144,21 @@ nav::-webkit-scrollbar{display:none}
 button:hover{
   filter:brightness(1.12);
 }
+
+.menu-toggle{
+  display:none;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:white;
+  border-radius:9px;
+  padding:9px 13px;
+  font-size:22px;
+  line-height:1;
+}
+
+/* =========================================================
+   PRINCIPAL
+========================================================= */
 
 main{
   max-width:1150px;
@@ -195,8 +214,6 @@ h3{margin:0 0 8px}
   border-radius:14px;
   padding:16px;
 }
-
-.card + .card{margin-top:0}
 
 .between{
   display:flex;
@@ -506,67 +523,111 @@ tr:last-child td{
   font-size:24px;
 }
 
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
 @media(max-width:800px){
+
   .kpis{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .topbar{
-    align-items:flex-start;
-  }
-
-  .account{
-    flex-direction:column;
-    align-items:flex-end;
-  }
-
-  .user-badge{
-    font-size:11px;
-  }
-
   .content-row{
-    grid-template-columns:1fr 80px 80px auto;
+    grid-template-columns:1.7fr .7fr .7fr auto;
   }
 }
 
 @media(max-width:600px){
+
   .header-inner{
     padding:12px;
   }
 
+  /* PRIMEIRA LINHA:
+     LOGO ---------------- SAIR
+  */
+
+  .topbar{
+    width:100%;
+    align-items:center;
+  }
+
+  .brand{
+    min-width:0;
+  }
+
   .logo-mark{
-    width:34px;
-    height:34px;
+    width:42px;
+    height:42px;
   }
 
   .logo-text{
     font-size:15px;
+    letter-spacing:3px;
   }
 
   .logo-sub{
     font-size:7px;
+    letter-spacing:2.2px;
+  }
+
+  .account{
+    margin-left:auto;
+  }
+
+  .account button{
+    padding:9px 14px;
+    font-size:14px;
+  }
+
+  /* SEGUNDA LINHA */
+
+  nav{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    overflow:visible;
+    flex-wrap:nowrap;
+  }
+
+  /*
+    No modo fechado:
+    aparece apenas o menu e o botão ativo.
+  */
+
+  nav .nav-btn{
+    display:none;
+  }
+
+  nav .nav-btn.active{
+    display:block;
+    order:2;
   }
 
   .menu-toggle{
     display:block;
+    order:1;
+    flex:none;
   }
 
-  nav{
-    display:none;
-    flex-wrap:wrap;
-    overflow:visible;
-  }
+  /*
+    Quando abrir:
+    mostra todos os itens.
+  */
 
   nav.open{
-    display:flex;
+    flex-wrap:wrap;
   }
 
-  nav .nav-btn{
-    flex:1 1 auto;
+  nav.open .nav-btn{
+    display:block;
   }
 
-  .account{
-    gap:5px;
+  nav.open .nav-btn.active{
+    display:block;
   }
 
   main{
@@ -602,95 +663,177 @@ tr:last-child td{
 
 <body>
 
-<!-- LOGIN -->
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
 <div id="loginScreen" class="login">
+
   <div class="login-box">
+
     <div class="login-brand">
 
       <svg class="logo-mark" viewBox="0 0 100 100" aria-label="Star Vision">
+
         <rect x="3" y="3" width="94" height="94" rx="22"
-              fill="#151519" stroke="#55555d" stroke-width="3"/>
-        <path d="M50 18 L60 42 L86 45 L66 62 L72 87 L50 73 L28 87 L34 62 L14 45 L40 42 Z"
-              fill="none" stroke="#f5f5f5" stroke-width="5"
+              fill="#151519"
+              stroke="#55555d"
+              stroke-width="3"/>
+
+        <path d="M50 18 L60 42 L86 45 L66 62 L72 87
+                 L50 73 L28 87 L34 62 L14 45 L40 42 Z"
+              fill="none"
+              stroke="#f5f5f5"
+              stroke-width="5"
               stroke-linejoin="round"/>
+
       </svg>
 
       <span class="logo-text">STAR VISION</span>
-      <span class="logo-sub">GESTÃO DE EQUIPAMENTOS</span>
+
+      <span class="logo-sub">
+        GESTÃO DE EQUIPAMENTOS
+      </span>
+
     </div>
 
     <label>Usuário</label>
-    <input id="loginUser" autocomplete="username">
+
+    <input id="loginUser"
+           autocomplete="username">
 
     <label>Senha</label>
-    <input id="loginPass" type="password" autocomplete="current-password"
+
+    <input id="loginPass"
+           type="password"
+           autocomplete="current-password"
            onkeydown="if(event.key==='Enter')login()">
 
-    <button class="primary" style="width:100%;margin-top:5px"
-            onclick="login()">Entrar</button>
+    <button class="primary"
+            style="width:100%;margin-top:5px"
+            onclick="login()">
+      Entrar
+    </button>
 
-    <p id="loginError" class="bad" style="text-align:center"></p>
+    <p id="loginError"
+       class="bad"
+       style="text-align:center"></p>
+
   </div>
+
 </div>
 
 
-<!-- SISTEMA -->
+<!-- =======================================================
+     SISTEMA
+======================================================= -->
+
 <div id="app" class="hidden">
 
 <header>
+
   <div class="header-inner">
 
+    <!-- PRIMEIRA LINHA -->
+
     <div class="topbar">
+
+      <!-- LOGO -->
 
       <div class="brand">
 
         <svg class="logo-mark" viewBox="0 0 100 100">
-          <rect x="3" y="3" width="94" height="94" rx="22"
-                fill="#151519" stroke="#55555d" stroke-width="3"/>
-          <path d="M50 18 L60 42 L86 45 L66 62 L72 87 L50 73 L28 87 L34 62 L14 45 L40 42 Z"
-                fill="none" stroke="#f5f5f5" stroke-width="5"
+
+          <rect x="3" y="3"
+                width="94"
+                height="94"
+                rx="22"
+                fill="#151519"
+                stroke="#55555d"
+                stroke-width="3"/>
+
+          <path d="M50 18 L60 42 L86 45 L66 62 L72 87
+                   L50 73 L28 87 L34 62 L14 45 L40 42 Z"
+                fill="none"
+                stroke="#f5f5f5"
+                stroke-width="5"
                 stroke-linejoin="round"/>
+
         </svg>
 
         <div>
-          <div class="logo-text">STAR VISION</div>
-          <span class="logo-sub">GESTÃO DE EQUIPAMENTOS</span>
+
+          <div class="logo-text">
+            STAR VISION
+          </div>
+
+          <span class="logo-sub">
+            GESTÃO DE EQUIPAMENTOS
+          </span>
+
         </div>
+
       </div>
 
-      <!-- BOTÃO DO MENU -->
+
+      <!-- SAIR -->
+
+      <div class="account">
+
+        <!-- Mantido apenas para o sistema,
+             mas não aparece visualmente -->
+
+        <span id="currentUser"
+              class="user-badge"></span>
+
+        <button onclick="logout()">
+          Sair
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- SEGUNDA LINHA -->
+
+    <nav id="nav">
+
       <button class="menu-toggle"
               onclick="toggleMenu()"
               aria-label="Abrir menu">
         ☰
       </button>
 
-      <div class="account">
-        <span id="currentUser" class="user-badge"></span>
-        <button onclick="logout()">Sair</button>
-      </div>
-
-    </div>
-
-    <nav id="nav"></nav>
+    </nav>
 
   </div>
+
 </header>
 
 
 <main>
 
-<!-- INÍCIO -->
+<!-- =======================================================
+     INÍCIO
+======================================================= -->
+
 <section id="home" class="view active">
 
   <div class="section-head">
+
     <div>
+
       <h1>Painel</h1>
+
       <div class="muted">
         Controle interno de equipamentos, cases e movimentações
       </div>
+
     </div>
+
   </div>
+
 
   <div class="kpis">
 
@@ -719,118 +862,176 @@ tr:last-child td{
 </section>
 
 
-<!-- INVENTÁRIO -->
+<!-- =======================================================
+     INVENTÁRIO
+======================================================= -->
+
 <section id="inventory" class="view">
 
   <div class="section-head">
+
     <div>
+
       <h1>Inventário</h1>
+
       <div class="muted">
         Patrimônios e cadastro dos cases da Star Vision.
       </div>
+
     </div>
+
   </div>
 
+
   <div class="tabs">
-    <button id="tabEquipment" class="tab active"
+
+    <button id="tabEquipment"
+            class="tab active"
             onclick="inventoryTab('equipment')">
       Patrimônios
     </button>
 
-    <button id="tabCases" class="tab"
+    <button id="tabCases"
+            class="tab"
             onclick="inventoryTab('cases')">
       Cases
     </button>
+
   </div>
 
+
   <div id="equipmentPanel"></div>
-  <div id="casesPanel" class="hidden"></div>
+
+  <div id="casesPanel"
+       class="hidden"></div>
 
 </section>
 
 
-<!-- EVENTOS -->
+<!-- =======================================================
+     EVENTOS
+======================================================= -->
+
 <section id="events" class="view">
 
   <div class="section-head">
+
     <div>
+
       <h1>Eventos / Empréstimos</h1>
+
       <div class="muted">
         Saída, conferência e retorno dos equipamentos.
       </div>
+
     </div>
 
-    <button class="primary" onclick="newMovement()">
+    <button class="primary"
+            onclick="newMovement()">
       + Nova saída
     </button>
+
   </div>
+
 
   <div id="eventList"></div>
 
 </section>
 
 
-<!-- MANUTENÇÃO -->
+<!-- =======================================================
+     MANUTENÇÃO
+======================================================= -->
+
 <section id="maintenance" class="view">
 
   <div class="section-head">
+
     <div>
+
       <h1>Manutenção</h1>
+
       <div class="muted">
         Controle de manutenção interna e externa.
       </div>
+
     </div>
 
-    <button class="primary" onclick="newMaintenance()">
+    <button class="primary"
+            onclick="newMaintenance()">
       + Registrar
     </button>
+
   </div>
+
 
   <div id="maintenanceList"></div>
 
 </section>
 
 
-<!-- ESTOQUE -->
+<!-- =======================================================
+     ESTOQUE
+======================================================= -->
+
 <section id="stock" class="view">
 
   <div class="section-head">
+
     <div>
+
       <h1>Estoque</h1>
+
       <div class="muted">
         Peças, materiais e consumíveis.
       </div>
+
     </div>
 
-    <button class="primary" onclick="newStock()">
+    <button class="primary"
+            onclick="newStock()">
       + Novo item
     </button>
+
   </div>
+
 
   <div id="stockList"></div>
 
 </section>
 
 </main>
+
 </div>
 
 
-<!-- MODAL -->
+<!-- =======================================================
+     MODAL
+======================================================= -->
+
 <div id="modal" class="modal">
+
   <div class="modal-box">
 
     <div class="modal-head">
+
       <h2 id="modalTitle"></h2>
-      <button onclick="closeModal()">Fechar</button>
+
+      <button onclick="closeModal()">
+        Fechar
+      </button>
+
     </div>
 
     <div id="modalBody"></div>
 
   </div>
+
 </div>
 
 
 <script>
+
 /* =========================================================
    BANCO LOCAL
 ========================================================= */
@@ -908,6 +1109,7 @@ const initialCases = [
 ];
 
 for(let i=1;i<=8;i++){
+
   initialCases.push({
     id:"SV-C"+String(7+i).padStart(3,"0"),
     name:"Case "+String(i).padStart(2,"0")+" - Beam",
@@ -919,9 +1121,11 @@ for(let i=1;i<=8;i++){
     ],
     status:"Disponível"
   });
+
 }
 
 initialCases.push(
+
   {
     id:"SV-C016",
     name:"Case 01 - Cabos Painel",
@@ -933,6 +1137,7 @@ initialCases.push(
     ],
     status:"Disponível"
   },
+
   {
     id:"SV-C017",
     name:"Case 02 - Cabos Painel",
@@ -944,6 +1149,7 @@ initialCases.push(
     ],
     status:"Disponível"
   },
+
   {
     id:"SV-C018",
     name:"Case 01 - Grand MA",
@@ -953,6 +1159,7 @@ initialCases.push(
     ],
     status:"Disponível"
   },
+
   {
     id:"SV-C019",
     name:"Case 02 - Grand MA",
@@ -962,43 +1169,121 @@ initialCases.push(
     ],
     status:"Disponível"
   }
+
 );
 
 
 const initialEquipment = [
-  {name:"01V96",pat:"PAT-0001",caseId:"SV-C005",status:"Disponível"},
-  {name:"ADA Behringer 01",pat:"PAT-0002",caseId:"SV-C005",status:"Disponível"},
-  {name:"ADA Behringer 02",pat:"PAT-0003",caseId:"SV-C005",status:"Disponível"},
-  {name:"01V96i",pat:"PAT-0004",caseId:"SV-C006",status:"Disponível"},
-  {name:"Midas M32 Full",pat:"PAT-0005",caseId:"SV-C007",status:"Disponível"}
+
+  {
+    name:"01V96",
+    pat:"PAT-0001",
+    caseId:"SV-C005",
+    status:"Disponível"
+  },
+
+  {
+    name:"ADA Behringer 01",
+    pat:"PAT-0002",
+    caseId:"SV-C005",
+    status:"Disponível"
+  },
+
+  {
+    name:"ADA Behringer 02",
+    pat:"PAT-0003",
+    caseId:"SV-C005",
+    status:"Disponível"
+  },
+
+  {
+    name:"01V96i",
+    pat:"PAT-0004",
+    caseId:"SV-C006",
+    status:"Disponível"
+  },
+
+  {
+    name:"Midas M32 Full",
+    pat:"PAT-0005",
+    caseId:"SV-C007",
+    status:"Disponível"
+  }
+
 ];
 
 for(let i=1;i<=16;i++){
+
   initialEquipment.push({
+
     name:"Beam "+String(i).padStart(2,"0"),
+
     pat:"PAT-"+String(i+5).padStart(4,"0"),
+
     caseId:"SV-C008",
+
     status:"Disponível"
+
   });
+
 }
 
 initialEquipment.push(
-  {name:"Grand MA 01",pat:"PAT-0022",caseId:"SV-C018",status:"Disponível"},
-  {name:"Grand MA 02",pat:"PAT-0023",caseId:"SV-C019",status:"Disponível"}
+
+  {
+    name:"Grand MA 01",
+    pat:"PAT-0022",
+    caseId:"SV-C018",
+    status:"Disponível"
+  },
+
+  {
+    name:"Grand MA 02",
+    pat:"PAT-0023",
+    caseId:"SV-C019",
+    status:"Disponível"
+  }
+
 );
 
 
 const defaultDB = {
+
   cases:initialCases,
+
   equipment:initialEquipment,
+
   maintenance:[],
+
   movements:[],
+
   stock:[
-    {name:"Lâmpada AR-111",unit:"un",qty:10,min:2},
-    {name:"Fita isolante",unit:"rolo",qty:20,min:10},
-    {name:"Líquido de fumaça",unit:"L",qty:0,min:5},
-    {name:"Papel picado",unit:"kg",qty:0,min:5}
+    {
+      name:"Lâmpada AR-111",
+      unit:"un",
+      qty:10,
+      min:2
+    },
+    {
+      name:"Fita isolante",
+      unit:"rolo",
+      qty:20,
+      min:10
+    },
+    {
+      name:"Líquido de fumaça",
+      unit:"L",
+      qty:0,
+      min:5
+    },
+    {
+      name:"Papel picado",
+      unit:"kg",
+      qty:0,
+      min:5
+    }
   ],
+
   users:[
     {
       user:"admin",
@@ -1008,6 +1293,7 @@ const defaultDB = {
       active:true
     }
   ]
+
 };
 
 
@@ -1018,41 +1304,77 @@ const defaultDB = {
 let db;
 
 try{
-  db=JSON.parse(localStorage.getItem("starVisionDB")||"null");
+
+  db=JSON.parse(
+    localStorage.getItem("starVisionDB")||"null"
+  );
+
 }catch(e){
+
   db=null;
+
 }
 
 if(!db){
+
   try{
-    const old=JSON.parse(localStorage.getItem("svdb")||"null");
+
+    const old=JSON.parse(
+      localStorage.getItem("svdb")||"null"
+    );
 
     if(old){
+
       db={
+
         cases:(old.cases||[]).map(c=>({
+
           id:c.id,
+
           name:c.name,
+
           description:true,
+
           items:parseOldItems(c.items),
+
           status:c.status||"Disponível"
+
         })),
+
         equipment:(old.equipment||[]).map(e=>({
+
           name:e[0]||e.name,
+
           pat:e[1]||e.pat,
+
           caseId:e[2]||e.caseId,
+
           status:e[3]||e.status||"Disponível"
+
         })),
+
         maintenance:old.maint||[],
+
         movements:old.mov||[],
+
         stock:old.stock||[],
+
         users:defaultDB.users
+
       };
+
     }else{
+
       db=structuredClone(defaultDB);
+
     }
+
   }catch(e){
+
     db=structuredClone(defaultDB);
+
   }
+
 }
 
 normalizeDB();
@@ -1060,78 +1382,133 @@ saveDB();
 
 
 function parseOldItems(value){
+
   if(!value)return[];
 
   return String(value)
+
     .split(";")
+
     .map(x=>x.trim())
+
     .filter(Boolean)
+
     .map(x=>{
-      const match=x.match(/^(.+?)\s*[×x]\s*(\d+)$/i);
+
+      const match=x.match(
+        /^(.+?)\s*[×x]\s*(\d+)$/i
+      );
 
       if(match){
+
         return {
+
           name:match[1].trim(),
+
           qty:Number(match[2]),
+
           unit:"un"
+
         };
+
       }
 
       return {
+
         name:x,
+
         qty:0,
+
         unit:"un"
+
       };
+
     });
+
 }
 
 
 function normalizeDB(){
 
   db.cases ||= [];
+
   db.equipment ||= [];
+
   db.maintenance ||= db.maint||[];
+
   db.movements ||= db.mov||[];
+
   db.stock ||= [];
+
   db.users ||= defaultDB.users;
 
   db.cases.forEach(c=>{
+
     c.items ||= parseOldItems(c.content||"");
-    c.description = c.description!==false;
+
+    c.description =
+      c.description!==false;
+
     c.status ||= "Disponível";
+
   });
 
   db.movements.forEach(m=>{
+
     m.id ||= "MOV-"+Date.now();
+
     m.type ||= "Evento";
+
     m.name ||= "Sem nome";
+
     m.responsible ||= m.resp||"";
+
     m.date ||= "";
+
     m.returnDate ||= m.ret||"";
+
     m.cases ||= [];
+
     m.status ||= "Aberto";
+
     m.returned ||= false;
 
     m.cases=m.cases.map(c=>{
+
       if(typeof c==="string"){
+
         return {
+
           caseId:c,
+
           items:[],
+
           checked:false,
+
           returned:false,
+
           divergences:[]
+
         };
+
       }
 
       c.items ||= [];
+
       c.divergences ||= [];
+
       return c;
+
     });
+
   });
 
   db.users.forEach(u=>{
+
     u.active=u.active!==false;
+
   });
+
 }
 
 
@@ -1141,19 +1518,31 @@ function normalizeDB(){
 
 let currentUser=null;
 
+
 function login(){
 
-  const user=document.getElementById("loginUser").value.trim();
-  const pass=document.getElementById("loginPass").value;
+  const user=
+    document.getElementById("loginUser")
+      .value.trim();
+
+  const pass=
+    document.getElementById("loginPass")
+      .value;
 
   const found=db.users.find(
-    u=>u.user===user && u.pass===pass && u.active!==false
+    u=>u.user===user &&
+       u.pass===pass &&
+       u.active!==false
   );
 
   if(!found){
-    document.getElementById("loginError").textContent=
+
+    document.getElementById("loginError")
+      .textContent=
       "Usuário ou senha inválidos.";
+
     return;
+
   }
 
   currentUser=found;
@@ -1166,60 +1555,91 @@ function login(){
     })
   );
 
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("loginScreen")
+    .classList.add("hidden");
 
-  document.getElementById("currentUser").textContent=
+  document.getElementById("app")
+    .classList.remove("hidden");
+
+  document.getElementById("currentUser")
+    .textContent=
     found.name+" • "+found.role;
 
   buildNav();
+
   show("home");
+
 }
 
 
 function restoreLogin(){
 
-  const session=sessionStorage.getItem("svLoggedUser");
+  const session=
+    sessionStorage.getItem("svLoggedUser");
 
   if(!session)return;
 
   try{
+
     const s=JSON.parse(session);
 
     const found=db.users.find(
-      u=>u.user===s.user && u.active!==false
+      u=>u.user===s.user &&
+         u.active!==false
     );
 
     if(found){
+
       currentUser=found;
 
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("app").classList.remove("hidden");
+      document.getElementById("loginScreen")
+        .classList.add("hidden");
 
-      document.getElementById("currentUser").textContent=
+      document.getElementById("app")
+        .classList.remove("hidden");
+
+      document.getElementById("currentUser")
+        .textContent=
         found.name+" • "+found.role;
 
       buildNav();
+
       show("home");
+
     }
+
   }catch(e){}
+
 }
 
 
 function logout(){
-  sessionStorage.removeItem("svLoggedUser");
+
+  sessionStorage.removeItem(
+    "svLoggedUser"
+  );
+
   currentUser=null;
 
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
+  document.getElementById("app")
+    .classList.add("hidden");
 
-  document.getElementById("loginUser").value="";
-  document.getElementById("loginPass").value="";
+  document.getElementById("loginScreen")
+    .classList.remove("hidden");
+
+  document.getElementById("loginUser")
+    .value="";
+
+  document.getElementById("loginPass")
+    .value="";
+
 }
 
 
 function isAdmin(){
+
   return currentUser?.role==="Administrador";
+
 }
 
 
@@ -1228,34 +1648,56 @@ function isAdmin(){
 ========================================================= */
 
 const navigation=[
+
   ["home","Início"],
+
   ["inventory","Inventário"],
+
   ["events","Eventos"],
+
   ["maintenance","Manutenção"],
+
   ["stock","Estoque"]
+
 ];
+
 
 function buildNav(){
 
-  document.getElementById("nav").innerHTML=
-    navigation.map(x=>
-      `<button class="nav-btn" data-view="${x[0]}"
-       onclick="show('${x[0]}')">${x[1]}</button>`
-    ).join("");
+  const nav=
+    document.getElementById("nav");
+
+  nav.innerHTML=`
+
+    <button
+      class="menu-toggle"
+      onclick="toggleMenu()"
+      aria-label="Abrir menu">
+      ☰
+    </button>
+
+    ${navigation.map(x=>
+      `<button
+        class="nav-btn"
+        data-view="${x[0]}"
+        onclick="show('${x[0]}')">
+        ${x[1]}
+      </button>`
+    ).join("")}
+
+  `;
+
 }
 
 
-/* =========================================================
-   MENU MOBILE
-========================================================= */
-
 function toggleMenu(){
 
-  const nav=document.getElementById("nav");
+  const nav=
+    document.getElementById("nav");
 
-  if(nav){
-    nav.classList.toggle("open");
-  }
+  if(!nav)return;
+
+  nav.classList.toggle("open");
 
 }
 
@@ -1263,45 +1705,70 @@ function toggleMenu(){
 function show(view){
 
   document.querySelectorAll(".view")
-    .forEach(v=>v.classList.remove("active"));
+    .forEach(v=>
+      v.classList.remove("active")
+    );
 
-  const target=document.getElementById(view);
+  const target=
+    document.getElementById(view);
 
-  if(target)target.classList.add("active");
+  if(target)
+    target.classList.add("active");
 
   document.querySelectorAll(".nav-btn")
     .forEach(b=>{
+
       b.classList.toggle(
         "active",
         b.dataset.view===view
       );
+
     });
 
-  const nav=document.getElementById("nav");
+  /*
+    No celular, depois de selecionar uma opção,
+    fecha o menu novamente.
+  */
 
-  if(nav){
+  const nav=
+    document.getElementById("nav");
+
+  if(nav)
     nav.classList.remove("open");
-  }
 
   render();
+
 }
 
 
 function inventoryTab(tab){
 
   document.getElementById("equipmentPanel")
-    .classList.toggle("hidden",tab!=="equipment");
+    .classList.toggle(
+      "hidden",
+      tab!=="equipment"
+    );
 
   document.getElementById("casesPanel")
-    .classList.toggle("hidden",tab!=="cases");
+    .classList.toggle(
+      "hidden",
+      tab!=="cases"
+    );
 
   document.getElementById("tabEquipment")
-    .classList.toggle("active",tab==="equipment");
+    .classList.toggle(
+      "active",
+      tab==="equipment"
+    );
 
   document.getElementById("tabCases")
-    .classList.toggle("active",tab==="cases");
+    .classList.toggle(
+      "active",
+      tab==="cases"
+    );
 
   renderInventory();
+
 }
 
 
@@ -1310,10 +1777,12 @@ function inventoryTab(tab){
 ========================================================= */
 
 function saveDB(){
+
   localStorage.setItem(
     "starVisionDB",
     JSON.stringify(db)
   );
+
 }
 
 
@@ -1325,24 +1794,32 @@ function render(){
 
   if(!currentUser)return;
 
-  document.getElementById("kc").textContent=db.cases.length;
+  document.getElementById("kc")
+    .textContent=db.cases.length;
 
-  document.getElementById("ke").textContent=db.equipment.length;
+  document.getElementById("ke")
+    .textContent=db.equipment.length;
 
-  document.getElementById("km").textContent=
+  document.getElementById("km")
+    .textContent=
     db.maintenance.filter(
       m=>m.status!=="Concluída"
     ).length;
 
-  document.getElementById("kv").textContent=
+  document.getElementById("kv")
+    .textContent=
     db.movements.filter(
       m=>m.status!=="Cancelado"
     ).length;
 
   renderInventory();
+
   renderEvents();
+
   renderMaintenance();
+
   renderStock();
+
 }
 
 
@@ -1352,152 +1829,268 @@ function render(){
 
 function renderInventory(){
 
-  const ep=document.getElementById("equipmentPanel");
-  const cp=document.getElementById("casesPanel");
+  const ep=
+    document.getElementById(
+      "equipmentPanel"
+    );
+
+  const cp=
+    document.getElementById(
+      "casesPanel"
+    );
 
   if(!ep||!cp)return;
 
   ep.innerHTML=`
+
     <div class="section-head">
+
       <div>
+
         <h3>Patrimônios</h3>
+
         <div class="muted">
           Equipamentos individuais controlados por patrimônio.
         </div>
+
       </div>
 
-      ${isAdmin()
-        ? `<button class="primary" onclick="newEquipment()">+ Novo patrimônio</button>`
-        : ""}
+      ${
+        isAdmin()
+        ? `<button class="primary"
+             onclick="newEquipment()">
+             + Novo patrimônio
+           </button>`
+        : ""
+      }
+
     </div>
 
-    <input class="search"
+    <input
+      class="search"
       id="equipmentSearch"
       placeholder="Pesquisar patrimônio ou equipamento..."
       oninput="renderEquipmentTable()">
 
     <div id="equipmentTable"></div>
+
   `;
 
+
   cp.innerHTML=`
+
     <div class="section-head">
+
       <div>
+
         <h3>Cases</h3>
+
         <div class="muted">
           Estrutura e conteúdo base dos cases.
         </div>
+
       </div>
 
-      ${isAdmin()
-        ? `<button class="primary" onclick="newCase()">+ Novo case</button>`
-        : ""}
+      ${
+        isAdmin()
+        ? `<button class="primary"
+             onclick="newCase()">
+             + Novo case
+           </button>`
+        : ""
+      }
+
     </div>
 
-    <input class="search"
+    <input
+      class="search"
       id="caseSearch"
       placeholder="Pesquisar case..."
       oninput="renderCases()">
 
     <div id="caseTable"></div>
+
   `;
 
   renderEquipmentTable();
+
   renderCases();
+
 }
 
 
 function renderEquipmentTable(){
 
-  const target=document.getElementById("equipmentTable");
+  const target=
+    document.getElementById(
+      "equipmentTable"
+    );
+
   if(!target)return;
 
   const search=
-    (document.getElementById("equipmentSearch")?.value||"")
-    .toLowerCase();
+    (
+      document.getElementById(
+        "equipmentSearch"
+      )?.value||""
+    ).toLowerCase();
 
-  const list=db.equipment.filter(e=>
-    e.name.toLowerCase().includes(search) ||
-    e.pat.toLowerCase().includes(search)
-  );
+  const list=
+    db.equipment.filter(e=>
+      e.name.toLowerCase()
+        .includes(search) ||
+      e.pat.toLowerCase()
+        .includes(search)
+    );
 
   if(!list.length){
-    target.innerHTML=`<div class="empty">Nenhum patrimônio encontrado.</div>`;
+
+    target.innerHTML=
+      `<div class="empty">
+        Nenhum patrimônio encontrado.
+      </div>`;
+
     return;
+
   }
 
   target.innerHTML=`
+
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
+
             <th>Equipamento</th>
+
             <th>Patrimônio</th>
+
             <th>Case</th>
+
             <th>Status</th>
+
             ${isAdmin()?`<th></th>`:""}
+
           </tr>
+
         </thead>
 
         <tbody>
+
           ${list.map(e=>{
-            const c=db.cases.find(x=>x.id===e.caseId);
+
+            const c=
+              db.cases.find(
+                x=>x.id===e.caseId
+              );
 
             return `
+
               <tr>
+
                 <td>${esc(e.name)}</td>
+
                 <td>${esc(e.pat)}</td>
+
                 <td>${esc(c?.name||"—")}</td>
-                <td class="${e.status==="Disponível"?"ok":"warn"}">
+
+                <td class="${
+                  e.status==="Disponível"
+                    ?"ok"
+                    :"warn"
+                }">
+
                   ${esc(e.status)}
+
                 </td>
 
-                ${isAdmin()
+                ${
+                  isAdmin()
                   ? `<td>
-                       <button class="small"
-                         onclick="editEquipment('${e.pat}')">
-                         Editar
-                       </button>
+
+                      <button
+                        class="small"
+                        onclick="editEquipment('${e.pat}')">
+                        Editar
+                      </button>
+
                      </td>`
-                  : ""}
+                  : ""
+                }
+
               </tr>
+
             `;
+
           }).join("")}
+
         </tbody>
+
       </table>
+
     </div>
+
   `;
+
 }
 
 
 function renderCases(){
 
-  const target=document.getElementById("caseTable");
+  const target=
+    document.getElementById(
+      "caseTable"
+    );
+
   if(!target)return;
 
   const search=
-    (document.getElementById("caseSearch")?.value||"")
-    .toLowerCase();
+    (
+      document.getElementById(
+        "caseSearch"
+      )?.value||""
+    ).toLowerCase();
 
-  const list=db.cases.filter(c=>
-    c.name.toLowerCase().includes(search) ||
-    c.id.toLowerCase().includes(search)
-  );
+  const list=
+    db.cases.filter(c=>
+      c.name.toLowerCase()
+        .includes(search) ||
+      c.id.toLowerCase()
+        .includes(search)
+    );
 
   if(!list.length){
-    target.innerHTML=`<div class="empty">Nenhum case encontrado.</div>`;
+
+    target.innerHTML=
+      `<div class="empty">
+        Nenhum case encontrado.
+      </div>`;
+
     return;
+
   }
 
   target.innerHTML=`
+
     <div class="grid">
+
       ${list.map(c=>`
 
         <div class="card">
 
           <div class="between">
+
             <div>
+
               <h3>${esc(c.name)}</h3>
-              <div class="muted">${esc(c.id)}</div>
+
+              <div class="muted">
+                ${esc(c.id)}
+              </div>
+
             </div>
 
             <span class="status-pill ${
@@ -1505,34 +2098,60 @@ function renderCases(){
                 ?"status-ok"
                 :"status-out"
             }">
+
               ${esc(c.status)}
+
             </span>
+
           </div>
 
           <div style="margin:12px 0">
-            ${c.items.length
+
+            ${
+              c.items.length
+
               ? c.items.map(i=>
                 `<span class="badge">
+
                   ${esc(i.name)}
-                  ${i.qty>0?` × ${i.qty} ${esc(i.unit)}`:""}
+
+                  ${
+                    i.qty>0
+                    ? ` × ${i.qty} ${esc(i.unit)}`
+                    : ""
+                  }
+
                 </span>`
               ).join("")
-              : `<span class="muted">Conteúdo ainda não cadastrado.</span>`
+
+              : `<span class="muted">
+                  Conteúdo ainda não cadastrado.
+                </span>`
             }
+
           </div>
 
-          ${isAdmin()
+          ${
+            isAdmin()
             ? `<div class="row">
-                <button onclick="editCase('${c.id}')">
+
+                <button
+                  onclick="editCase('${c.id}')">
                   Editar conteúdo
                 </button>
-              </div>`
-            : ""}
+
+               </div>`
+            : ""
+          }
+
         </div>
 
       `).join("")}
+
     </div>
+
   `;
+
 }
 
 
@@ -1543,21 +2162,32 @@ function renderCases(){
 function newCase(){
 
   openModal(
+
     "Novo case",
+
     `
+
       <label>Nome do case</label>
-      <input id="caseName"
+
+      <input
+        id="caseName"
         placeholder="Ex.: Case 01 - PAR LED">
 
       <label>
-        <input id="caseDescription"
-               type="checkbox"
-               checked
-               style="width:auto;margin-right:7px">
+
+        <input
+          id="caseDescription"
+          type="checkbox"
+          checked
+          style="width:auto;margin-right:7px">
+
         Permitir detalhamento do conteúdo durante a saída
+
       </label>
 
-      <h3 style="margin-top:18px">Conteúdo inicial</h3>
+      <h3 style="margin-top:18px">
+        Conteúdo inicial
+      </h3>
 
       <div id="caseItems"></div>
 
@@ -1566,124 +2196,229 @@ function newCase(){
       </button>
 
       <div style="margin-top:18px">
-        <button class="primary" onclick="createCase()">
+
+        <button
+          class="primary"
+          onclick="createCase()">
           Criar case
         </button>
+
       </div>
+
     `
+
   );
 
   addCaseItemRow();
+
 }
 
 
 function addCaseItemRow(){
 
-  const container=document.getElementById("caseItems");
+  const container=
+    document.getElementById(
+      "caseItems"
+    );
+
   if(!container)return;
 
-  const id="row-"+Date.now()+"-"+Math.random();
+  const id=
+    "row-"+Date.now()+"-"+Math.random();
 
   container.insertAdjacentHTML(
+
     "beforeend",
+
     `
-      <div class="content-row" id="${id}">
-        <input class="item-name"
+
+      <div
+        class="content-row"
+        id="${id}">
+
+        <input
+          class="item-name"
           placeholder="Item">
 
-        <input class="item-qty"
+        <input
+          class="item-qty"
           type="number"
           min="0"
           value="0"
           placeholder="Qtd.">
 
-        <input class="item-unit"
+        <input
+          class="item-unit"
           value="un"
           placeholder="Un.">
 
-        <button class="danger small"
-          onclick="document.getElementById('${id}').remove()">
+        <button
+          class="danger small"
+          onclick="
+            document.getElementById('${id}').remove()
+          ">
           ×
         </button>
+
       </div>
+
     `
+
   );
+
 }
 
 
 function collectItemRows(containerId){
 
-  return [...document.querySelectorAll(
-    "#"+containerId+" .content-row"
-  )]
+  return [
+    ...document.querySelectorAll(
+      "#"+containerId+" .content-row"
+    )
+  ]
+
   .map(row=>({
-    name:row.querySelector(".item-name")?.value.trim(),
-    qty:Number(row.querySelector(".item-qty")?.value||0),
-    unit:row.querySelector(".item-unit")?.value.trim()||"un"
+
+    name:
+      row.querySelector(
+        ".item-name"
+      )?.value.trim(),
+
+    qty:
+      Number(
+        row.querySelector(
+          ".item-qty"
+        )?.value||0
+      ),
+
+    unit:
+      row.querySelector(
+        ".item-unit"
+      )?.value.trim()||"un"
+
   }))
+
   .filter(x=>x.name);
+
 }
 
 
 function createCase(){
 
-  const name=document.getElementById("caseName").value.trim();
+  const name=
+    document.getElementById(
+      "caseName"
+    ).value.trim();
 
   if(!name){
+
     alert("Informe o nome do case.");
+
     return;
+
   }
 
   const next=
     Math.max(
       0,
-      ...db.cases.map(c=>Number(c.id.replace("SV-C","")))
+      ...db.cases.map(
+        c=>Number(
+          c.id.replace("SV-C","")
+        )
+      )
     )+1;
 
   db.cases.push({
-    id:"SV-C"+String(next).padStart(3,"0"),
+
+    id:
+      "SV-C"+
+      String(next).padStart(3,"0"),
+
     name,
-    description:document.getElementById("caseDescription").checked,
-    items:collectItemRows("caseItems"),
+
+    description:
+      document.getElementById(
+        "caseDescription"
+      ).checked,
+
+    items:
+      collectItemRows(
+        "caseItems"
+      ),
+
     status:"Disponível"
+
   });
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function editCase(id){
 
-  const c=db.cases.find(x=>x.id===id);
+  const c=
+    db.cases.find(
+      x=>x.id===id
+    );
+
   if(!c)return;
 
   openModal(
+
     "Editar case — "+c.name,
+
     `
+
       <label>Nome</label>
-      <input id="editCaseName" value="${attr(c.name)}">
+
+      <input
+        id="editCaseName"
+        value="${attr(c.name)}">
 
       <label>Status</label>
+
       <select id="editCaseStatus">
-        ${[
-          "Disponível",
-          "Reservado",
-          "Em manutenção interna",
-          "Em manutenção externa",
-          "Indisponível"
-        ].map(s=>
-          `<option ${c.status===s?"selected":""}>${s}</option>`
-        ).join("")}
+
+        ${
+          [
+            "Disponível",
+            "Reservado",
+            "Em manutenção interna",
+            "Em manutenção externa",
+            "Indisponível"
+          ]
+          .map(s=>
+            `<option ${
+              c.status===s
+                ?"selected"
+                :""
+            }>
+              ${s}
+            </option>`
+          ).join("")
+        }
+
       </select>
 
       <label>
-        <input id="editCaseDescription"
-               type="checkbox"
-               ${c.description!==false?"checked":""}
-               style="width:auto;margin-right:7px">
+
+        <input
+          id="editCaseDescription"
+          type="checkbox"
+          ${
+            c.description!==false
+              ?"checked"
+              :""
+          }
+          style="width:auto;margin-right:7px">
+
         Permitir detalhamento durante a saída
+
       </label>
 
       <h3 style="margin-top:18px">
@@ -1696,91 +2431,150 @@ function editCase(id){
         + Adicionar item
       </button>
 
-      <div class="row" style="margin-top:18px">
-        <button class="primary"
+      <div
+        class="row"
+        style="margin-top:18px">
+
+        <button
+          class="primary"
           onclick="saveCaseEdit('${id}')">
           Salvar alterações
         </button>
 
-        <button class="danger"
+        <button
+          class="danger"
           onclick="deleteCase('${id}')">
           Excluir case
         </button>
+
       </div>
+
     `
+
   );
 
-  c.items.forEach(item=>addEditCaseItemRow(item));
+  c.items.forEach(
+    item=>addEditCaseItemRow(item)
+  );
+
 }
 
 
 function addEditCaseItemRow(item=null){
 
-  const container=document.getElementById("editCaseItems");
+  const container=
+    document.getElementById(
+      "editCaseItems"
+    );
+
   if(!container)return;
 
-  const id="edit-"+Date.now()+"-"+Math.random();
+  const id=
+    "edit-"+Date.now()+"-"+Math.random();
 
   container.insertAdjacentHTML(
+
     "beforeend",
+
     `
-      <div class="content-row" id="${id}">
-        <input class="item-name"
+
+      <div
+        class="content-row"
+        id="${id}">
+
+        <input
+          class="item-name"
           value="${attr(item?.name||"")}"
           placeholder="Item">
 
-        <input class="item-qty"
+        <input
+          class="item-qty"
           type="number"
           min="0"
           value="${item?.qty||0}">
 
-        <input class="item-unit"
+        <input
+          class="item-unit"
           value="${attr(item?.unit||"un")}">
 
-        <button class="danger small"
-          onclick="document.getElementById('${id}').remove()">
+        <button
+          class="danger small"
+          onclick="
+            document.getElementById('${id}').remove()
+          ">
           ×
         </button>
+
       </div>
+
     `
+
   );
+
 }
 
 
 function saveCaseEdit(id){
 
-  const c=db.cases.find(x=>x.id===id);
+  const c=
+    db.cases.find(
+      x=>x.id===id
+    );
+
   if(!c)return;
 
-  c.name=document.getElementById("editCaseName").value.trim();
+  c.name=
+    document.getElementById(
+      "editCaseName"
+    ).value.trim();
 
-  c.status=document.getElementById("editCaseStatus").value;
+  c.status=
+    document.getElementById(
+      "editCaseStatus"
+    ).value;
 
   c.description=
-    document.getElementById("editCaseDescription").checked;
+    document.getElementById(
+      "editCaseDescription"
+    ).checked;
 
-  c.items=collectItemRows("editCaseItems");
+  c.items=
+    collectItemRows(
+      "editCaseItems"
+    );
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function deleteCase(id){
 
-  const c=db.cases.find(x=>x.id===id);
+  const c=
+    db.cases.find(
+      x=>x.id===id
+    );
 
   if(!c)return;
 
-  const linked=db.equipment.some(e=>e.caseId===id);
+  const linked=
+    db.equipment.some(
+      e=>e.caseId===id
+    );
 
   if(linked){
+
     alert(
       "Este case possui patrimônios vinculados. "+
       "Remova ou transfira os patrimônios antes de excluir."
     );
+
     return;
+
   }
 
   if(!confirm(
@@ -1789,11 +2583,17 @@ function deleteCase(id){
     "\n\nEsta ação não poderá ser desfeita."
   ))return;
 
-  db.cases=db.cases.filter(x=>x.id!==id);
+  db.cases=
+    db.cases.filter(
+      x=>x.id!==id
+    );
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
@@ -1804,142 +2604,292 @@ function deleteCase(id){
 function newEquipment(){
 
   openModal(
+
     "Novo patrimônio",
+
     `
+
       <label>Equipamento</label>
-      <input id="eqName" placeholder="Ex.: Moving Head">
+
+      <input
+        id="eqName"
+        placeholder="Ex.: Moving Head">
 
       <label>Número do patrimônio</label>
-      <input id="eqPat" placeholder="PAT-0024">
+
+      <input
+        id="eqPat"
+        placeholder="PAT-0024">
 
       <label>Case</label>
+
       <select id="eqCase">
+
         ${db.cases.map(c=>
+
           `<option value="${c.id}">
             ${esc(c.name)}
           </option>`
+
         ).join("")}
+
       </select>
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="createEquipment()">
         Cadastrar
       </button>
+
     `
+
   );
+
 }
 
 
 function createEquipment(){
 
-  const name=document.getElementById("eqName").value.trim();
-  const pat=document.getElementById("eqPat").value.trim();
-  const caseId=document.getElementById("eqCase").value;
+  const name=
+    document.getElementById(
+      "eqName"
+    ).value.trim();
+
+  const pat=
+    document.getElementById(
+      "eqPat"
+    ).value.trim();
+
+  const caseId=
+    document.getElementById(
+      "eqCase"
+    ).value;
 
   if(!name||!pat){
-    alert("Preencha equipamento e patrimônio.");
+
+    alert(
+      "Preencha equipamento e patrimônio."
+    );
+
     return;
+
   }
 
-  if(db.equipment.some(e=>e.pat===pat)){
-    alert("Esse patrimônio já existe.");
+  if(
+    db.equipment.some(
+      e=>e.pat===pat
+    )
+  ){
+
+    alert(
+      "Esse patrimônio já existe."
+    );
+
     return;
+
   }
 
   db.equipment.push({
+
     name,
+
     pat,
+
     caseId,
+
     status:"Disponível"
+
   });
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function editEquipment(pat){
 
-  const e=db.equipment.find(x=>x.pat===pat);
+  const e=
+    db.equipment.find(
+      x=>x.pat===pat
+    );
+
   if(!e)return;
 
   openModal(
+
     "Editar patrimônio",
+
     `
+
       <label>Equipamento</label>
-      <input id="editEqName" value="${attr(e.name)}">
+
+      <input
+        id="editEqName"
+        value="${attr(e.name)}">
 
       <label>Patrimônio</label>
-      <input id="editEqPat" value="${attr(e.pat)}">
+
+      <input
+        id="editEqPat"
+        value="${attr(e.pat)}">
 
       <label>Case</label>
+
       <select id="editEqCase">
+
         ${db.cases.map(c=>
-          `<option value="${c.id}"
-             ${c.id===e.caseId?"selected":""}>
-             ${esc(c.name)}
+
+          `<option
+            value="${c.id}"
+            ${
+              c.id===e.caseId
+                ?"selected"
+                :""
+            }>
+            ${esc(c.name)}
           </option>`
+
         ).join("")}
+
       </select>
 
       <label>Status</label>
+
       <select id="editEqStatus">
-        <option ${e.status==="Disponível"?"selected":""}>Disponível</option>
-        <option ${e.status==="Fora"?"selected":""}>Fora</option>
-        <option ${e.status==="Manutenção"?"selected":""}>Manutenção</option>
-        <option ${e.status==="Indisponível"?"selected":""}>Indisponível</option>
+
+        <option ${
+          e.status==="Disponível"
+            ?"selected"
+            :""
+        }>
+          Disponível
+        </option>
+
+        <option ${
+          e.status==="Fora"
+            ?"selected"
+            :""
+        }>
+          Fora
+        </option>
+
+        <option ${
+          e.status==="Manutenção"
+            ?"selected"
+            :""
+        }>
+          Manutenção
+        </option>
+
+        <option ${
+          e.status==="Indisponível"
+            ?"selected"
+            :""
+        }>
+          Indisponível
+        </option>
+
       </select>
 
       <div class="row">
-        <button class="primary"
+
+        <button
+          class="primary"
           onclick="saveEquipment('${attr(e.pat)}')">
           Salvar
         </button>
 
-        <button class="danger"
+        <button
+          class="danger"
           onclick="deleteEquipment('${attr(e.pat)}')">
           Excluir
         </button>
+
       </div>
+
     `
+
   );
+
 }
 
 
 function saveEquipment(oldPat){
 
-  const e=db.equipment.find(x=>x.pat===oldPat);
+  const e=
+    db.equipment.find(
+      x=>x.pat===oldPat
+    );
+
   if(!e)return;
 
-  const newPat=document.getElementById("editEqPat").value.trim();
+  const newPat=
+    document.getElementById(
+      "editEqPat"
+    ).value.trim();
 
-  if(newPat!==oldPat &&
-     db.equipment.some(x=>x.pat===newPat)){
-    alert("Esse patrimônio já existe.");
+  if(
+    newPat!==oldPat &&
+    db.equipment.some(
+      x=>x.pat===newPat
+    )
+  ){
+
+    alert(
+      "Esse patrimônio já existe."
+    );
+
     return;
+
   }
 
-  e.name=document.getElementById("editEqName").value.trim();
+  e.name=
+    document.getElementById(
+      "editEqName"
+    ).value.trim();
+
   e.pat=newPat;
-  e.caseId=document.getElementById("editEqCase").value;
-  e.status=document.getElementById("editEqStatus").value;
+
+  e.caseId=
+    document.getElementById(
+      "editEqCase"
+    ).value;
+
+  e.status=
+    document.getElementById(
+      "editEqStatus"
+    ).value;
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function deleteEquipment(pat){
 
-  if(!confirm("Excluir este patrimônio?"))return;
+  if(!confirm(
+    "Excluir este patrimônio?"
+  ))return;
 
-  db.equipment=db.equipment.filter(e=>e.pat!==pat);
+  db.equipment=
+    db.equipment.filter(
+      e=>e.pat!==pat
+    );
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
@@ -1950,28 +2900,45 @@ function deleteEquipment(pat){
 function newMovement(){
 
   openModal(
+
     "Nova saída",
+
     `
+
       <label>Tipo</label>
+
       <select id="movType">
+
         <option>Evento</option>
+
         <option>Empréstimo</option>
+
       </select>
 
       <label>Nome / destino</label>
-      <input id="movName"
+
+      <input
+        id="movName"
         placeholder="Ex.: Formatura PG">
 
       <label>Data de saída</label>
-      <input id="movDate" type="date"
+
+      <input
+        id="movDate"
+        type="date"
         value="${today()}">
 
       <label>Responsável</label>
-      <input id="movResponsible"
+
+      <input
+        id="movResponsible"
         placeholder="Nome do responsável">
 
       <label>Retorno previsto</label>
-      <input id="movReturnDate" type="date">
+
+      <input
+        id="movReturnDate"
+        type="date">
 
       <p class="muted">
         Depois de criar a saída, você selecionará os cases.
@@ -1979,22 +2946,34 @@ function newMovement(){
         conferência do conteúdo.
       </p>
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="createMovement()">
         Criar saída
       </button>
+
     `
+
   );
+
 }
 
 
 function createMovement(){
 
-  const name=document.getElementById("movName").value.trim();
+  const name=
+    document.getElementById(
+      "movName"
+    ).value.trim();
 
   if(!name){
-    alert("Informe o nome do evento ou empréstimo.");
+
+    alert(
+      "Informe o nome do evento ou empréstimo."
+    );
+
     return;
+
   }
 
   const id=
@@ -2003,50 +2982,90 @@ function createMovement(){
     ).padStart(4,"0");
 
   db.movements.push({
+
     id,
-    type:document.getElementById("movType").value,
+
+    type:
+      document.getElementById(
+        "movType"
+      ).value,
+
     name,
-    date:document.getElementById("movDate").value,
-    responsible:document.getElementById("movResponsible").value.trim(),
-    returnDate:document.getElementById("movReturnDate").value,
+
+    date:
+      document.getElementById(
+        "movDate"
+      ).value,
+
+    responsible:
+      document.getElementById(
+        "movResponsible"
+      ).value.trim(),
+
+    returnDate:
+      document.getElementById(
+        "movReturnDate"
+      ).value,
+
     cases:[],
+
     status:"Aberto",
+
     returned:false
+
   });
 
   closeModal();
+
   saveDB();
+
   render();
 
   openMovement(id);
+
 }
 
 
 function renderEvents(){
 
-  const target=document.getElementById("eventList");
+  const target=
+    document.getElementById(
+      "eventList"
+    );
+
   if(!target)return;
 
   if(!db.movements.length){
+
     target.innerHTML=
       `<div class="empty">
         Nenhum evento ou empréstimo cadastrado.
       </div>`;
+
     return;
+
   }
 
   target.innerHTML=`
+
     <div class="grid">
-      ${[...db.movements].reverse().map(m=>`
+
+      ${[...db.movements]
+        .reverse()
+        .map(m=>`
 
         <div class="card">
 
           <div class="between">
+
             <div>
+
               <h3>${esc(m.name)}</h3>
+
               <div class="muted">
                 ${esc(m.id)} • ${esc(m.type)}
               </div>
+
             </div>
 
             <span class="status-pill ${
@@ -2056,69 +3075,112 @@ function renderEvents(){
                   ?"status-cancel"
                   :"status-out"
             }">
+
               ${esc(m.status)}
+
             </span>
+
           </div>
 
           <p class="muted">
-            Responsável: ${esc(m.responsible||"—")}<br>
-            Saída: ${formatDate(m.date)}<br>
-            Retorno previsto: ${formatDate(m.returnDate)}<br>
-            Cases: ${m.cases.length}
+
+            Responsável:
+            ${esc(m.responsible||"—")}
+            <br>
+
+            Saída:
+            ${formatDate(m.date)}
+            <br>
+
+            Retorno previsto:
+            ${formatDate(m.returnDate)}
+            <br>
+
+            Cases:
+            ${m.cases.length}
+
           </p>
 
           <div class="row">
 
-            <button onclick="openMovement('${m.id}')">
-              ${m.status==="Retornado"
+            <button
+              onclick="openMovement('${m.id}')">
+
+              ${
+                m.status==="Retornado"
                 ?"Ver conferência"
-                :"Abrir / conferir"}
+                :"Abrir / conferir"
+              }
+
             </button>
 
-            ${m.status!=="Cancelado"
-              ? `<button class="danger"
+            ${
+              m.status!=="Cancelado"
+
+              ? `<button
+                   class="danger"
                    onclick="deleteMovement('${m.id}')">
                    Excluir
                  </button>`
-              : ""}
+
+              : ""
+            }
+
           </div>
 
         </div>
 
       `).join("")}
+
     </div>
+
   `;
+
 }
 
 
 /* =========================================================
-   SELEÇÃO DOS CASES DO EVENTO
+   SELEÇÃO DOS CASES
 ========================================================= */
 
 function openMovement(id){
 
-  const m=db.movements.find(x=>x.id===id);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
+
   if(!m)return;
 
   openModal(
+
     m.type+" — "+m.name,
+
     `
+
       <div class="between">
+
         <div>
+
           <b>${esc(m.id)}</b>
+
           <div class="muted">
             ${formatDate(m.date)}
           </div>
+
         </div>
 
         <span class="status-pill status-out">
           ${esc(m.status)}
         </span>
+
       </div>
 
       ${
         m.status==="Aberto"
+
         ? `
+
           <h3 style="margin-top:20px">
             Cases do evento
           </h3>
@@ -2127,15 +3189,22 @@ function openMovement(id){
 
             ${db.cases.map(c=>{
 
-              const selected=m.cases.some(
-                x=>x.caseId===c.id
-              );
+              const selected=
+                m.cases.some(
+                  x=>x.caseId===c.id
+                );
 
               return `
+
                 <label class="check-item">
 
-                  <input type="checkbox"
-                    ${selected?"checked":""}
+                  <input
+                    type="checkbox"
+                    ${
+                      selected
+                        ?"checked"
+                        :""
+                    }
                     onchange="
                       toggleEventCase(
                         '${m.id}',
@@ -2145,19 +3214,29 @@ function openMovement(id){
                     ">
 
                   <span>
-                    <b>${esc(c.name)}</b>
+
+                    <b>
+                      ${esc(c.name)}
+                    </b>
+
                     <br>
+
                     <span class="muted">
                       ${esc(c.id)}
                     </span>
+
                   </span>
 
                 </label>
+
               `;
+
             }).join("")}
 
           </div>
+
         `
+
         : ""
       }
 
@@ -2166,130 +3245,211 @@ function openMovement(id){
       </h3>
 
       <div id="movementCases">
+
         ${renderMovementCasesHTML(m)}
+
       </div>
 
-      <div class="row" style="margin-top:18px">
+      <div
+        class="row"
+        style="margin-top:18px">
 
         ${
-          m.status==="Aberto" && m.cases.length
-          ? `<button class="primary"
+          m.status==="Aberto" &&
+          m.cases.length
+
+          ? `<button
+               class="primary"
                onclick="printMovement('${m.id}')">
                Imprimir saída
              </button>`
+
           : ""
         }
 
         ${
-          m.status==="Aberto" && m.cases.length
-          ? `<button class="success"
+          m.status==="Aberto" &&
+          m.cases.length
+
+          ? `<button
+               class="success"
                onclick="returnMovement('${m.id}')">
                Registrar retorno
              </button>`
+
           : ""
         }
 
         ${
           m.status==="Retornado"
-          ? `<button class="primary"
+
+          ? `<button
+               class="primary"
                onclick="printMovement('${m.id}')">
                Imprimir conferência
              </button>`
+
           : ""
         }
 
       </div>
+
     `
+
   );
+
 }
 
 
-function toggleEventCase(id,caseId,checked){
+function toggleEventCase(
+  id,
+  caseId,
+  checked
+){
 
-  const m=db.movements.find(x=>x.id===id);
-  const c=db.cases.find(x=>x.id===caseId);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
+
+  const c=
+    db.cases.find(
+      x=>x.id===caseId
+    );
 
   if(!m||!c)return;
 
   if(checked){
 
-    if(m.cases.some(x=>x.caseId===caseId)){
+    if(
+      m.cases.some(
+        x=>x.caseId===caseId
+      )
+    ){
       return;
     }
 
-    const eventItems=c.items.map(i=>({
-      name:i.name,
-      qty:i.qty||0,
-      unit:i.unit||"un",
-      originalQty:i.qty||0
-    }));
+    const eventItems=
+      c.items.map(i=>({
+
+        name:i.name,
+
+        qty:i.qty||0,
+
+        unit:i.unit||"un",
+
+        originalQty:i.qty||0
+
+      }));
 
     m.cases.push({
+
       caseId,
+
       items:eventItems,
+
       checked:false,
+
       returned:false,
+
       divergences:[]
+
     });
 
     c.status="Reservado";
 
     saveDB();
 
-    openCaseEventDescription(id,caseId);
+    openCaseEventDescription(
+      id,
+      caseId
+    );
 
   }else{
 
-    m.cases=m.cases.filter(x=>x.caseId!==caseId);
+    m.cases=
+      m.cases.filter(
+        x=>x.caseId!==caseId
+      );
 
     updateCaseStatus(caseId);
 
     saveDB();
 
     openMovement(id);
+
   }
+
 }
 
 
-function openCaseEventDescription(movementId,caseId){
+function openCaseEventDescription(
+  movementId,
+  caseId
+){
 
-  const m=db.movements.find(x=>x.id===movementId);
-  const c=db.cases.find(x=>x.id===caseId);
-  const ec=m.cases.find(x=>x.caseId===caseId);
+  const m=
+    db.movements.find(
+      x=>x.id===movementId
+    );
+
+  const c=
+    db.cases.find(
+      x=>x.id===caseId
+    );
+
+  const ec=
+    m.cases.find(
+      x=>x.caseId===caseId
+    );
 
   if(!m||!c||!ec)return;
 
   openModal(
+
     "Conferir conteúdo — "+c.name,
+
     `
+
       <p class="muted">
+
         Informe a quantidade que realmente está saindo
         neste evento.
+
       </p>
 
       <div id="eventItemRows">
 
         ${ec.items.map((item,index)=>`
-          <div class="content-row"
-               data-index="${index}">
 
-            <input class="event-item-name"
+          <div
+            class="content-row"
+            data-index="${index}">
+
+            <input
+              class="event-item-name"
               value="${attr(item.name)}">
 
-            <input class="event-item-qty"
+            <input
+              class="event-item-qty"
               type="number"
               min="0"
               value="${item.qty}">
 
-            <input class="event-item-unit"
+            <input
+              class="event-item-unit"
               value="${attr(item.unit)}">
 
-            <button class="danger small"
-              onclick="this.parentElement.remove()">
+            <button
+              class="danger small"
+              onclick="
+                this.parentElement.remove()
+              ">
               ×
             </button>
 
           </div>
+
         `).join("")}
 
       </div>
@@ -2300,7 +3460,8 @@ function openCaseEventDescription(movementId,caseId){
 
       <div style="margin-top:18px">
 
-        <button class="primary"
+        <button
+          class="primary"
           onclick="
             saveEventCaseDescription(
               '${movementId}',
@@ -2311,64 +3472,113 @@ function openCaseEventDescription(movementId,caseId){
         </button>
 
       </div>
+
     `
+
   );
+
 }
 
 
 function addEventItemRow(){
 
-  const container=document.getElementById("eventItemRows");
+  const container=
+    document.getElementById(
+      "eventItemRows"
+    );
 
   if(!container)return;
 
-  const id="new-event-item-"+Date.now();
+  const id=
+    "new-event-item-"+Date.now();
 
   container.insertAdjacentHTML(
+
     "beforeend",
+
     `
-      <div class="content-row" id="${id}">
-        <input class="event-item-name"
+
+      <div
+        class="content-row"
+        id="${id}">
+
+        <input
+          class="event-item-name"
           placeholder="Item">
 
-        <input class="event-item-qty"
+        <input
+          class="event-item-qty"
           type="number"
           min="0"
           value="1">
 
-        <input class="event-item-unit"
+        <input
+          class="event-item-unit"
           value="un">
 
-        <button class="danger small"
-          onclick="document.getElementById('${id}').remove()">
+        <button
+          class="danger small"
+          onclick="
+            document.getElementById('${id}').remove()
+          ">
           ×
         </button>
+
       </div>
+
     `
+
   );
+
 }
 
 
-function saveEventCaseDescription(movementId,caseId){
+function saveEventCaseDescription(
+  movementId,
+  caseId
+){
 
-  const m=db.movements.find(x=>x.id===movementId);
-  const ec=m?.cases.find(x=>x.caseId===caseId);
+  const m=
+    db.movements.find(
+      x=>x.id===movementId
+    );
+
+  const ec=
+    m?.cases.find(
+      x=>x.caseId===caseId
+    );
 
   if(!ec)return;
 
   ec.items=[
+
     ...document.querySelectorAll(
       "#eventItemRows .content-row"
     )
+
   ]
+
   .map(row=>({
-    name:row.querySelector(".event-item-name").value.trim(),
-    qty:Number(
-      row.querySelector(".event-item-qty").value||0
-    ),
+
+    name:
+      row.querySelector(
+        ".event-item-name"
+      ).value.trim(),
+
+    qty:
+      Number(
+        row.querySelector(
+          ".event-item-qty"
+        ).value||0
+      ),
+
     unit:
-      row.querySelector(".event-item-unit").value.trim()||"un"
+      row.querySelector(
+        ".event-item-unit"
+      ).value.trim()||"un"
+
   }))
+
   .filter(x=>x.name);
 
   saveDB();
@@ -2376,36 +3586,55 @@ function saveEventCaseDescription(movementId,caseId){
   closeModal();
 
   openMovement(movementId);
+
 }
 
 
 function renderMovementCasesHTML(m){
 
   if(!m.cases.length){
-    return `<div class="empty">
-      Nenhum case selecionado.
-    </div>`;
+
+    return `
+      <div class="empty">
+        Nenhum case selecionado.
+      </div>
+    `;
+
   }
 
   return m.cases.map(ec=>{
 
-    const c=db.cases.find(x=>x.id===ec.caseId);
+    const c=
+      db.cases.find(
+        x=>x.id===ec.caseId
+      );
 
     return `
+
       <div class="event-case">
 
         <div class="event-case-head">
 
           <div>
-            <b>${esc(c?.name||ec.caseId)}</b>
+
+            <b>
+              ${esc(
+                c?.name||
+                ec.caseId
+              )}
+            </b>
+
             <div class="muted">
               ${esc(ec.caseId)}
             </div>
+
           </div>
 
           ${
             m.status==="Aberto"
-            ? `<button class="small"
+
+            ? `<button
+                 class="small"
                  onclick="
                    openCaseEventDescription(
                      '${m.id}',
@@ -2414,6 +3643,7 @@ function renderMovementCasesHTML(m){
                  ">
                  Editar conteúdo
                </button>`
+
             : ""
           }
 
@@ -2422,42 +3652,70 @@ function renderMovementCasesHTML(m){
         <div class="event-case-body">
 
           <table>
+
             <thead>
+
               <tr>
+
                 <th>Item</th>
+
                 <th>Qtd.</th>
+
                 <th>Un.</th>
+
                 ${
                   m.status==="Retornado"
                   ? "<th>Conferência</th>"
                   : ""
                 }
+
               </tr>
+
             </thead>
 
             <tbody>
 
-              ${ec.items.map((item,index)=>`
+              ${ec.items.map(item=>`
 
                 <tr>
 
-                  <td>${esc(item.name)}</td>
+                  <td>
+                    ${esc(item.name)}
+                  </td>
 
-                  <td>${item.qty}</td>
+                  <td>
+                    ${item.qty}
+                  </td>
 
-                  <td>${esc(item.unit)}</td>
+                  <td>
+                    ${esc(item.unit)}
+                  </td>
 
                   ${
                     m.status==="Retornado"
+
                     ? `<td>
+
                         ${
                           item.returnStatus==="falta"
-                          ? `<span class="bad">FALTA</span>`
+
+                          ? `<span class="bad">
+                               FALTA
+                             </span>`
+
                           : item.returnStatus==="dano"
-                            ? `<span class="warn">DANO</span>`
-                            : `<span class="ok">OK</span>`
+
+                            ? `<span class="warn">
+                                 DANO
+                               </span>`
+
+                            : `<span class="ok">
+                                 OK
+                               </span>`
                         }
+
                        </td>`
+
                     : ""
                   }
 
@@ -2466,56 +3724,86 @@ function renderMovementCasesHTML(m){
               `).join("")}
 
             </tbody>
+
           </table>
 
         </div>
+
       </div>
+
     `;
+
   }).join("");
+
 }
 
 
 /* =========================================================
-   RETORNO / CONFERÊNCIA
+   RETORNO
 ========================================================= */
 
 function returnMovement(id){
 
-  const m=db.movements.find(x=>x.id===id);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
+
   if(!m)return;
 
   openModal(
+
     "Retorno — "+m.name,
+
     `
+
       <p class="muted">
+
         Confira cada item. Você pode registrar
         quantidade encontrada, falta ou dano.
+
       </p>
 
       <div id="returnCases">
 
         ${m.cases.map(ec=>{
 
-          const c=db.cases.find(x=>x.id===ec.caseId);
+          const c=
+            db.cases.find(
+              x=>x.id===ec.caseId
+            );
 
           return `
+
             <div class="event-case">
 
               <div class="event-case-head">
-                <b>${esc(c?.name||ec.caseId)}</b>
+
+                <b>
+                  ${esc(
+                    c?.name||
+                    ec.caseId
+                  )}
+                </b>
+
               </div>
 
               <div class="event-case-body">
 
                 ${ec.items.map((item,index)=>`
 
-                  <div class="card"
-                       style="margin-bottom:9px">
+                  <div
+                    class="card"
+                    style="margin-bottom:9px">
 
-                    <b>${esc(item.name)}</b>
+                    <b>
+                      ${esc(item.name)}
+                    </b>
 
                     <div class="muted">
-                      Saiu: ${item.qty} ${esc(item.unit)}
+                      Saiu:
+                      ${item.qty}
+                      ${esc(item.unit)}
                     </div>
 
                     <label>
@@ -2539,18 +3827,34 @@ function returnMovement(id){
                       data-case="${ec.caseId}"
                       data-index="${index}">
 
-                      <option value="ok"
-                        ${item.returnStatus==="ok"||!item.returnStatus?"selected":""}>
+                      <option
+                        value="ok"
+                        ${
+                          item.returnStatus==="ok"||
+                          !item.returnStatus
+                          ?"selected"
+                          :""
+                        }>
                         OK
                       </option>
 
-                      <option value="falta"
-                        ${item.returnStatus==="falta"?"selected":""}>
+                      <option
+                        value="falta"
+                        ${
+                          item.returnStatus==="falta"
+                          ?"selected"
+                          :""
+                        }>
                         Falta
                       </option>
 
-                      <option value="dano"
-                        ${item.returnStatus==="dano"?"selected":""}>
+                      <option
+                        value="dano"
+                        ${
+                          item.returnStatus==="dano"
+                          ?"selected"
+                          :""
+                        }>
                         Dano
                       </option>
 
@@ -2574,23 +3878,32 @@ function returnMovement(id){
               </div>
 
             </div>
+
           `;
+
         }).join("")}
 
       </div>
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="saveReturn('${m.id}')">
         Confirmar retorno
       </button>
+
     `
+
   );
+
 }
 
 
 function saveReturn(id){
 
-  const m=db.movements.find(x=>x.id===id);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
 
   if(!m)return;
 
@@ -2598,57 +3911,87 @@ function saveReturn(id){
 
     ec.items.forEach((item,index)=>{
 
-      const qty=document.querySelector(
-        `.return-qty[data-case="${ec.caseId}"][data-index="${index}"]`
-      );
+      const qty=
+        document.querySelector(
+          `.return-qty[data-case="${ec.caseId}"][data-index="${index}"]`
+        );
 
-      const status=document.querySelector(
-        `.return-status[data-case="${ec.caseId}"][data-index="${index}"]`
-      );
+      const status=
+        document.querySelector(
+          `.return-status[data-case="${ec.caseId}"][data-index="${index}"]`
+        );
 
-      const note=document.querySelector(
-        `.return-note[data-case="${ec.caseId}"][data-index="${index}"]`
-      );
+      const note=
+        document.querySelector(
+          `.return-note[data-case="${ec.caseId}"][data-index="${index}"]`
+        );
 
-      item.returnQty=Number(qty?.value||0);
-      item.returnStatus=status?.value||"ok";
-      item.note=note?.value||"";
+      item.returnQty=
+        Number(qty?.value||0);
+
+      item.returnStatus=
+        status?.value||"ok";
+
+      item.note=
+        note?.value||"";
 
     });
 
     ec.returned=true;
+
   });
 
   m.status="Retornado";
+
   m.returned=true;
-  m.returnedAt=new Date().toISOString();
+
+  m.returnedAt=
+    new Date().toISOString();
 
   m.cases.forEach(ec=>{
-    updateCaseStatus(ec.caseId);
+
+    updateCaseStatus(
+      ec.caseId
+    );
+
   });
 
   saveDB();
+
   closeModal();
+
   render();
+
 }
 
 
 function updateCaseStatus(caseId){
 
-  const c=db.cases.find(x=>x.id===caseId);
+  const c=
+    db.cases.find(
+      x=>x.id===caseId
+    );
 
   if(!c)return;
 
-  const active=db.movements.some(m=>
-    m.status==="Aberto" &&
-    m.cases.some(ec=>ec.caseId===caseId)
-  );
+  const active=
+    db.movements.some(m=>
+      m.status==="Aberto" &&
+      m.cases.some(
+        ec=>ec.caseId===caseId
+      )
+    );
 
   if(active){
+
     c.status="Reservado";
+
   }else{
+
     c.status="Disponível";
+
   }
+
 }
 
 
@@ -2658,7 +4001,10 @@ function updateCaseStatus(caseId){
 
 function deleteMovement(id){
 
-  const m=db.movements.find(x=>x.id===id);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
 
   if(!m)return;
 
@@ -2671,19 +4017,30 @@ function deleteMovement(id){
   if(!confirm(message))return;
 
   m.cases.forEach(ec=>{
-    updateCaseStatus(ec.caseId);
+
+    updateCaseStatus(
+      ec.caseId
+    );
+
   });
 
   db.movements=
-    db.movements.filter(x=>x.id!==id);
+    db.movements.filter(
+      x=>x.id!==id
+    );
 
   db.cases.forEach(c=>{
+
     updateCaseStatus(c.id);
+
   });
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
@@ -2693,55 +4050,105 @@ function deleteMovement(id){
 
 function printMovement(id){
 
-  const m=db.movements.find(x=>x.id===id);
+  const m=
+    db.movements.find(
+      x=>x.id===id
+    );
 
   if(!m)return;
 
-  const rows=m.cases.map(ec=>{
+  const rows=
+    m.cases.map(ec=>{
 
-    const c=db.cases.find(x=>x.id===ec.caseId);
+      const c=
+        db.cases.find(
+          x=>x.id===ec.caseId
+        );
 
-    return ec.items.map(item=>`
-      <tr>
-        <td>${esc(c?.name||ec.caseId)}</td>
-        <td>${esc(ec.caseId)}</td>
-        <td>${esc(item.name)}</td>
-        <td>${item.qty}</td>
-        <td>${esc(item.unit)}</td>
-        <td>${m.status==="Retornado"
-          ? item.returnQty??item.qty
-          : "—"}
-        </td>
-        <td>${
-          m.status==="Retornado"
-            ? esc(
-                item.returnStatus==="falta"
-                  ?"FALTA"
-                  :item.returnStatus==="dano"
-                    ?"DANO"
-                    :"OK"
-              )
-            :"FORA"
-        }</td>
-      </tr>
-    `).join("");
+      return ec.items.map(item=>`
 
-  }).join("");
+        <tr>
+
+          <td>
+            ${esc(
+              c?.name||
+              ec.caseId
+            )}
+          </td>
+
+          <td>
+            ${esc(ec.caseId)}
+          </td>
+
+          <td>
+            ${esc(item.name)}
+          </td>
+
+          <td>
+            ${item.qty}
+          </td>
+
+          <td>
+            ${esc(item.unit)}
+          </td>
+
+          <td>
+            ${
+              m.status==="Retornado"
+              ? item.returnQty??item.qty
+              : "—"
+            }
+          </td>
+
+          <td>
+
+            ${
+              m.status==="Retornado"
+
+              ? esc(
+                  item.returnStatus==="falta"
+                    ?"FALTA"
+                    :item.returnStatus==="dano"
+                      ?"DANO"
+                      :"OK"
+                )
+
+              : "FORA"
+            }
+
+          </td>
+
+        </tr>
+
+      `).join("");
+
+    }).join("");
 
   const title=
     m.type+" — "+m.name;
 
-  const w=window.open("","_blank");
+  const w=
+    window.open(
+      "",
+      "_blank"
+    );
 
   w.document.write(`
+
     <!doctype html>
+
     <html>
+
     <head>
+
       <meta charset="utf-8">
 
-      <title>${esc(title)}</title>
+      <title>
+        ${esc(title)}
+      </title>
 
       <style>
+
         body{
           font-family:Arial,sans-serif;
           padding:35px;
@@ -2783,17 +4190,28 @@ function printMovement(id){
         }
 
         @media print{
-          body{padding:15px}
+          body{
+            padding:15px;
+          }
         }
+
       </style>
+
     </head>
 
     <body>
 
-      <div class="logo">STAR VISION</div>
-      <div class="sub">GESTÃO DE EQUIPAMENTOS</div>
+      <div class="logo">
+        STAR VISION
+      </div>
 
-      <h2>${esc(title)}</h2>
+      <div class="sub">
+        GESTÃO DE EQUIPAMENTOS
+      </div>
+
+      <h2>
+        ${esc(title)}
+      </h2>
 
       <p>
         <b>Responsável:</b>
@@ -2813,34 +4231,51 @@ function printMovement(id){
       <table>
 
         <thead>
+
           <tr>
+
             <th>Case</th>
+
             <th>ID</th>
+
             <th>Item</th>
+
             <th>Qtd. saída</th>
+
             <th>Un.</th>
+
             <th>Qtd. retorno</th>
+
             <th>Status</th>
+
           </tr>
+
         </thead>
 
         <tbody>
+
           ${rows}
+
         </tbody>
 
       </table>
 
       <script>
+
         window.onload=function(){
           window.print();
         }
+
       <\/script>
 
     </body>
+
     </html>
+
   `);
 
   w.document.close();
+
 }
 
 
@@ -2850,49 +4285,80 @@ function printMovement(id){
 
 function renderMaintenance(){
 
-  const target=document.getElementById("maintenanceList");
+  const target=
+    document.getElementById(
+      "maintenanceList"
+    );
+
   if(!target)return;
 
   if(!db.maintenance.length){
+
     target.innerHTML=
       `<div class="empty">
         Nenhuma manutenção registrada.
       </div>`;
+
     return;
+
   }
 
   target.innerHTML=`
+
     <div class="grid">
 
-      ${[...db.maintenance].reverse().map((m,i)=>`
+      ${[...db.maintenance]
+        .reverse()
+        .map(m=>`
 
         <div class="card">
 
           <div class="between">
-            <h3>${esc(m.name)}</h3>
+
+            <h3>
+              ${esc(m.name)}
+            </h3>
 
             <span class="badge ${
               m.status==="Concluída"
                 ?"ok"
                 :"warn"
             }">
+
               ${esc(m.status)}
+
             </span>
+
           </div>
 
           <p class="muted">
-            Tipo: ${esc(m.type)}<br>
-            Case: ${esc(m.case||"—")}
+
+            Tipo:
+            ${esc(m.type)}
+            <br>
+
+            Case:
+            ${esc(m.case||"—")}
+
           </p>
 
-          <p>${esc(m.desc||"")}</p>
+          <p>
+            ${esc(m.desc||"")}
+          </p>
 
           ${
             m.status!=="Concluída"
-            ? `<button class="success"
-                 onclick="finishMaintenance(${db.maintenance.indexOf(m)})">
+
+            ? `<button
+                 class="success"
+                 onclick="
+                   finishMaintenance(
+                     ${db.maintenance.indexOf(m)}
+                   )
+                 ">
                  Marcar concluída
                </button>`
+
             : ""
           }
 
@@ -2901,23 +4367,30 @@ function renderMaintenance(){
       `).join("")}
 
     </div>
+
   `;
+
 }
 
 
 function newMaintenance(){
 
   openModal(
+
     "Registrar manutenção",
+
     `
+
       <label>Case</label>
 
       <select id="maintCase">
 
         ${db.cases.map(c=>
+
           `<option value="${c.id}">
             ${esc(c.name)}
           </option>`
+
         ).join("")}
 
       </select>
@@ -2925,68 +4398,115 @@ function newMaintenance(){
       <label>Tipo</label>
 
       <select id="maintType">
+
         <option>Interna</option>
+
         <option>Externa</option>
+
       </select>
 
       <label>Descrição</label>
 
-      <textarea id="maintDesc"
+      <textarea
+        id="maintDesc"
         placeholder="Descreva o problema ou serviço realizado."></textarea>
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="createMaintenance()">
         Registrar
       </button>
+
     `
+
   );
+
 }
 
 
 function createMaintenance(){
 
-  const c=db.cases.find(
-    x=>x.id===document.getElementById("maintCase").value
-  );
+  const c=
+    db.cases.find(
+      x=>x.id===
+        document.getElementById(
+          "maintCase"
+        ).value
+    );
 
   db.maintenance.push({
-    name:c?.name||"Case",
-    case:c?.id||"",
-    type:document.getElementById("maintType").value,
-    desc:document.getElementById("maintDesc").value,
+
+    name:
+      c?.name||
+      "Case",
+
+    case:
+      c?.id||
+      "",
+
+    type:
+      document.getElementById(
+        "maintType"
+      ).value,
+
+    desc:
+      document.getElementById(
+        "maintDesc"
+      ).value,
+
     status:"Pendente",
+
     date:today()
+
   });
 
   if(c){
+
     c.status=
-      document.getElementById("maintType").value==="Externa"
-        ?"Em manutenção externa"
-        :"Em manutenção interna";
+      document.getElementById(
+        "maintType"
+      ).value==="Externa"
+
+      ?"Em manutenção externa"
+
+      :"Em manutenção interna";
+
   }
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function finishMaintenance(index){
 
-  const m=db.maintenance[index];
+  const m=
+    db.maintenance[index];
 
   if(!m)return;
 
   m.status="Concluída";
 
   if(m.case){
-    const c=db.cases.find(x=>x.id===m.case);
 
-    if(c)c.status="Disponível";
+    const c=
+      db.cases.find(
+        x=>x.id===m.case
+      );
+
+    if(c)
+      c.status="Disponível";
+
   }
 
   saveDB();
+
   render();
+
 }
 
 
@@ -2996,18 +4516,26 @@ function finishMaintenance(index){
 
 function renderStock(){
 
-  const target=document.getElementById("stockList");
+  const target=
+    document.getElementById(
+      "stockList"
+    );
+
   if(!target)return;
 
   if(!db.stock.length){
+
     target.innerHTML=
       `<div class="empty">
         Nenhum item no estoque.
       </div>`;
+
     return;
+
   }
 
   target.innerHTML=`
+
     <div class="grid">
 
       ${db.stock.map((s,i)=>`
@@ -3016,36 +4544,54 @@ function renderStock(){
 
           <div class="between">
 
-            <h3>${esc(s.name)}</h3>
+            <h3>
+              ${esc(s.name)}
+            </h3>
 
             <b class="${
               s.qty<=s.min
                 ?"bad"
                 :"ok"
             }">
-              ${s.qty<=s.min?"REPOR":"OK"}
+
+              ${
+                s.qty<=s.min
+                ?"REPOR"
+                :"OK"
+              }
+
             </b>
 
           </div>
 
           <p>
+
             <b>${s.qty}</b>
+
             ${esc(s.unit)}
+
             • mínimo ${s.min}
+
           </p>
 
           <div class="row">
-            <button onclick="moveStock(${i})">
+
+            <button
+              onclick="moveStock(${i})">
               Movimentar
             </button>
 
             ${
               isAdmin()
-              ? `<button onclick="editStock(${i})">
+
+              ? `<button
+                   onclick="editStock(${i})">
                    Editar
                  </button>`
+
               : ""
             }
+
           </div>
 
         </div>
@@ -3053,55 +4599,95 @@ function renderStock(){
       `).join("")}
 
     </div>
+
   `;
+
 }
 
 
 function newStock(){
 
   openModal(
+
     "Novo item de estoque",
+
     `
+
       <label>Item</label>
+
       <input id="stockName">
 
       <label>Unidade</label>
-      <input id="stockUnit"
+
+      <input
+        id="stockUnit"
         placeholder="un, rolo, kg, L...">
 
       <label>Quantidade inicial</label>
-      <input id="stockQty"
+
+      <input
+        id="stockQty"
         type="number"
         min="0"
         value="0">
 
       <label>Estoque mínimo</label>
-      <input id="stockMin"
+
+      <input
+        id="stockMin"
         type="number"
         min="0"
         value="0">
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="createStock()">
         Cadastrar
       </button>
+
     `
+
   );
+
 }
 
 
 function createStock(){
 
   db.stock.push({
-    name:document.getElementById("stockName").value.trim(),
-    unit:document.getElementById("stockUnit").value.trim()||"un",
-    qty:Number(document.getElementById("stockQty").value||0),
-    min:Number(document.getElementById("stockMin").value||0)
+
+    name:
+      document.getElementById(
+        "stockName"
+      ).value.trim(),
+
+    unit:
+      document.getElementById(
+        "stockUnit"
+      ).value.trim()||"un",
+
+    qty:
+      Number(
+        document.getElementById(
+          "stockQty"
+        ).value||0
+      ),
+
+    min:
+      Number(
+        document.getElementById(
+          "stockMin"
+        ).value||0
+      )
+
   });
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
@@ -3110,105 +4696,175 @@ function moveStock(index){
   const s=db.stock[index];
 
   openModal(
+
     "Estoque — "+s.name,
+
     `
+
       <p>
+
         Saldo atual:
-        <b>${s.qty} ${esc(s.unit)}</b>
+        <b>
+          ${s.qty}
+          ${esc(s.unit)}
+        </b>
+
       </p>
 
       <label>Movimento</label>
 
       <select id="stockMoveType">
-        <option value="1">Entrada</option>
-        <option value="-1">Saída</option>
+
+        <option value="1">
+          Entrada
+        </option>
+
+        <option value="-1">
+          Saída
+        </option>
+
       </select>
 
       <label>Quantidade</label>
 
-      <input id="stockMoveQty"
+      <input
+        id="stockMoveQty"
         type="number"
         min="1"
         value="1">
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="applyStock(${index})">
         Aplicar
       </button>
+
     `
+
   );
+
 }
 
 
 function applyStock(index){
 
-  const s=db.stock[index];
+  const s=
+    db.stock[index];
 
-  const type=Number(
-    document.getElementById("stockMoveType").value
-  );
+  const type=
+    Number(
+      document.getElementById(
+        "stockMoveType"
+      ).value
+    );
 
-  const qty=Number(
-    document.getElementById("stockMoveQty").value
-  );
+  const qty=
+    Number(
+      document.getElementById(
+        "stockMoveQty"
+      ).value
+    );
 
-  s.qty=Math.max(
-    0,
-    s.qty+(type*qty)
-  );
+  s.qty=
+    Math.max(
+      0,
+      s.qty+(type*qty)
+    );
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
 function editStock(index){
 
-  const s=db.stock[index];
+  const s=
+    db.stock[index];
 
   openModal(
+
     "Editar estoque",
+
     `
+
       <label>Item</label>
-      <input id="editStockName"
+
+      <input
+        id="editStockName"
         value="${attr(s.name)}">
 
       <label>Unidade</label>
-      <input id="editStockUnit"
+
+      <input
+        id="editStockUnit"
         value="${attr(s.unit)}">
 
       <label>Quantidade</label>
-      <input id="editStockQty"
+
+      <input
+        id="editStockQty"
         type="number"
         value="${s.qty}">
 
       <label>Mínimo</label>
-      <input id="editStockMin"
+
+      <input
+        id="editStockMin"
         type="number"
         value="${s.min}">
 
-      <button class="primary"
+      <button
+        class="primary"
         onclick="saveStockEdit(${index})">
         Salvar
       </button>
+
     `
+
   );
+
 }
 
 
 function saveStockEdit(index){
 
-  const s=db.stock[index];
+  const s=
+    db.stock[index];
 
-  s.name=document.getElementById("editStockName").value.trim();
-  s.unit=document.getElementById("editStockUnit").value.trim()||"un";
-  s.qty=Number(document.getElementById("editStockQty").value||0);
-  s.min=Number(document.getElementById("editStockMin").value||0);
+  s.name=
+    document.getElementById(
+      "editStockName"
+    ).value.trim();
+
+  s.unit=
+    document.getElementById(
+      "editStockUnit"
+    ).value.trim()||"un";
+
+  s.qty=
+    Number(
+      document.getElementById(
+        "editStockQty"
+      ).value||0
+    );
+
+  s.min=
+    Number(
+      document.getElementById(
+        "editStockMin"
+      ).value||0
+    );
 
   closeModal();
+
   saveDB();
+
   render();
+
 }
 
 
@@ -3218,21 +4874,39 @@ function saveStockEdit(index){
 
 function openModal(title,body){
 
-  document.getElementById("modalTitle").textContent=title;
-  document.getElementById("modalBody").innerHTML=body;
-  document.getElementById("modal").classList.add("open");
+  document.getElementById(
+    "modalTitle"
+  ).textContent=title;
+
+  document.getElementById(
+    "modalBody"
+  ).innerHTML=body;
+
+  document.getElementById(
+    "modal"
+  ).classList.add("open");
+
 }
 
 
 function closeModal(){
-  document.getElementById("modal").classList.remove("open");
+
+  document.getElementById(
+    "modal"
+  ).classList.remove("open");
+
 }
 
 
-document.getElementById("modal").addEventListener(
+document.getElementById(
+  "modal"
+).addEventListener(
   "click",
   function(e){
-    if(e.target===this)closeModal();
+
+    if(e.target===this)
+      closeModal();
+
   }
 );
 
@@ -3244,18 +4918,34 @@ document.getElementById("modal").addEventListener(
 function esc(value){
 
   return String(value??"")
-    .replace(/[&<>"']/g,m=>({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[m]));
+    .replace(
+      /[&<>"']/g,
+      m=>({
+
+        "&":"&amp;",
+
+        "<":"&lt;",
+
+        ">":"&gt;",
+
+        '"':"&quot;",
+
+        "'":"&#039;"
+
+      }[m])
+    );
+
 }
 
 
 function attr(value){
-  return esc(value).replace(/`/g,"&#096;");
+
+  return esc(value)
+    .replace(
+      /`/g,
+      "&#096;"
+    );
+
 }
 
 
@@ -3264,8 +4954,15 @@ function today(){
   const d=new Date();
 
   return d.getFullYear()+"-"+
-    String(d.getMonth()+1).padStart(2,"0")+"-"+
-    String(d.getDate()).padStart(2,"0");
+
+    String(
+      d.getMonth()+1
+    ).padStart(2,"0")+"-"+
+
+    String(
+      d.getDate()
+    ).padStart(2,"0");
+
 }
 
 
@@ -3275,9 +4972,13 @@ function formatDate(value){
 
   const p=value.split("-");
 
-  if(p.length!==3)return value;
+  if(p.length!==3)
+    return value;
 
-  return p[2]+"/"+p[1]+"/"+p[0];
+  return p[2]+"/"+
+         p[1]+"/"+
+         p[0];
+
 }
 
 
