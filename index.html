@@ -1770,41 +1770,69 @@ function inventoryTab(tab){
 
 let saveQueue=Promise.resolve();
 
-function saveDB(){
-
-  const payload=JSON.stringify(db);
-
-  localStorage.setItem(
-    "starVisionDB",
-    payload
-  );
-
-  saveQueue=saveQueue.then(async()=>{
-
-    try{
-
-      await fetch("/api/db",{
-        method:"PUT",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:payload,
-        cache:"no-store",
-        keepalive:true
-      });
-
-    }catch(e){
-
-      console.warn("Servidor indisponível; dados mantidos localmente.",e);
-
-    }
-
+function mergeDatabases(local, remote){
+  const result={...remote};
+  const keys=["cases","equipment","maintenance","movements","stock","users"];
+  const keyFor=(key,item)=>{
+    if(key==="cases") return "id:"+(item?.id||"");
+    if(key==="equipment") return "pat:"+(item?.pat||item?.name||"");
+    if(key==="maintenance"||key==="movements") return "id:"+(item?.id||"");
+    if(key==="users") return "user:"+(item?.user||item?.name||"");
+    if(key==="stock") return "name:"+(item?.name||"");
+    return JSON.stringify(item);
+  };
+  keys.forEach(key=>{
+    const remoteItems=Array.isArray(remote?.[key]) ? remote[key] : [];
+    const localItems=Array.isArray(local?.[key]) ? local[key] : [];
+    const map=new Map();
+    remoteItems.forEach(item=>map.set(keyFor(key,item),item));
+    localItems.forEach(item=>map.set(keyFor(key,item),item));
+    result[key]=Array.from(map.values());
   });
-
+  result._version=Number(remote?._version||0);
+  result._updatedAt=remote?._updatedAt||null;
+  return result;
 }
 
+function saveDB(){
+  localStorage.setItem("starVisionDB",JSON.stringify(db));
+  saveQueue=saveQueue.then(async()=>{
+    let attempts=0;
+    while(attempts<2){
+      try{
+        const response=await fetch("/api/db",{
+          method:"PUT",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(db),
+          cache:"no-store",
+          keepalive:true
+        });
+        if(response.ok){
+          db=await response.json();
+          normalizeDB();
+          localStorage.setItem("starVisionDB",JSON.stringify(db));
+          return;
+        }
+        if(response.status===409){
+          const conflict=await response.json();
+          if(conflict?.current){
+            db=mergeDatabases(db,conflict.current);
+            normalizeDB();
+            localStorage.setItem("starVisionDB",JSON.stringify(db));
+            attempts++;
+            continue;
+          }
+        }
+        throw new Error("HTTP "+response.status);
+      }catch(e){
+        console.warn("Servidor indisponível; dados mantidos localmente.",e);
+        return;
+      }
+    }
+  });
+}
 
-async function loadServerDB(){
+          async function loadServerDB(){
 
   let localSnapshot=null;
 
@@ -5030,7 +5058,8 @@ function printMovement(id){
 
       <\/script>
 
-    </body>
+      <script src="sync.js"></script>
+</body>
 
     </html>
 
