@@ -89,7 +89,7 @@ jobs:
             });
           }'''
 
-          pattern = re.compile(r'let saveQueue=Promise\\.resolve\\(\\);.*?async function loadServerDB\\(\\)', re.S)
+          pattern = re.compile(r'let saveQueue=Promise\.resolve\(\);.*?async function loadServerDB\(\)', re.S)
           text, count = pattern.subn(new_save + '\n\n          async function loadServerDB()', text, count=1)
           if count != 1:
               raise SystemExit('saveDB block not found')
