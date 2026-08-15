@@ -94,8 +94,12 @@ jobs:
           if count != 1:
               raise SystemExit('saveDB block not found')
 
-          if '<script src="sync.js"></script>' not in text:
-              text=text.replace('</body>','  <script src="sync.js"></script>\n</body>',1)
+          text=text.replace('  <script src="sync.js"></script>\n', '')
+          final_body='</body>'
+          pos=text.rfind(final_body)
+          if pos < 0:
+              raise SystemExit('Final closing body tag not found')
+          text=text[:pos] + '  <script src="sync.js"></script>\n' + text[pos:]
 
           path.write_text(text,encoding='utf-8')
           PY
@@ -109,5 +113,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "fix: enable live central database sync [skip ci]"
+          git commit -m "fix: load central sync client in main app [skip ci]"
           git push
