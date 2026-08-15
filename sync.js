@@ -1,78 +1,78 @@
-/* Star Vision — automatic central sync */
+/* Star Vision — automatic central database synchronization */
 const SV_SYNC_KEY = 'starVisionDB';
-const SV_SYNC_INIT_KEY = 'starVisionCentralInitialized';
-const SV_SYNC_INTERVAL = 12000;
-let svSyncBusy = false;
+const SV_SYNC_INTERVAL = 5000;
 let svSyncTimer = null;
+let svSyncBusy = false;
 
-function svReadLocalDB(){
-  try { return JSON.parse(localStorage.getItem(SV_SYNC_KEY) || 'null'); }
-  catch(e){ return null; }
-}
-function svCountData(db){
-  if(!db || typeof db !== 'object') return 0;
-  return ['cases','patrimons','events','maintenances','stock','users'].reduce((n,k)=>n+(Array.isArray(db[k])?db[k].length:0),0);
+function svReadLocalDB() {
+  try {
+    return JSON.parse(localStorage.getItem(SV_SYNC_KEY) || 'null');
+  } catch (e) {
+    return null;
+  }
 }
 
-async function svGetCentral(){
-  const r = await fetch('/api/db?ts=' + Date.now(), {cache:'no-store'});
-  if(!r.ok) throw new Error('HTTP '+r.status);
+async function svGetCentral() {
+  const r = await fetch('/api/db?ts=' + Date.now(), {
+    method: 'GET',
+    cache: 'no-store',
+    headers: { 'Cache-Control': 'no-cache' }
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
   return await r.json();
 }
 
-async function svPullCentral(remote){
+function svApplyCentral(remote) {
+  if (!remote || typeof remote !== 'object') return false;
+
   const local = svReadLocalDB();
-  const remoteVersion = Number(remote && remote._version || 0);
-  const localVersion = Number(local && local._version || 0);
-  if(remoteVersion === 0) return false;
-  if(!local || localVersion === 0 || remoteVersion > localVersion){
-    localStorage.setItem(SV_SYNC_KEY, JSON.stringify(remote));
-    window.db = remote;
-    localStorage.setItem(SV_SYNC_INIT_KEY, '1');
-    if(typeof renderAll === 'function') renderAll();
-    return true;
-  }
-  return false;
+  const remoteVersion = Number(remote._version || 0);
+  const localVersion = Number(local?._version || 0);
+
+  if (remoteVersion <= 0) return false;
+  if (remoteVersion <= localVersion) return false;
+
+  localStorage.setItem(SV_SYNC_KEY, JSON.stringify(remote));
+  window.db = remote;
+
+  if (typeof normalizeDB === 'function') normalizeDB();
+  if (typeof render === 'function') render();
+
+  return true;
 }
 
-async function svPushCentral(local){
-  if(svSyncBusy) return false;
+async function svSyncNow() {
+  if (svSyncBusy) return;
   svSyncBusy = true;
-  try{
-    const r = await fetch('/api/db', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(local)});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const saved = await r.json();
-    localStorage.setItem(SV_SYNC_KEY, JSON.stringify(saved));
-    window.db = saved;
-    localStorage.setItem(SV_SYNC_INIT_KEY, '1');
-    return true;
-  }catch(e){ console.warn('Star Vision central push:',e); return false; }
-  finally{ svSyncBusy=false; }
-}
 
-async function svSyncNow(){
-  try{
-    const local = svReadLocalDB();
+  try {
     const remote = await svGetCentral();
-    const initialized = localStorage.getItem(SV_SYNC_INIT_KEY) === '1';
-
-    // First connection: PC data wins only when the central database is empty.
-    if(!initialized && Number(remote && remote._version || 0) === 0 && svCountData(local) > 0){
-      await svPushCentral(local);
-      return;
-    }
-    if(await svPullCentral(remote)) return;
-
-    if(initialized && local) await svPushCentral(local);
-  }catch(e){ console.warn('Star Vision central sync:',e); }
+    svApplyCentral(remote);
+  } catch (e) {
+    console.warn('Star Vision central sync:', e);
+  } finally {
+    svSyncBusy = false;
+  }
 }
 
-function svStartAutoSync(){
-  if(svSyncTimer) clearInterval(svSyncTimer);
+function svStartAutoSync() {
+  if (svSyncTimer) clearInterval(svSyncTimer);
+
   svSyncNow();
   svSyncTimer = setInterval(svSyncNow, SV_SYNC_INTERVAL);
+
   window.addEventListener('online', svSyncNow);
+  window.addEventListener('focus', svSyncNow);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) svSyncNow();
+  });
 }
 
 window.svSyncNow = svSyncNow;
 window.svStartAutoSync = svStartAutoSync;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', svStartAutoSync, { once: true });
+} else {
+  svStartAutoSync();
+}
