@@ -383,32 +383,6 @@ Controle interno de equipamentos, cases e movimentações
 
 </div>
 
-
-<div class="grid">
-
-<div class="card">
-<h3>Inventário</h3>
-<p class="muted">
-Equipamentos patrimoniais vinculados aos seus cases.
-</p>
-</div>
-
-<div class="card">
-<h3>Movimentação</h3>
-<p class="muted">
-Os cases são selecionados diretamente durante a criação da saída.
-</p>
-</div>
-
-<div class="card">
-<h3>Conferência</h3>
-<p class="muted">
-Saída, retorno e manutenção são tratados dentro dos respectivos fluxos.
-</p>
-</div>
-
-</div>
-
 </section>
 
 
@@ -802,7 +776,7 @@ document.getElementById('modal').classList.remove('open');
 
 /* =========================================================
    MENU
-   CASES FOI REMOVIDO DAQUI
+   CASES REMOVIDO DO MENU PRINCIPAL
 ========================================================= */
 
 const nav=[
@@ -961,8 +935,7 @@ db.cases.find(c=>c.id===e[2])?.name||'—'
 
 
 /* =========================================================
-   SELECTOR DE CASES
-   USADO EM SAÍDA
+   SELETOR DE CASES
 ========================================================= */
 
 function caseSelector(selected=[]){
@@ -994,9 +967,11 @@ ${esc(c.id)} • ${esc(c.status)}
 </div>
 
 <div class="case-items">
+
 ${c.items.split(';').map(i=>
 `<span class="badge">${esc(i)}</span>`
 ).join('')}
+
 </div>
 
 </div>
@@ -2250,7 +2225,7 @@ save();
 
 /* =========================================================
    QR / IDENTIFICAÇÃO
-   O QR continua contextual, não no menu.
+   CONTEXTUAL
 ========================================================= */
 
 function caseQR(id){
