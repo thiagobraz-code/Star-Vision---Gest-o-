@@ -1,0 +1,198 @@
+name: Enable automatic database sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-app:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch automatic server sync
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          old_boot_save = '''normalizeDB();
+          saveDB();'''
+          new_boot_save = '''normalizeDB();'''
+
+          if old_boot_save not in text:
+              raise SystemExit('Expected initial normalize/save block not found')
+          text = text.replace(old_boot_save, new_boot_save, 1)
+
+          old_save = '''function saveDB(){
+
+            localStorage.setItem(
+              "starVisionDB",
+              JSON.stringify(db)
+            );
+
+          }'''
+
+          new_save = '''let saveQueue=Promise.resolve();
+
+          function saveDB(){
+
+            const payload=JSON.stringify(db);
+
+            localStorage.setItem(
+              "starVisionDB",
+              payload
+            );
+
+            saveQueue=saveQueue.then(async()=>{
+
+              try{
+
+                await fetch("/api/db",{
+                  method:"PUT",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body:payload,
+                  cache:"no-store",
+                  keepalive:true
+                });
+
+              }catch(e){
+
+                console.warn("Servidor indisponível; dados mantidos localmente.",e);
+
+              }
+
+            });
+
+          }
+
+
+          async function loadServerDB(){
+
+            let localSnapshot=null;
+
+            try{
+
+              localSnapshot=JSON.parse(
+                localStorage.getItem("starVisionDB")||"null"
+              );
+
+            }catch(e){
+
+              localSnapshot=null;
+
+            }
+
+            try{
+
+              const response=await fetch("/api/db",{
+                method:"GET",
+                cache:"no-store"
+              });
+
+              if(!response.ok)
+                throw new Error("HTTP "+response.status);
+
+              const serverDB=await response.json();
+
+              const hasServerData=
+                Array.isArray(serverDB?.cases) && serverDB.cases.length>0 ||
+                Array.isArray(serverDB?.equipment) && serverDB.equipment.length>0 ||
+                Array.isArray(serverDB?.movements) && serverDB.movements.length>0 ||
+                Array.isArray(serverDB?.maintenance) && serverDB.maintenance.length>0 ||
+                Array.isArray(serverDB?.stock) && serverDB.stock.length>0;
+
+              if(hasServerData){
+
+                db=serverDB;
+                normalizeDB();
+
+                localStorage.setItem(
+                  "starVisionDB",
+                  JSON.stringify(db)
+                );
+
+              }else if(localSnapshot){
+
+                db=localSnapshot;
+                normalizeDB();
+                saveDB();
+
+              }else{
+
+                normalizeDB();
+                saveDB();
+
+              }
+
+            }catch(e){
+
+              if(localSnapshot){
+
+                db=localSnapshot;
+                normalizeDB();
+
+              }else{
+
+                normalizeDB();
+
+              }
+
+              console.warn("Não foi possível carregar o banco do servidor.",e);
+
+            }
+
+          }
+
+
+          async function boot(){
+
+            await loadServerDB();
+            restoreLogin();
+
+          }'''
+
+          if old_save not in text:
+              raise SystemExit('Expected saveDB function not found')
+          text = text.replace(old_save, new_save, 1)
+
+          old_init = '''/* =========================================================
+             INICIALIZAÇÃO
+          ========================================================= */
+
+          restoreLogin();'''
+
+          new_init = '''/* =========================================================
+             INICIALIZAÇÃO
+          ========================================================= */
+
+          boot();'''
+
+          if old_init not in text:
+              raise SystemExit('Expected initialization block not found')
+          text = text.replace(old_init, new_init, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit patch
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "fix: sync Star Vision database automatically [skip ci]"
+          git push
