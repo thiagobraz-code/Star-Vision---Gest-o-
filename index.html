@@ -79,10 +79,6 @@ cursor:pointer
 border-color:#aaa
 }
 
-.nav:hover,button:hover{
-border-color:#777
-}
-
 button.primary{
 background:#eee;
 color:#111;
@@ -112,11 +108,7 @@ h1{
 margin:0 0 4px
 }
 
-h2{
-margin-top:0
-}
-
-h3{
+h2,h3{
 margin-top:0
 }
 
@@ -210,6 +202,24 @@ width:auto;
 margin:0
 }
 
+.tabs{
+display:flex;
+gap:8px;
+margin:18px 0 5px;
+border-bottom:1px solid var(--l);
+padding-bottom:10px
+}
+
+.tab{
+background:transparent;
+border-color:transparent
+}
+
+.tab.active{
+background:var(--p2);
+border-color:#777
+}
+
 .items-editor{
 border:1px solid var(--l);
 border-radius:10px;
@@ -267,14 +277,6 @@ padding:12px;
 margin-bottom:8px
 }
 
-.case-box h4{
-margin:0 0 5px
-}
-
-.case-items{
-margin-top:6px
-}
-
 .item-line{
 display:flex;
 justify-content:space-between;
@@ -286,6 +288,14 @@ font-size:13px
 
 .item-line:last-child{
 border-bottom:0
+}
+
+.status-box{
+padding:10px;
+border-radius:9px;
+background:#101014;
+border:1px solid var(--l);
+margin:10px 0
 }
 
 table{
@@ -345,14 +355,6 @@ padding:25px;
 text-align:center
 }
 
-.status-box{
-padding:10px;
-border-radius:9px;
-background:#101014;
-border:1px solid var(--l);
-margin:10px 0
-}
-
 @media(max-width:700px){
 
 .kpis{
@@ -371,7 +373,7 @@ white-space:nowrap
 }
 
 .item-row{
-grid-template-columns:1fr 75px 75px auto
+grid-template-columns:1fr 70px 70px auto
 }
 
 }
@@ -381,6 +383,7 @@ grid-template-columns:1fr 75px 75px auto
 <body>
 
 <header>
+
 <div class="bar">
 
 <div class="logo">
@@ -391,9 +394,16 @@ STAR VISION
 <nav id="nav"></nav>
 
 </div>
+
 </header>
 
+
 <main>
+
+
+<!-- =========================
+     INÍCIO
+========================= -->
 
 <section id="home" class="view active">
 
@@ -430,13 +440,73 @@ Controle interno de equipamentos, cases e movimentações
 </section>
 
 
+<!-- =========================
+     INVENTÁRIO
+========================= -->
+
 <section id="inv" class="view">
+
+<div class="between">
+
+<div>
 
 <h1>Inventário</h1>
 
 <div class="muted">
-Equipamentos patrimoniais cadastrados.
+Patrimônios individuais e estrutura dos cases.
 </div>
+
+</div>
+
+</div>
+
+
+<div class="tabs">
+
+<button
+id="tabPat"
+class="tab active"
+onclick="showInvTab('pat')"
+>
+Patrimônios
+</button>
+
+<button
+id="tabCases"
+class="tab"
+onclick="showInvTab('cases')"
+>
+Cases
+</button>
+
+</div>
+
+
+<!-- PATRIMÔNIOS -->
+
+<div id="invPatTab">
+
+<div class="between">
+
+<div>
+
+<h2>Patrimônios</h2>
+
+<div class="muted">
+Equipamentos identificados individualmente.
+</div>
+
+</div>
+
+<button
+class="primary"
+onclick="novoPatrimonio()"
+>
++ Novo patrimônio
+</button>
+
+</div>
+
 
 <input
 class="search"
@@ -447,8 +517,56 @@ oninput="renderInv()"
 
 <div id="invBody"></div>
 
+</div>
+
+
+<!-- CASES -->
+
+<div id="invCasesTab" style="display:none">
+
+<div class="between">
+
+<div>
+
+<h2>Cases</h2>
+
+<div class="muted">
+Cadastre e configure os cases da Star Vision.
+</div>
+
+</div>
+
+<button
+class="primary"
+onclick="novoCase()"
+>
++ Novo case
+</button>
+
+</div>
+
+
+<input
+class="search"
+id="caseSearch"
+placeholder="Pesquisar case..."
+oninput="renderCases()"
+>
+
+<div
+id="caseList"
+class="grid"
+>
+</div>
+
+</div>
+
 </section>
 
+
+<!-- =========================
+     EVENTOS
+========================= -->
 
 <section id="mov" class="view">
 
@@ -464,16 +582,27 @@ Saída, conferência e retorno dos equipamentos.
 
 </div>
 
-<button class="primary" onclick="novoMov()">
+<button
+class="primary"
+onclick="novoMov()"
+>
 + Nova saída
 </button>
 
 </div>
 
-<div id="movList" class="grid"></div>
+<div
+id="movList"
+class="grid"
+>
+</div>
 
 </section>
 
+
+<!-- =========================
+     MANUTENÇÃO
+========================= -->
 
 <section id="maint" class="view">
 
@@ -489,16 +618,27 @@ Controle de manutenção interna ou externa.
 
 </div>
 
-<button class="primary" onclick="novaMan()">
+<button
+class="primary"
+onclick="novaMan()"
+>
 + Registrar
 </button>
 
 </div>
 
-<div id="manList" class="grid"></div>
+<div
+id="manList"
+class="grid"
+>
+</div>
 
 </section>
 
+
+<!-- =========================
+     ESTOQUE
+========================= -->
 
 <section id="stock" class="view">
 
@@ -514,20 +654,34 @@ Peças, materiais e consumíveis.
 
 </div>
 
-<button class="primary" onclick="novoEstoque()">
+<button
+class="primary"
+onclick="novoEstoque()"
+>
 + Novo item
 </button>
 
 </div>
 
-<div id="stockList" class="grid"></div>
+<div
+id="stockList"
+class="grid"
+>
+</div>
 
 </section>
 
 </main>
 
 
-<div id="modal" class="modal">
+<!-- =========================
+     MODAL
+========================= -->
+
+<div
+id="modal"
+class="modal"
+>
 
 <div class="box">
 
@@ -556,49 +710,49 @@ Fechar
 
 const initialCases=[
 
-['SV-C001','Case 01 - XLR Som','XLR Som',false],
+['SV-C001','Case 01 - XLR Som','XLR Som'],
 
-['SV-C002','Case 01 - XLR Luz','XLR Luz',false],
+['SV-C002','Case 01 - XLR Luz','XLR Luz'],
 
-['SV-C003','Case 01 - Chicotes','Chicotes',false],
+['SV-C003','Case 01 - Chicotes','Chicotes'],
 
-['SV-C004','Case 01 - Extensão PP','Extensão Régua;Extensão PP Simples',false],
+['SV-C004','Case 01 - Extensão PP','Extensão Régua;Extensão PP Simples'],
 
-['SV-C005','Case 01 - 01V96','01V96 × 1;ADA Behringer × 2',false],
+['SV-C005','Case 01 - 01V96','01V96 × 1;ADA Behringer × 2'],
 
-['SV-C006','Case 02 - 01V96i','01V96i × 1',false],
+['SV-C006','Case 02 - 01V96i','01V96i × 1'],
 
-['SV-C007','Case 01 - Midas M32 Full','Midas M32 Full × 1',false],
+['SV-C007','Case 01 - Midas M32 Full','Midas M32 Full × 1'],
 
-['SV-C008','Case 01 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C008','Case 01 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C009','Case 02 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C009','Case 02 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C010','Case 03 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C010','Case 03 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C011','Case 04 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C011','Case 04 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C012','Case 05 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C012','Case 05 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C013','Case 06 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C013','Case 06 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C014','Case 07 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C014','Case 07 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C015','Case 08 - Beam','Beam × 2;Powercon × 2;Gancho × 4',false],
+['SV-C015','Case 08 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
 
-['SV-C016','Case 01 - Cabos Painel','Gancho;RJ;Powercon',false],
+['SV-C016','Case 01 - Cabos Painel','Gancho;RJ;Powercon'],
 
-['SV-C017','Case 02 - Cabos Painel','Gancho;RJ;Powercon',false],
+['SV-C017','Case 02 - Cabos Painel','Gancho;RJ;Powercon'],
 
-['SV-C018','Case 01 - Grand MA','Grand MA × 1',false],
+['SV-C018','Case 01 - Grand MA','Grand MA × 1'],
 
-['SV-C019','Case 02 - Grand MA','Grand MA × 1',false]
+['SV-C019','Case 02 - Grand MA','Grand MA × 1']
 
 ];
 
 
 /* =========================================================
-   EQUIPAMENTOS
+   EQUIPAMENTOS INICIAIS
 ========================================================= */
 
 function defaultEquipment(){
@@ -664,7 +818,9 @@ name:x[1],
 
 items:x[2],
 
-hasItems:x[3],
+itemsList:[],
+
+hasItems:false,
 
 status:'Disponível'
 
@@ -718,7 +874,7 @@ localStorage.getItem('svdb')||'null'
 
 
 /* =========================================================
-   COMPATIBILIDADE COM VERSÃO ANTERIOR
+   COMPATIBILIDADE
 ========================================================= */
 
 db.cases ||= [];
@@ -730,17 +886,11 @@ db.stock ||= [];
 
 db.cases.forEach(c=>{
 
-if(c.hasItems===undefined){
-
+if(c.hasItems===undefined)
 c.hasItems=false;
 
-}
-
-if(!Array.isArray(c.itemsList)){
-
+if(!Array.isArray(c.itemsList))
 c.itemsList=[];
-
-}
 
 });
 
@@ -813,7 +963,7 @@ document
 
 
 /* =========================================================
-   MENU
+   MENU PRINCIPAL
 ========================================================= */
 
 const nav=[
@@ -882,7 +1032,53 @@ render();
 
 
 /* =========================================================
-   RENDER
+   ABAS DO INVENTÁRIO
+========================================================= */
+
+function showInvTab(tab){
+
+const pat=
+document.getElementById('invPatTab');
+
+const cases=
+document.getElementById('invCasesTab');
+
+const tabPat=
+document.getElementById('tabPat');
+
+const tabCases=
+document.getElementById('tabCases');
+
+
+if(tab==='pat'){
+
+pat.style.display='block';
+
+cases.style.display='none';
+
+tabPat.classList.add('active');
+
+tabCases.classList.remove('active');
+
+}else{
+
+pat.style.display='none';
+
+cases.style.display='block';
+
+tabPat.classList.remove('active');
+
+tabCases.classList.add('active');
+
+renderCases();
+
+}
+
+}
+
+
+/* =========================================================
+   RENDER GERAL
 ========================================================= */
 
 function render(){
@@ -903,7 +1099,10 @@ db.mov.filter(
 x=>x.status!=='Concluída'
 ).length;
 
+
 renderInv();
+
+renderCases();
 
 renderMov();
 
@@ -915,7 +1114,7 @@ renderStock();
 
 
 /* =========================================================
-   INVENTÁRIO
+   RENDER PATRIMÔNIOS
 ========================================================= */
 
 function renderInv(){
@@ -926,7 +1125,8 @@ document.getElementById('invSearch')?.value||''
 ).toLowerCase();
 
 
-const list=db.equipment.filter(e=>
+const list=
+db.equipment.filter(e=>
 
 (
 e.join(' ')+' '+
@@ -948,9 +1148,10 @@ document.getElementById('invBody').innerHTML=
 '<th>Patrimônio</th>'+
 '<th>Case</th>'+
 '<th>Status</th>'+
+'<th>Ação</th>'+
 '</tr>'+
 
-list.map(e=>`
+list.map((e,i)=>`
 
 <tr>
 
@@ -968,6 +1169,16 @@ c=>c.id===e[2]
 
 <td>${esc(e[3]||'Disponível')}</td>
 
+<td>
+
+<button
+onclick="editarPatrimonio(${db.equipment.indexOf(e)})"
+>
+Editar
+</button>
+
+</td>
+
 </tr>
 
 `).join('')+
@@ -978,26 +1189,507 @@ c=>c.id===e[2]
 
 
 /* =========================================================
-   EDITOR DE ITENS DO CASE
+   NOVO PATRIMÔNIO
 ========================================================= */
 
-function itemRows(items=[]){
+function novoPatrimonio(){
 
-if(!items.length){
+openM(
 
-return '';
+'Novo patrimônio',
+
+`
+
+<label>
+Equipamento
+</label>
+
+<input
+id="patNome"
+placeholder="Ex.: PAR LED 01"
+>
+
+
+<label>
+Número do patrimônio
+</label>
+
+<input
+id="patNumero"
+placeholder="Ex.: PAT-0024"
+>
+
+
+<label>
+Case
+</label>
+
+<select id="patCase">
+
+<option value="">
+Sem case
+</option>
+
+${db.cases.map(c=>
+
+`<option value="${c.id}">
+${esc(c.name)}
+</option>`
+
+).join('')}
+
+</select>
+
+
+<label>
+Status
+</label>
+
+<select id="patStatus">
+
+<option>
+Disponível
+</option>
+
+<option>
+Em evento
+</option>
+
+<option>
+Em manutenção
+</option>
+
+<option>
+Indisponível
+</option>
+
+</select>
+
+
+<button
+class="primary"
+onclick="addPatrimonio()"
+>
+Cadastrar patrimônio
+</button>
+
+`
+
+);
 
 }
 
 
-return items.map((item,i)=>`
+/* =========================================================
+   ADICIONA PATRIMÔNIO
+========================================================= */
+
+function addPatrimonio(){
+
+const nome=
+document.getElementById('patNome')
+.value.trim();
+
+const numero=
+document.getElementById('patNumero')
+.value.trim();
+
+const cid=
+document.getElementById('patCase')
+.value;
+
+
+if(!nome){
+
+alert(
+'Informe o equipamento.'
+);
+
+return;
+
+}
+
+
+if(!numero){
+
+alert(
+'Informe o número do patrimônio.'
+);
+
+return;
+
+}
+
+
+if(db.equipment.some(
+e=>e[1]===numero
+)){
+
+alert(
+'Esse número de patrimônio já existe.'
+);
+
+return;
+
+}
+
+
+db.equipment.push([
+
+nome,
+
+numero,
+
+cid,
+
+document.getElementById('patStatus')
+.value
+
+]);
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   EDITAR PATRIMÔNIO
+========================================================= */
+
+function editarPatrimonio(index){
+
+const e=
+db.equipment[index];
+
+if(!e)return;
+
+
+openM(
+
+'Editar patrimônio',
+
+`
+
+<label>
+Equipamento
+</label>
+
+<input
+id="patNome"
+value="${esc(e[0])}"
+>
+
+
+<label>
+Número do patrimônio
+</label>
+
+<input
+id="patNumero"
+value="${esc(e[1])}"
+>
+
+
+<label>
+Case
+</label>
+
+<select id="patCase">
+
+<option value="">
+Sem case
+</option>
+
+${db.cases.map(c=>
+
+`<option
+value="${c.id}"
+${e[2]===c.id?'selected':''}
+>
+${esc(c.name)}
+</option>`
+
+).join('')}
+
+</select>
+
+
+<label>
+Status
+</label>
+
+<select id="patStatus">
+
+${[
+'Disponível',
+'Em evento',
+'Em manutenção',
+'Indisponível'
+].map(x=>
+
+`<option
+${(e[3]||'Disponível')===x?'selected':''}
+>
+${x}
+</option>`
+
+).join('')}
+
+</select>
+
+
+<button
+class="primary"
+onclick="savePatrimonio(${index})"
+>
+Salvar
+</button>
+
+`
+
+);
+
+}
+
+
+/* =========================================================
+   SALVA PATRIMÔNIO
+========================================================= */
+
+function savePatrimonio(index){
+
+const e=
+db.equipment[index];
+
+const nome=
+document.getElementById('patNome')
+.value.trim();
+
+const numero=
+document.getElementById('patNumero')
+.value.trim();
+
+
+if(!nome||!numero){
+
+alert(
+'Preencha equipamento e patrimônio.'
+);
+
+return;
+
+}
+
+
+const duplicado=
+db.equipment.some(
+(x,i)=>i!==index&&x[1]===numero
+);
+
+
+if(duplicado){
+
+alert(
+'Esse número de patrimônio já existe.'
+);
+
+return;
+
+}
+
+
+e[0]=nome;
+
+e[1]=numero;
+
+e[2]=
+document.getElementById('patCase')
+.value;
+
+e[3]=
+document.getElementById('patStatus')
+.value;
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   RENDER CASES
+========================================================= */
+
+function renderCases(){
+
+const box=
+document.getElementById('caseList');
+
+if(!box)return;
+
+
+const q=
+(
+document.getElementById('caseSearch')?.value||''
+).toLowerCase();
+
+
+const list=
+db.cases.filter(c=>
+
+(
+c.name+' '+
+c.id+' '+
+(c.items||'')
+).toLowerCase().includes(q)
+
+);
+
+
+box.innerHTML=
+
+list.map(c=>`
+
+<div class="card">
+
+<div class="between">
+
+<div>
+
+<h3>
+${esc(c.name)}
+</h3>
+
+<div class="muted">
+${esc(c.id)}
+</div>
+
+</div>
+
+
+<span class="badge ${
+c.status==='Disponível'
+?'ok'
+:'warn'
+}">
+
+${esc(c.status)}
+
+</span>
+
+</div>
+
+
+<p>
+
+${
+c.hasItems&&c.itemsList?.length
+
+?
+
+`<span class="badge blue">
+${c.itemsList.length}
+item(ns) detalhado(s)
+</span>`
+
+:
+
+`<span class="badge">
+Sem detalhamento
+</span>`
+
+}
+
+</p>
+
+
+${
+c.hasItems&&c.itemsList?.length
+
+?
+
+`
+
+<div>
+
+${c.itemsList.map(item=>
+
+`<span class="badge">
+${esc(item.desc)}
+ × ${item.qty} ${esc(item.unit)}
+</span>`
+
+).join('')}
+
+</div>
+
+`
+
+:
+
+`<div class="muted">
+O conteúdo ainda não foi detalhado.
+</div>`
+
+}
+
+
+<div class="row" style="margin-top:12px">
+
+<button
+onclick="editCase('${c.id}')"
+>
+Editar
+</button>
+
+
+<button
+onclick="caseQR('${c.id}')"
+>
+Identificação
+</button>
+
+
+<button
+onclick="caseMan('${c.id}')"
+>
+Manutenção
+</button>
+
+</div>
+
+</div>
+
+`).join('')||
+
+`
+<div class="card empty muted">
+Nenhum case encontrado.
+</div>
+`;
+
+}
+
+
+/* =========================================================
+   EDITOR DE ITENS
+========================================================= */
+
+function itemRows(items=[]){
+
+return items.map(item=>`
 
 <div class="item-row">
 
 <input
 class="item-desc"
 value="${esc(item.desc||'')}"
-placeholder="Descrição do item"
+placeholder="Descrição"
 >
 
 <input
@@ -1033,7 +1725,11 @@ function addItemRow(){
 const box=
 document.getElementById('itemsEditor');
 
-const row=document.createElement('div');
+if(!box)return;
+
+
+const row=
+document.createElement('div');
 
 row.className='item-row';
 
@@ -1041,7 +1737,7 @@ row.innerHTML=`
 
 <input
 class="item-desc"
-placeholder="Descrição do item"
+placeholder="Descrição"
 >
 
 <input
@@ -1088,6 +1784,7 @@ document.querySelectorAll(
 
 const result=[];
 
+
 rows.forEach(row=>{
 
 const desc=
@@ -1105,7 +1802,7 @@ row.querySelector('.item-unit')
 .value.trim()||'un';
 
 
-if(desc && qty>0){
+if(desc&&qty>0){
 
 result.push({
 
@@ -1120,6 +1817,7 @@ unit:unit
 }
 
 });
+
 
 return result;
 
@@ -1138,7 +1836,9 @@ openM(
 
 `
 
-<label>Nome do case</label>
+<label>
+Nome do case
+</label>
 
 <input
 id="caseName"
@@ -1209,16 +1909,21 @@ Criar case
 
 
 /* =========================================================
-   MOSTRA / ESCONDE EDITOR
+   TOGGLE ITENS
 ========================================================= */
 
 function toggleItemsEditor(){
 
 const active=
-document.getElementById('caseHasItems').checked;
+document.getElementById('caseHasItems')
+.checked;
 
 const area=
 document.getElementById('itemsArea');
+
+
+if(!area)return;
+
 
 area.style.display=
 active?'block':'none';
@@ -1253,7 +1958,9 @@ document.getElementById('caseName')
 
 if(!name){
 
-alert('Informe o nome do case.');
+alert(
+'Informe o nome do case.'
+);
 
 return;
 
@@ -1271,10 +1978,10 @@ hasItems
 :[];
 
 
-if(hasItems && !itemsList.length){
+if(hasItems&&!itemsList.length){
 
 alert(
-'Adicione pelo menos um item ao case.'
+'Adicione pelo menos um item.'
 );
 
 return;
@@ -1282,20 +1989,22 @@ return;
 }
 
 
-const n=db.cases.length+1;
+const next=
+db.cases.length+1;
 
 
 db.cases.push({
 
 id:
-'SV-C'+String(n).padStart(3,'0'),
+'SV-C'+
+String(next).padStart(3,'0'),
 
 name:name,
 
 items:
 itemsList.length
-?itemsList.map(x=>
-x.desc+' × '+x.qty
+?itemsList.map(
+x=>x.desc+' × '+x.qty
 ).join(';')
 :'',
 
@@ -1312,28 +2021,34 @@ closeM();
 
 save();
 
+showInvTab('cases');
+
 }
 
 
 /* =========================================================
-   EDITAR CASE
+   EDITAR CASE EXISTENTE
 ========================================================= */
 
 function editCase(id){
 
 const c=
-db.cases.find(x=>x.id===id);
+db.cases.find(
+x=>x.id===id
+);
 
 if(!c)return;
 
 
 openM(
 
-'Editar case',
+'Editar case — '+c.id,
 
 `
 
-<label>Nome do case</label>
+<label>
+Nome do case
+</label>
 
 <input
 id="caseName"
@@ -1391,7 +2106,9 @@ onclick="addItemRow()"
 </div>
 
 
-<label>Status</label>
+<label>
+Status
+</label>
 
 <select id="caseStatus">
 
@@ -1415,11 +2132,13 @@ ${x}
 </select>
 
 
+<br>
+
 <button
 class="primary"
 onclick="saveCase('${id}')"
 >
-Salvar
+Salvar alterações
 </button>
 
 `
@@ -1430,13 +2149,15 @@ Salvar
 
 
 /* =========================================================
-   SALVA CASE
+   SALVA CASE EXISTENTE
 ========================================================= */
 
 function saveCase(id){
 
 const c=
-db.cases.find(x=>x.id===id);
+db.cases.find(
+x=>x.id===id
+);
 
 if(!c)return;
 
@@ -1448,7 +2169,9 @@ document.getElementById('caseName')
 
 if(!name){
 
-alert('Informe o nome do case.');
+alert(
+'Informe o nome do case.'
+);
 
 return;
 
@@ -1466,10 +2189,10 @@ hasItems
 :[];
 
 
-if(hasItems && !itemsList.length){
+if(hasItems&&!itemsList.length){
 
 alert(
-'Adicione pelo menos um item ao case.'
+'Adicione pelo menos um item.'
 );
 
 return;
@@ -1485,8 +2208,8 @@ c.itemsList=itemsList;
 
 c.items=
 itemsList.length
-?itemsList.map(x=>
-x.desc+' × '+x.qty
+?itemsList.map(
+x=>x.desc+' × '+x.qty
 ).join(';')
 :'';
 
@@ -1503,7 +2226,7 @@ save();
 
 
 /* =========================================================
-   SELECTOR DE CASES
+   SELETOR DE CASES PARA EVENTO
 ========================================================= */
 
 function caseSelector(selected=[]){
@@ -1533,28 +2256,24 @@ ${esc(c.name)}
 </b>
 
 <div class="muted">
-
-${esc(c.id)}
-•
-${esc(c.status)}
-
+${esc(c.id)} • ${esc(c.status)}
 </div>
 
 
 ${
 c.hasItems&&c.itemsList?.length
+
 ?
 
 `
 
-<div class="case-items">
+<div>
 
 ${c.itemsList.map(item=>
 
 `<span class="badge">
 ${esc(item.desc)}
- × ${item.qty}
- ${esc(item.unit)}
+ × ${item.qty} ${esc(item.unit)}
 </span>`
 
 ).join('')}
@@ -1607,7 +2326,9 @@ openM(
 </select>
 
 
-<label>Nome / destino</label>
+<label>
+Nome / destino
+</label>
 
 <input
 id="movNome"
@@ -1615,7 +2336,9 @@ placeholder="Formatura XYZ / Empresa ABC"
 >
 
 
-<label>Data de saída</label>
+<label>
+Data de saída
+</label>
 
 <input
 id="movData"
@@ -1623,7 +2346,9 @@ type="date"
 >
 
 
-<label>Responsável</label>
+<label>
+Responsável
+</label>
 
 <input
 id="movResp"
@@ -1631,7 +2356,9 @@ placeholder="Nome do responsável"
 >
 
 
-<label>Retorno previsto</label>
+<label>
+Retorno previsto
+</label>
 
 <input
 id="movRet"
@@ -1644,9 +2371,7 @@ Cases que irão sair
 </h3>
 
 <div class="muted">
-
-Selecione os cases que serão levados.
-
+Selecione os cases.
 </div>
 
 
@@ -1699,7 +2424,7 @@ const cases=[
 ].map(x=>x.value);
 
 
-if(cases.length===0){
+if(!cases.length){
 
 alert(
 'Selecione pelo menos um case.'
@@ -1754,11 +2479,7 @@ db.cases.find(
 x=>x.id===cid
 );
 
-if(c){
-
-c.status='Em evento';
-
-}
+if(c)c.status='Em evento';
 
 });
 
@@ -1771,7 +2492,7 @@ save();
 
 
 /* =========================================================
-   LISTA DE MOVIMENTAÇÕES
+   LISTA EVENTOS
 ========================================================= */
 
 function renderMov(){
@@ -1785,9 +2506,7 @@ if(!db.mov.length){
 lista.innerHTML=`
 
 <div class="card empty muted">
-
 Nenhuma movimentação registrada.
-
 </div>
 
 `;
@@ -1990,11 +2709,9 @@ c.hasItems&&c.itemsList?.length
 
 `
 
-<div>
+${c.itemsList.map(item=>
 
-${c.itemsList.map(item=>`
-
-<div class="item-line">
+`<div class="item-line">
 
 <span>
 ${esc(item.desc)}
@@ -2005,11 +2722,9 @@ ${item.qty}
  ${esc(item.unit)}
 </b>
 
-</div>
+</div>`
 
-`).join('')}
-
-</div>
+).join('')}
 
 `
 
@@ -2094,9 +2809,7 @@ openM(
 `
 
 <p class="muted">
-
 Marque os cases que efetivamente retornaram.
-
 </p>
 
 
@@ -2129,19 +2842,19 @@ ${esc(c.name)}
 ${esc(c.id)}
 </div>
 
+
 ${
 c.hasItems&&c.itemsList?.length
 
 ?
 
-`<div class="case-items">
+`<div>
 
 ${c.itemsList.map(item=>
 
 `<span class="badge">
 ${esc(item.desc)}
- × ${item.qty}
- ${esc(item.unit)}
+ × ${item.qty} ${esc(item.unit)}
 </span>`
 
 ).join('')}
@@ -2227,23 +2940,12 @@ x=>x.id===cid
 );
 
 
-if(c){
-
-c.status='Disponível';
-
-}
+if(c)c.status='Disponível';
 
 });
 
 
-const total=
-m.cases.length;
-
-const voltou=
-m.returned.length;
-
-
-if(voltou>=total){
+if(m.returned.length>=m.cases.length){
 
 m.status='Concluída';
 
@@ -2346,10 +3048,7 @@ rows+=`
 
 
 const w=
-window.open(
-'',
-'_blank'
-);
+window.open('','_blank');
 
 
 w.document.write(`
@@ -2410,15 +3109,10 @@ ${esc(m.date||'—')}
 <tr>
 
 <th>Case</th>
-
 <th>ID</th>
-
 <th>Item</th>
-
 <th>Qtd.</th>
-
 <th>Un.</th>
-
 <th>Status</th>
 
 </tr>
@@ -2454,24 +3148,26 @@ openM(
 
 `
 
-<label>Case</label>
+<label>
+Case
+</label>
 
 <select id="manCase">
 
-${db.cases.map(c=>`
+${db.cases.map(c=>
 
-<option
-value="${c.id}"
->
+`<option value="${c.id}">
 ${esc(c.name)} — ${esc(c.status)}
-</option>
+</option>`
 
-`).join('')}
+).join('')}
 
 </select>
 
 
-<label>Tipo</label>
+<label>
+Tipo
+</label>
 
 <select id="manTipo">
 
@@ -2486,7 +3182,9 @@ Externa
 </select>
 
 
-<label>Descrição</label>
+<label>
+Descrição
+</label>
 
 <textarea
 id="manDesc"
@@ -2596,9 +3294,7 @@ if(!db.maint.length){
 lista.innerHTML=`
 
 <div class="card empty muted">
-
 Nenhuma manutenção registrada.
-
 </div>
 
 `;
@@ -2702,11 +3398,7 @@ x=>x.id===m.case
 );
 
 
-if(c){
-
-c.status='Disponível';
-
-}
+if(c)c.status='Disponível';
 
 
 save();
@@ -2774,7 +3466,7 @@ Movimentar
 
 
 /* =========================================================
-   NOVO ITEM ESTOQUE
+   NOVO ESTOQUE
 ========================================================= */
 
 function novoEstoque(){
@@ -2785,14 +3477,18 @@ openM(
 
 `
 
-<label>Item</label>
+<label>
+Item
+</label>
 
 <input
 id="stockNome"
 >
 
 
-<label>Unidade</label>
+<label>
+Unidade
+</label>
 
 <input
 id="stockUnit"
@@ -2800,7 +3496,9 @@ placeholder="un, kg, L, rolo..."
 >
 
 
-<label>Quantidade inicial</label>
+<label>
+Quantidade inicial
+</label>
 
 <input
 id="stockQty"
@@ -2810,7 +3508,9 @@ value="0"
 >
 
 
-<label>Estoque mínimo</label>
+<label>
+Estoque mínimo
+</label>
 
 <input
 id="stockMin"
@@ -2984,7 +3684,7 @@ return;
 }
 
 
-if(op===-1 && amount>s.qty){
+if(op===-1&&amount>s.qty){
 
 alert(
 'A quantidade de saída é maior que o estoque disponível.'
@@ -3006,7 +3706,7 @@ save();
 
 
 /* =========================================================
-   QR / IDENTIFICAÇÃO
+   IDENTIFICAÇÃO DO CASE
 ========================================================= */
 
 function caseQR(id){
@@ -3041,9 +3741,7 @@ font:bold 24px monospace;
 display:inline-block
 "
 >
-
 ${esc(c.id)}
-
 </div>
 
 <p class="muted">
@@ -3057,6 +3755,7 @@ ${esc(c.status)}
 </b>
 </p>
 
+
 ${
 c.hasItems&&c.itemsList?.length
 
@@ -3068,9 +3767,9 @@ c.hasItems&&c.itemsList?.length
 Itens do case
 </h3>
 
-${c.itemsList.map(item=>`
+${c.itemsList.map(item=>
 
-<div class="item-line">
+`<div class="item-line">
 
 <span>
 ${esc(item.desc)}
@@ -3081,9 +3780,9 @@ ${item.qty}
  ${esc(item.unit)}
 </b>
 
-</div>
+</div>`
 
-`).join('')}
+).join('')}
 
 `
 
@@ -3101,7 +3800,123 @@ ${item.qty}
 
 
 /* =========================================================
-   INICIALIZA
+   MANUTENÇÃO DIRETA DO CASE
+========================================================= */
+
+function caseMan(id){
+
+const c=
+db.cases.find(
+x=>x.id===id
+);
+
+if(!c)return;
+
+
+openM(
+
+'Manutenção — '+c.name,
+
+`
+
+<label>
+Tipo
+</label>
+
+<select id="caseManTipo">
+
+<option>
+Interna
+</option>
+
+<option>
+Externa
+</option>
+
+</select>
+
+
+<label>
+Descrição
+</label>
+
+<textarea
+id="caseManDesc"
+placeholder="Descreva o problema..."
+></textarea>
+
+
+<button
+class="primary"
+onclick="addCaseMan('${id}')"
+>
+Registrar manutenção
+</button>
+
+`
+
+);
+
+}
+
+
+function addCaseMan(id){
+
+const c=
+db.cases.find(
+x=>x.id===id
+);
+
+if(!c)return;
+
+
+const type=
+document.getElementById('caseManTipo')
+.value;
+
+
+db.maint.push({
+
+id:
+'MAN-'+
+String(db.maint.length+1)
+.padStart(4,'0'),
+
+name:c.name,
+
+case:id,
+
+type:type,
+
+desc:
+document.getElementById('caseManDesc')
+.value,
+
+status:'Pendente',
+
+date:
+new Date()
+.toISOString()
+.slice(0,10)
+
+});
+
+
+c.status=
+type==='Externa'
+?'Em manutenção externa'
+:'Em manutenção interna';
+
+
+closeM();
+
+save();
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
 ========================================================= */
 
 render();
