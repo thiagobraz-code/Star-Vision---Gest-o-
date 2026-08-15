@@ -1329,7 +1329,6 @@ if(!db){
 }
 
 normalizeDB();
-saveDB();
 
 
 function parseOldItems(value){
@@ -1769,12 +1768,124 @@ function inventoryTab(tab){
    SALVAMENTO
 ========================================================= */
 
+let saveQueue=Promise.resolve();
+
 function saveDB(){
+
+  const payload=JSON.stringify(db);
 
   localStorage.setItem(
     "starVisionDB",
-    JSON.stringify(db)
+    payload
   );
+
+  saveQueue=saveQueue.then(async()=>{
+
+    try{
+
+      await fetch("/api/db",{
+        method:"PUT",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:payload,
+        cache:"no-store",
+        keepalive:true
+      });
+
+    }catch(e){
+
+      console.warn("Servidor indisponível; dados mantidos localmente.",e);
+
+    }
+
+  });
+
+}
+
+
+async function loadServerDB(){
+
+  let localSnapshot=null;
+
+  try{
+
+    localSnapshot=JSON.parse(
+      localStorage.getItem("starVisionDB")||"null"
+    );
+
+  }catch(e){
+
+    localSnapshot=null;
+
+  }
+
+  try{
+
+    const response=await fetch("/api/db",{
+      method:"GET",
+      cache:"no-store"
+    });
+
+    if(!response.ok)
+      throw new Error("HTTP "+response.status);
+
+    const serverDB=await response.json();
+
+    const hasServerData=
+      Array.isArray(serverDB?.cases) && serverDB.cases.length>0 ||
+      Array.isArray(serverDB?.equipment) && serverDB.equipment.length>0 ||
+      Array.isArray(serverDB?.movements) && serverDB.movements.length>0 ||
+      Array.isArray(serverDB?.maintenance) && serverDB.maintenance.length>0 ||
+      Array.isArray(serverDB?.stock) && serverDB.stock.length>0;
+
+    if(hasServerData){
+
+      db=serverDB;
+      normalizeDB();
+
+      localStorage.setItem(
+        "starVisionDB",
+        JSON.stringify(db)
+      );
+
+    }else if(localSnapshot){
+
+      db=localSnapshot;
+      normalizeDB();
+      saveDB();
+
+    }else{
+
+      normalizeDB();
+      saveDB();
+
+    }
+
+  }catch(e){
+
+    if(localSnapshot){
+
+      db=localSnapshot;
+      normalizeDB();
+
+    }else{
+
+      normalizeDB();
+
+    }
+
+    console.warn("Não foi possível carregar o banco do servidor.",e);
+
+  }
+
+}
+
+
+async function boot(){
+
+  await loadServerDB();
+  restoreLogin();
 
 }
 
@@ -6040,7 +6151,7 @@ function formatDate(value){
    INICIALIZAÇÃO
 ========================================================= */
 
-restoreLogin();
+boot();
 
 </script>
 
