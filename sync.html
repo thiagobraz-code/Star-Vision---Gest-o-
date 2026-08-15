@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Star Vision — Sincronização</title>
+<style>
+:root{--bg:#09090b;--panel:#151519;--line:#36363e;--text:#f5f5f5;--muted:#a1a1aa;--ok:#42d77d;--bad:#ff626b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;padding:24px}
+main{max-width:720px;margin:auto}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:14px}h1{margin:0 0 6px}.muted{color:var(--muted)}button{border:1px solid var(--line);background:#202026;color:white;border-radius:9px;padding:11px 14px;cursor:pointer;margin:4px 4px 4px 0}button.primary{background:#eee;color:#111;border-color:#eee}button.success{border-color:#246c43;color:#65e69a}button.danger{border-color:#7e3037;color:#ff8d95}input[type=file]{display:block;margin:12px 0}.status{padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:12px;white-space:pre-wrap}.ok{color:var(--ok)}.bad{color:var(--bad)}
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <h1>STAR VISION</h1>
+    <div class="muted">Sincronização e transferência de dados</div>
+  </div>
+
+  <div class="card">
+    <h2>1. No PC — exportar a base atual</h2>
+    <p class="muted">Esta página lê a base <b>starVisionDB</b> gravada neste navegador. O PC continua sendo a fonte original.</p>
+    <button class="primary" onclick="exportDB()">Exportar dados do PC</button>
+    <button onclick="copyDB()">Copiar dados</button>
+    <div id="pcStatus" class="status">Aguardando leitura...</div>
+  </div>
+
+  <div class="card">
+    <h2>2. No celular — importar a base do PC</h2>
+    <p class="muted">Transfira o arquivo JSON exportado pelo PC para o celular e selecione-o abaixo.</p>
+    <input id="file" type="file" accept="application/json,.json">
+    <button class="success" onclick="importDB()">Importar dados no celular</button>
+    <div id="mobileStatus" class="status">Nenhuma importação realizada.</div>
+  </div>
+
+  <div class="card">
+    <h2>3. Conferência</h2>
+    <p class="muted">Depois da importação, abra o Star Vision normalmente no celular. Os eventos, cases, patrimônios, manutenção e estoque serão carregados da mesma base transferida.</p>
+    <button onclick="location.href='/'">Abrir Star Vision</button>
+    <button class="danger" onclick="clearLocal()">Limpar base deste dispositivo</button>
+  </div>
+</main>
+<script>
+const KEY='starVisionDB';
+function readDB(){
+  try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){return null}
+}
+function summary(db){
+  if(!db)return 'Nenhuma base encontrada neste navegador.';
+  return `Cases: ${db.cases?.length||0}\nPatrimônios: ${db.equipment?.length||0}\nEventos/Empréstimos: ${db.movements?.length||0}\nManutenções: ${db.maintenance?.length||0}\nEstoque: ${db.stock?.length||0}`;
+}
+function exportDB(){
+  const db=readDB();
+  const el=document.getElementById('pcStatus');
+  if(!db){el.innerHTML='<span class="bad">Não encontrei starVisionDB neste PC.</span>';return}
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='star-vision-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  el.innerHTML='<span class="ok">Backup exportado.</span>\n'+summary(db);
+}
+async function copyDB(){
+  const db=readDB();
+  const el=document.getElementById('pcStatus');
+  if(!db){el.innerHTML='<span class="bad">Não encontrei starVisionDB neste PC.</span>';return}
+  try{
+    await navigator.clipboard.writeText(JSON.stringify(db));
+    el.innerHTML='<span class="ok">Dados copiados para a área de transferência.</span>\n'+summary(db);
+  }catch(e){el.innerHTML='<span class="bad">O navegador bloqueou a cópia. Use Exportar dados do PC.</span>';}
+}
+async function importDB(){
+  const file=document.getElementById('file').files[0];
+  const el=document.getElementById('mobileStatus');
+  if(!file){el.innerHTML='<span class="bad">Selecione o arquivo JSON primeiro.</span>';return}
+  try{
+    const text=await file.text();
+    const db=JSON.parse(text);
+    if(!db||typeof db!=='object'||!Array.isArray(db.cases)||!Array.isArray(db.movements))throw new Error('arquivo não parece ser uma base Star Vision válida');
+    if(!confirm('Isso substituirá a base Star Vision deste celular pelos dados exportados do PC. Continuar?'))return;
+    localStorage.setItem(KEY,JSON.stringify(db));
+    el.innerHTML='<span class="ok">Base importada com sucesso.</span>\n'+summary(db)+'\n\nAgora abra o Star Vision.';
+  }catch(e){el.innerHTML='<span class="bad">Falha na importação: '+e.message+'</span>';}
+}
+function clearLocal(){
+  if(!confirm('Apagar a base Star Vision deste dispositivo?'))return;
+  localStorage.removeItem(KEY);
+  localStorage.removeItem('svdb');
+  document.getElementById('mobileStatus').innerHTML='<span class="bad">Base local apagada.</span>';
+}
+const db=readDB();
+document.getElementById('pcStatus').textContent=summary(db);
+</script>
+</body>
+</html>
