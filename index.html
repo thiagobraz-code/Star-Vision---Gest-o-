@@ -18,13 +18,40 @@
 --w:#f3bd4e;
 --bad:#ff626b
 }
+
 *{box-sizing:border-box}
+
 body{
 margin:0;
 background:var(--bg);
 color:var(--t);
 font:15px Arial,sans-serif
 }
+
+button,input,select,textarea{
+font:inherit
+}
+
+button{
+border:1px solid var(--l);
+background:var(--p2);
+color:white;
+border-radius:8px;
+padding:9px 11px;
+cursor:pointer
+}
+
+button.primary{
+background:#eee;
+color:#111;
+border-color:#eee
+}
+
+button.danger{
+color:#ff858c;
+border-color:#632b31
+}
+
 header{
 position:sticky;
 top:0;
@@ -32,6 +59,7 @@ background:#0b0b0def;
 border-bottom:1px solid var(--l);
 z-index:5
 }
+
 .bar{
 max-width:1100px;
 margin:auto;
@@ -41,10 +69,12 @@ justify-content:space-between;
 align-items:center;
 gap:12px
 }
+
 .logo{
 font-weight:900;
 letter-spacing:2px
 }
+
 .logo small{
 display:block;
 color:var(--m);
@@ -52,65 +82,90 @@ font-size:9px;
 letter-spacing:2px;
 margin-top:4px
 }
+
 nav{
 display:flex;
 gap:6px;
 flex-wrap:wrap
 }
-.nav,button{
-border:1px solid var(--l);
-background:var(--p2);
-color:white;
-border-radius:8px;
-padding:9px 11px;
-cursor:pointer
+
+.nav.active{
+border-color:#aaa
 }
-.nav.active{border-color:#aaa}
-button.primary{
-background:#eee;
-color:#111;
-border-color:#eee
+
+.userbox{
+display:flex;
+align-items:center;
+gap:8px
 }
-button.danger{
-border-color:#7b252c;
-color:#ff858c
-}
+
 main{
 max-width:1100px;
 margin:auto;
 padding:22px 18px
 }
-.view{display:none}
-.view.active{display:block}
-h1{margin:0 0 4px}
-h2{margin-top:0}
+
+.view{
+display:none
+}
+
+.view.active{
+display:block
+}
+
+h1{
+margin:0 0 4px
+}
+
+h2,h3{
+margin-top:0
+}
+
 .muted{
 color:var(--m);
 font-size:13px
 }
+
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:12px;
 margin-top:18px
 }
+
 .card,.kpi{
 background:var(--p);
 border:1px solid var(--l);
 border-radius:13px;
 padding:15px
 }
+
+.kpis{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin:18px 0
+}
+
+.kpi b{
+display:block;
+font-size:28px;
+margin-bottom:5px
+}
+
 .between{
 display:flex;
 justify-content:space-between;
-gap:10px;
-align-items:center
+align-items:center;
+gap:10px
 }
+
 .row{
 display:flex;
 gap:8px;
 flex-wrap:wrap
 }
+
 .badge{
 display:inline-block;
 border:1px solid var(--l);
@@ -119,20 +174,11 @@ padding:5px 8px;
 font-size:12px;
 margin:3px 3px 0 0
 }
+
 .ok{color:var(--ok)}
 .warn{color:var(--w)}
 .bad{color:var(--bad)}
-.kpis{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin:18px 0
-}
-.kpi b{
-display:block;
-font-size:28px;
-margin-bottom:5px
-}
+
 input,select,textarea{
 width:100%;
 background:#0e0e10;
@@ -142,42 +188,36 @@ border-radius:8px;
 padding:10px;
 margin:5px 0 12px
 }
-textarea{min-height:100px}
+
+textarea{
+min-height:100px
+}
+
 label{
 display:block;
-color:#ddd;
 font-size:13px;
-margin-top:6px
+margin-top:7px
 }
-.check{
-display:flex;
-align-items:center;
-gap:8px;
-margin:7px 0;
-padding:8px;
-border:1px solid var(--l);
-border-radius:8px
-}
-.check input{
-width:auto;
-margin:0
-}
+
 table{
 width:100%;
 border-collapse:collapse;
 background:var(--p);
 margin-top:15px
 }
+
 th,td{
 padding:10px;
 border-bottom:1px solid var(--l);
 text-align:left;
 font-size:13px
 }
+
 th{
 color:var(--m);
 font-size:11px
 }
+
 .modal{
 position:fixed;
 inset:0;
@@ -188,7 +228,11 @@ justify-content:center;
 padding:16px;
 z-index:20
 }
-.modal.open{display:flex}
+
+.modal.open{
+display:flex
+}
+
 .box{
 background:var(--p);
 border:1px solid var(--l);
@@ -198,15 +242,34 @@ width:min(760px,100%);
 max-height:90vh;
 overflow:auto
 }
-.itemline{
+
+.itemrow{
 display:grid;
-grid-template-columns:1fr 100px 100px 45px;
+grid-template-columns:1fr 90px 80px 40px;
 gap:7px;
+align-items:center;
 margin-bottom:7px
 }
-.smallbtn{
-padding:7px 9px
+
+.itemrow input{
+margin:0
 }
+
+.check{
+display:flex;
+align-items:flex-start;
+gap:9px;
+padding:10px;
+border:1px solid var(--l);
+border-radius:9px;
+margin:7px 0
+}
+
+.check input{
+width:auto;
+margin:3px 0 0
+}
+
 .empty{
 padding:25px;
 text-align:center;
@@ -215,150 +278,622 @@ border:1px dashed var(--l);
 border-radius:12px;
 margin-top:15px
 }
-.status-ok{color:var(--ok)}
-.status-bad{color:var(--bad)}
-.status-warn{color:var(--w)}
+
+
+/* LOGIN */
+
+#loginScreen{
+position:fixed;
+inset:0;
+background:var(--bg);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100
+}
+
+.loginbox{
+width:min(400px,100%);
+background:var(--p);
+border:1px solid var(--l);
+border-radius:16px;
+padding:28px;
+box-shadow:0 20px 60px #0008
+}
+
+.loginlogo{
+font-size:24px;
+font-weight:900;
+letter-spacing:3px;
+margin-bottom:4px
+}
+
+.loginlogo small{
+display:block;
+font-size:9px;
+color:var(--m);
+letter-spacing:2px;
+margin-top:6px
+}
+
+.login-error{
+display:none;
+color:var(--bad);
+font-size:13px;
+margin:5px 0 12px
+}
+
+#app{
+display:none
+}
+
 @media(max-width:700px){
-.kpis{grid-template-columns:repeat(2,1fr)}
+
+.kpis{
+grid-template-columns:repeat(2,1fr)
+}
+
 .bar{
 align-items:flex-start;
 flex-direction:column
 }
-.itemline{
-grid-template-columns:1fr 75px 75px 40px
+
+.itemrow{
+grid-template-columns:1fr 70px 70px 40px
 }
+
+table{
+display:block;
+overflow:auto;
+white-space:nowrap
+}
+
+.userbox{
+width:100%;
+justify-content:space-between
+}
+
 }
 </style>
 </head>
 
 <body>
 
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen">
+
+<div class="loginbox">
+
+<div class="loginlogo">
+STAR VISION
+<small>GESTÃO DE EQUIPAMENTOS</small>
+</div>
+
+<p class="muted">
+Acesso ao sistema
+</p>
+
+<label>Usuário</label>
+
+<input
+id="loginUser"
+autocomplete="username"
+placeholder="Usuário"
+>
+
+<label>Senha</label>
+
+<input
+id="loginPass"
+type="password"
+autocomplete="current-password"
+placeholder="Senha"
+>
+
+<div
+id="loginError"
+class="login-error"
+>
+Usuário ou senha inválidos.
+</div>
+
+<button
+class="primary"
+style="width:100%"
+onclick="login()"
+>
+ENTRAR
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     APLICAÇÃO
+===================================================== -->
+
+<div id="app">
+
 <header>
+
 <div class="bar">
+
 <div class="logo">
 STAR VISION
 <small>GESTÃO DE EQUIPAMENTOS</small>
 </div>
+
+<div class="userbox">
+
 <nav id="nav"></nav>
+
+<span
+class="badge"
+id="userLabel"
+></span>
+
+<button onclick="logout()">
+Sair
+</button>
+
 </div>
+
+</div>
+
 </header>
+
 
 <main>
 
+
 <!-- INÍCIO -->
-<section id="home" class="view active">
+
+<section
+id="home"
+class="view active"
+>
+
 <h1>Painel</h1>
-<div class="muted">Controle interno de equipamentos, cases e movimentações</div>
+
+<div class="muted">
+Controle interno de equipamentos, cases e movimentações.
+</div>
 
 <div class="kpis">
-<div class="kpi"><b id="kc">0</b><span class="muted">Cases</span></div>
-<div class="kpi"><b id="ke">0</b><span class="muted">Patrimônios</span></div>
-<div class="kpi"><b id="km">0</b><span class="muted">Manutenções abertas</span></div>
-<div class="kpi"><b id="kv">0</b><span class="muted">Movimentações</span></div>
+
+<div class="kpi">
+<b id="kc">0</b>
+<span class="muted">Cases</span>
 </div>
+
+<div class="kpi">
+<b id="ke">0</b>
+<span class="muted">Patrimônios</span>
+</div>
+
+<div class="kpi">
+<b id="km">0</b>
+<span class="muted">Manutenções abertas</span>
+</div>
+
+<div class="kpi">
+<b id="kv">0</b>
+<span class="muted">Movimentações</span>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Inventário</h3>
+
+<p class="muted">
+Patrimônios individuais e cases com conteúdo controlado.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Eventos</h3>
+
+<p class="muted">
+Saída, conferência e retorno dos equipamentos.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Conferência</h3>
+
+<p class="muted">
+Registre faltas, danos e divergências no retorno.
+</p>
+
+</div>
+
+</div>
+
 </section>
 
 
 <!-- INVENTÁRIO -->
-<section id="inv" class="view">
+
+<section
+id="inv"
+class="view"
+>
 
 <div class="between">
+
 <div>
+
 <h1>Inventário</h1>
-<div class="muted">Equipamentos patrimoniais cadastrados.</div>
-</div>
-<button class="primary" onclick="novoEquip()">+ Novo patrimônio</button>
+
+<div class="muted">
+Patrimônios e estrutura dos cases.
 </div>
 
+</div>
+
+</div>
+
+
+<div class="row" style="margin-top:18px">
+
+<button
+class="primary"
+onclick="novoEquip()"
+>
++ Novo patrimônio
+</button>
+
+<button
+onclick="novoCase()"
+>
++ Novo case
+</button>
+
+</div>
+
+
+<div class="card" style="margin-top:15px">
+
+<h3>Patrimônios</h3>
+
 <div id="invBody"></div>
+
+</div>
+
+
+<div class="card" style="margin-top:15px">
+
+<div class="between">
+
+<div>
+
+<h3>Cases</h3>
+
+<div class="muted">
+Clique em editar para alterar o conteúdo.
+</div>
+
+</div>
+
+</div>
+
+<div
+id="caseList"
+class="grid"
+>
+</div>
+
+</div>
 
 </section>
 
 
 <!-- EVENTOS -->
-<section id="mov" class="view">
+
+<section
+id="mov"
+class="view"
+>
 
 <div class="between">
+
 <div>
+
 <h1>Eventos / Empréstimos</h1>
-<div class="muted">Saída, retorno e conferência dos materiais.</div>
-</div>
-<button class="primary" onclick="novoMov()">+ Nova saída</button>
+
+<div class="muted">
+Saída, retorno e conferência.
 </div>
 
-<div id="movList" class="grid"></div>
+</div>
+
+<button
+class="primary"
+onclick="novoMov()"
+>
++ Nova saída
+</button>
+
+</div>
+
+<div
+id="movList"
+class="grid"
+>
+</div>
 
 </section>
 
 
 <!-- MANUTENÇÃO -->
-<section id="maint" class="view">
+
+<section
+id="maint"
+class="view"
+>
 
 <div class="between">
+
 <div>
+
 <h1>Manutenção</h1>
-<div class="muted">Controle de manutenção interna e externa.</div>
-</div>
-<button class="primary" onclick="novaMan()">+ Registrar</button>
+
+<div class="muted">
+Controle interno e externo.
 </div>
 
-<div id="manList" class="grid"></div>
+</div>
+
+<button
+class="primary"
+onclick="novaMan()"
+>
++ Registrar
+</button>
+
+</div>
+
+<div
+id="manList"
+class="grid"
+>
+</div>
 
 </section>
 
 
 <!-- ESTOQUE -->
-<section id="stock" class="view">
+
+<section
+id="stock"
+class="view"
+>
 
 <div class="between">
+
 <div>
+
 <h1>Estoque</h1>
-<div class="muted">Peças, materiais e consumíveis.</div>
-</div>
-<button class="primary" onclick="novoEstoque()">+ Novo item</button>
+
+<div class="muted">
+Peças, materiais e consumíveis.
 </div>
 
-<div id="stockList" class="grid"></div>
+</div>
+
+<button
+class="primary"
+onclick="novoEstoque()"
+>
++ Novo item
+</button>
+
+</div>
+
+<div
+id="stockList"
+class="grid"
+>
+</div>
 
 </section>
+
 
 </main>
 
 
-<div id="modal" class="modal">
+<!-- MODAL -->
+
+<div
+id="modal"
+class="modal"
+>
+
 <div class="box">
+
 <div class="between">
+
 <h2 id="mtitle"></h2>
-<button onclick="closeM()">Fechar</button>
+
+<button onclick="closeM()">
+Fechar
+</button>
+
 </div>
+
 <div id="mbody"></div>
+
 </div>
+
+</div>
+
+
 </div>
 
 
 <script>
 
-/* =========================================================
-   BANCO LOCAL
-========================================================= */
+/* =====================================================
+   LOGIN
+===================================================== */
+
+const USERS={
+
+admin:{
+password:"1234",
+role:"admin",
+name:"Administrador"
+}
+
+};
+
+
+let currentUser=null;
+
+
+function login(){
+
+const user=
+document.getElementById("loginUser")
+.value.trim();
+
+const pass=
+document.getElementById("loginPass")
+.value;
+
+
+const account=USERS[user];
+
+
+if(!account||account.password!==pass){
+
+document.getElementById("loginError")
+.style.display="block";
+
+return;
+
+}
+
+
+currentUser={
+user,
+role:account.role,
+name:account.name
+};
+
+
+sessionStorage.setItem(
+"sv_user",
+JSON.stringify(currentUser)
+);
+
+
+document.getElementById("loginScreen")
+.style.display="none";
+
+document.getElementById("app")
+.style.display="block";
+
+document.getElementById("userLabel")
+.textContent=
+currentUser.name;
+
+render();
+
+show("home");
+
+}
+
+
+function logout(){
+
+sessionStorage.removeItem("sv_user");
+
+currentUser=null;
+
+document.getElementById("app")
+.style.display="none";
+
+document.getElementById("loginScreen")
+.style.display="flex";
+
+document.getElementById("loginUser")
+.value="";
+
+document.getElementById("loginPass")
+.value="";
+
+}
+
+
+function checkLogin(){
+
+const saved=
+sessionStorage.getItem("sv_user");
+
+if(!saved)return;
+
+try{
+
+currentUser=JSON.parse(saved);
+
+document.getElementById("loginScreen")
+.style.display="none";
+
+document.getElementById("app")
+.style.display="block";
+
+document.getElementById("userLabel")
+.textContent=currentUser.name;
+
+}catch(e){
+
+sessionStorage.removeItem("sv_user");
+
+}
+
+}
+
+
+/* =====================================================
+   CASES INICIAIS
+===================================================== */
 
 const CASES_INICIAIS=[
+
 {
 id:"SV-C001",
 name:"Case 01 - XLR Som",
 status:"Disponível",
 items:[
-{name:"Cabo XLR",qty:27,unit:"un",desc:"Cabo XLR 10 metros"}
+{name:"XLR Som",qty:27,unit:"un",desc:"Cabo XLR"}
 ]
 },
+
 {
 id:"SV-C002",
 name:"Case 01 - XLR Luz",
 status:"Disponível",
 items:[
-{name:"Cabo XLR",qty:10,unit:"un",desc:"Cabo XLR 20 metros"}
+{name:"XLR Luz",qty:27,unit:"un",desc:"Cabo XLR"}
 ]
 },
+
 {
 id:"SV-C003",
 name:"Case 01 - Chicotes",
@@ -367,6 +902,7 @@ items:[
 {name:"Chicote",qty:1,unit:"kit",desc:""}
 ]
 },
+
 {
 id:"SV-C004",
 name:"Case 01 - Extensão PP",
@@ -376,6 +912,7 @@ items:[
 {name:"Extensão PP Simples",qty:1,unit:"un",desc:""}
 ]
 },
+
 {
 id:"SV-C005",
 name:"Case 01 - 01V96",
@@ -385,15 +922,16 @@ items:[
 {name:"ADA Behringer",qty:2,unit:"un",desc:""}
 ]
 },
+
 {
 id:"SV-C006",
 name:"Case 02 - 01V96i",
 status:"Disponível",
 items:[
-{name:"01V96i",qty:1,unit:"un",desc:""},
-{name:"ADA",qty:2,unit:"un",desc:""}
+{name:"01V96i",qty:1,unit:"un",desc:""}
 ]
 },
+
 {
 id:"SV-C007",
 name:"Case 01 - Midas M32 Full",
@@ -402,22 +940,33 @@ items:[
 {name:"Midas M32 Full",qty:1,unit:"un",desc:""}
 ]
 }
+
 ];
 
+
 for(let i=1;i<=8;i++){
+
 CASES_INICIAIS.push({
+
 id:"SV-C"+String(i+7).padStart(3,"0"),
+
 name:"Case "+String(i).padStart(2,"0")+" - Beam",
+
 status:"Disponível",
+
 items:[
 {name:"Beam",qty:2,unit:"un",desc:""},
 {name:"Powercon",qty:2,unit:"un",desc:""},
 {name:"Gancho",qty:4,unit:"un",desc:""}
 ]
+
 });
+
 }
 
+
 CASES_INICIAIS.push(
+
 {
 id:"SV-C016",
 name:"Case 01 - Cabos Painel",
@@ -428,6 +977,18 @@ items:[
 {name:"Powercon",qty:1,unit:"un",desc:""}
 ]
 },
+
+{
+id:"SV-C017",
+name:"Case 02 - Cabos Painel",
+status:"Disponível",
+items:[
+{name:"Gancho",qty:1,unit:"un",desc:""},
+{name:"RJ",qty:1,unit:"un",desc:""},
+{name:"Powercon",qty:1,unit:"un",desc:""}
+]
+},
+
 {
 id:"SV-C018",
 name:"Case 01 - Grand MA",
@@ -436,6 +997,7 @@ items:[
 {name:"Grand MA",qty:1,unit:"un",desc:""}
 ]
 },
+
 {
 id:"SV-C019",
 name:"Case 02 - Grand MA",
@@ -444,740 +1006,1866 @@ items:[
 {name:"Grand MA",qty:1,unit:"un",desc:""}
 ]
 }
+
 );
+
+
+/* =====================================================
+   PATRIMÔNIOS INICIAIS
+===================================================== */
 
 const EQUIP_INICIAIS=[
+
 ["01V96","PAT-0001","SV-C005"],
+
 ["ADA Behringer 01","PAT-0002","SV-C005"],
+
 ["ADA Behringer 02","PAT-0003","SV-C005"],
+
 ["01V96i","PAT-0004","SV-C006"],
+
 ["Midas M32 Full","PAT-0005","SV-C007"]
+
 ];
 
+
 for(let i=1;i<=16;i++){
+
 EQUIP_INICIAIS.push([
+
 "Beam "+String(i).padStart(2,"0"),
+
 "PAT-"+String(i+5).padStart(4,"0"),
-"SV-C"+String(7+Math.ceil(i/2)).padStart(3,"0")
+
+"SV-C"+String(
+7+Math.ceil(i/2)
+).padStart(3,"0")
+
 ]);
+
 }
 
+
 EQUIP_INICIAIS.push(
+
 ["Grand MA 01","PAT-0022","SV-C018"],
+
 ["Grand MA 02","PAT-0023","SV-C019"]
+
 );
 
-let db=JSON.parse(localStorage.getItem("svdb"));
+
+/* =====================================================
+   BANCO
+===================================================== */
+
+let db=
+JSON.parse(
+localStorage.getItem("svdb")||"null"
+);
+
 
 if(!db){
+
 db={
+
 cases:CASES_INICIAIS,
+
 equipment:EQUIP_INICIAIS.map(e=>({
+
 name:e[0],
 pat:e[1],
 caseId:e[2],
 status:"Disponível"
+
 })),
+
 maint:[],
+
 mov:[],
+
 stock:[
-{name:"Lâmpada AR-111",unit:"un",qty:10,min:2},
-{name:"Fita isolante",unit:"rolo",qty:20,min:10},
-{name:"Líquido de fumaça",unit:"L",qty:0,min:5},
-{name:"Papel picado",unit:"kg",qty:0,min:5}
+
+{
+name:"Lâmpada AR-111",
+unit:"un",
+qty:10,
+min:2
+},
+
+{
+name:"Fita isolante",
+unit:"rolo",
+qty:20,
+min:10
+},
+
+{
+name:"Líquido de fumaça",
+unit:"L",
+qty:0,
+min:5
+},
+
+{
+name:"Papel picado",
+unit:"kg",
+qty:0,
+min:5
+}
+
 ]
+
 };
+
 saveDB();
+
 }
 
 
-/* =========================================================
+/* =====================================================
+   MIGRAÇÃO DO BANCO ANTIGO
+===================================================== */
+
+db.cases ||= [];
+db.equipment ||= [];
+db.maint ||= [];
+db.mov ||= [];
+db.stock ||= [];
+
+
+db.cases.forEach(c=>{
+
+/*
+Versão antiga guardava items como texto.
+Converte automaticamente.
+*/
+
+if(!Array.isArray(c.items)){
+
+let texto=c.items||"";
+
+c.items=
+texto
+.split(";")
+.map(x=>x.trim())
+.filter(Boolean)
+.map(item=>{
+
+let match=
+item.match(
+/^(.*?)\s*[×x]\s*(\d+)\s*$/
+);
+
+if(match){
+
+return{
+
+name:match[1].trim(),
+qty:Number(match[2]),
+unit:"un",
+desc:""
+
+};
+
+}
+
+return{
+
+name:item,
+qty:1,
+unit:"un",
+desc:""
+
+};
+
+});
+
+}
+
+
+if(!c.status){
+
+c.status="Disponível";
+
+}
+
+});
+
+
+/*
+Converte patrimônio antigo.
+*/
+
+db.equipment=
+db.equipment.map(e=>{
+
+if(Array.isArray(e)){
+
+return{
+
+name:e[0],
+pat:e[1],
+caseId:e[2]||"",
+status:e[3]||"Disponível"
+
+};
+
+}
+
+return e;
+
+});
+
+
+/*
+Garante estrutura das movimentações.
+*/
+
+db.mov=
+db.mov.map(m=>({
+
+...m,
+
+cases:
+Array.isArray(m.cases)
+?m.cases
+:[],
+
+returned:
+m.returned||false,
+
+returnDate:
+m.returnDate||"",
+
+returnResp:
+m.returnResp||"",
+
+conference:
+Array.isArray(m.conference)
+?m.conference
+:[],
+
+notes:
+m.notes||""
+
+}));
+
+
+saveDB();
+
+
+/* =====================================================
    UTILIDADES
-========================================================= */
+===================================================== */
 
 function saveDB(){
-localStorage.setItem("svdb",JSON.stringify(db));
+
+localStorage.setItem(
+"svdb",
+JSON.stringify(db)
+);
+
 }
 
+
 function esc(s){
-return String(s??"").replace(/[&<>"']/g,m=>({
+
+return String(s??"")
+.replace(
+/[&<>"']/g,
+
+m=>({
+
 "&":"&amp;",
 "<":"&lt;",
 ">":"&gt;",
 '"':"&quot;",
 "'":"&#039;"
-}[m]));
+
+}[m])
+
+);
+
 }
+
 
 function openM(t,b){
-document.getElementById("mtitle").textContent=t;
-document.getElementById("mbody").innerHTML=b;
-document.getElementById("modal").classList.add("open");
+
+document.getElementById("mtitle")
+.textContent=t;
+
+document.getElementById("mbody")
+.innerHTML=b;
+
+document.getElementById("modal")
+.classList.add("open");
+
 }
+
 
 function closeM(){
-document.getElementById("modal").classList.remove("open");
+
+document.getElementById("modal")
+.classList.remove("open");
+
 }
 
-function novoId(prefix,lista){
-return prefix+String(lista.length+1).padStart(4,"0");
-}
 
-
-/* =========================================================
-   NAVEGAÇÃO
-========================================================= */
+/* =====================================================
+   MENU
+===================================================== */
 
 const nav=[
+
 ["home","Início"],
+
 ["inv","Inventário"],
+
 ["mov","Eventos"],
+
 ["maint","Manutenção"],
+
 ["stock","Estoque"]
+
 ];
 
+
 document.getElementById("nav").innerHTML=
+
 nav.map(x=>
-`<button class="nav" data-v="${x[0]}">${x[1]}</button>`
+
+`<button
+class="nav"
+data-v="${x[0]}"
+>
+${x[1]}
+</button>`
+
 ).join("");
 
-document.querySelectorAll(".nav").forEach(b=>{
-b.onclick=()=>show(b.dataset.v);
+
+document
+.querySelectorAll(".nav")
+.forEach(b=>{
+
+b.onclick=
+()=>show(b.dataset.v);
+
 });
+
 
 function show(v){
 
-document.querySelectorAll(".view")
-.forEach(x=>x.classList.remove("active"));
+document
+.querySelectorAll(".view")
+.forEach(x=>
+x.classList.remove("active")
+);
 
-document.getElementById(v).classList.add("active");
+document
+.getElementById(v)
+.classList.add("active");
 
-document.querySelectorAll(".nav")
-.forEach(x=>x.classList.toggle("active",x.dataset.v===v));
+
+document
+.querySelectorAll(".nav")
+.forEach(x=>
+
+x.classList.toggle(
+"active",
+x.dataset.v===v
+)
+
+);
 
 render();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDER
-========================================================= */
+===================================================== */
 
 function render(){
 
-document.getElementById("kc").textContent=db.cases.length;
-document.getElementById("ke").textContent=db.equipment.length;
-document.getElementById("km").textContent=
-db.maint.filter(x=>x.status!=="Concluída").length;
-document.getElementById("kv").textContent=db.mov.length;
+document.getElementById("kc")
+.textContent=db.cases.length;
+
+document.getElementById("ke")
+.textContent=db.equipment.length;
+
+document.getElementById("km")
+.textContent=
+db.maint.filter(
+x=>x.status!=="Concluída"
+).length;
+
+document.getElementById("kv")
+.textContent=db.mov.length;
 
 renderInventario();
+
+renderCases();
+
 renderMov();
+
 renderMan();
+
 renderStock();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    INVENTÁRIO
-========================================================= */
+===================================================== */
 
 function renderInventario(){
 
 let html=`
+
 <table>
+
 <tr>
+
 <th>Equipamento</th>
 <th>Patrimônio</th>
 <th>Case</th>
 <th>Status</th>
-<th>Ações</th>
-</tr>`;
+<th>Ação</th>
+
+</tr>
+
+`;
+
 
 db.equipment.forEach((e,i)=>{
 
-let c=db.cases.find(x=>x.id===e.caseId);
+let c=
+db.cases.find(
+x=>x.id===e.caseId
+);
+
 
 html+=`
+
 <tr>
-<td>${esc(e.name)}</td>
-<td>${esc(e.pat)}</td>
-<td>${esc(c?.name||"—")}</td>
-<td>${esc(e.status||"Disponível")}</td>
+
 <td>
-<button onclick="editEquip(${i})">Editar</button>
+${esc(e.name)}
 </td>
-</tr>`;
+
+<td>
+${esc(e.pat)}
+</td>
+
+<td>
+${esc(c?.name||"—")}
+</td>
+
+<td>
+${esc(e.status||"Disponível")}
+</td>
+
+<td>
+
+<button
+onclick="editEquip(${i})"
+>
+Editar
+</button>
+
+</td>
+
+</tr>
+
+`;
+
 });
+
 
 html+=`</table>`;
 
-document.getElementById("invBody").innerHTML=html;
+
+document.getElementById("invBody")
+.innerHTML=html;
+
 }
 
 
+/* =====================================================
+   NOVO PATRIMÔNIO
+===================================================== */
+
 function novoEquip(){
 
-openM("Novo patrimônio",`
+openM(
 
-<label>Nome do equipamento</label>
-<input id="eqname" placeholder="Ex.: Mesa M32">
+"Novo patrimônio",
 
-<label>Número do patrimônio</label>
-<input id="eqpat" placeholder="Ex.: PAT-0024">
+`
+
+<label>Equipamento</label>
+
+<input
+id="eqname"
+placeholder="Ex.: PAR LED 01"
+>
+
+<label>Patrimônio</label>
+
+<input
+id="eqpat"
+placeholder="PAT-0024"
+>
 
 <label>Case</label>
+
 <select id="eqcase">
-<option value="">Sem case</option>
+
+<option value="">
+Sem case
+</option>
+
 ${db.cases.map(c=>
-`<option value="${c.id}">${esc(c.name)}</option>`
+
+`<option value="${c.id}">
+${esc(c.name)}
+</option>`
+
 ).join("")}
+
 </select>
 
 <label>Status</label>
+
 <select id="eqstatus">
+
 <option>Disponível</option>
 <option>Em manutenção</option>
 <option>Indisponível</option>
+
 </select>
 
-<button class="primary" onclick="addEquip()">Cadastrar</button>
-`);
+<button
+class="primary"
+onclick="addEquip()"
+>
+Cadastrar
+</button>
+
+`
+
+);
+
 }
 
 
 function addEquip(){
 
-if(!eqname.value.trim()){
+const nome=
+document.getElementById("eqname")
+.value.trim();
+
+if(!nome){
+
 alert("Informe o equipamento.");
+
 return;
+
 }
+
 
 db.equipment.push({
-name:eqname.value.trim(),
-pat:eqpat.value.trim()||"PAT-"+String(db.equipment.length+1).padStart(4,"0"),
-caseId:eqcase.value,
-status:eqstatus.value
+
+name:nome,
+
+pat:
+document.getElementById("eqpat")
+.value.trim()||
+
+"PAT-"+
+String(db.equipment.length+1)
+.padStart(4,"0"),
+
+caseId:
+document.getElementById("eqcase")
+.value,
+
+status:
+document.getElementById("eqstatus")
+.value
+
 });
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
+
+/* =====================================================
+   EDITAR PATRIMÔNIO
+===================================================== */
 
 function editEquip(i){
 
 let e=db.equipment[i];
 
-openM("Editar patrimônio",`
 
-<label>Nome</label>
-<input id="eqname" value="${esc(e.name)}">
+openM(
+
+"Editar patrimônio",
+
+`
+
+<label>Equipamento</label>
+
+<input
+id="eqname"
+value="${esc(e.name)}"
+>
 
 <label>Patrimônio</label>
-<input id="eqpat" value="${esc(e.pat)}">
+
+<input
+id="eqpat"
+value="${esc(e.pat)}"
+>
 
 <label>Case</label>
+
 <select id="eqcase">
-<option value="">Sem case</option>
+
+<option value="">
+Sem case
+</option>
+
 ${db.cases.map(c=>
-`<option value="${c.id}" ${c.id===e.caseId?"selected":""}>
+
+`<option
+value="${c.id}"
+${c.id===e.caseId?"selected":""}
+>
 ${esc(c.name)}
 </option>`
+
 ).join("")}
+
 </select>
 
 <label>Status</label>
+
 <select id="eqstatus">
-${["Disponível","Em manutenção","Indisponível"]
-.map(s=>`<option ${e.status===s?"selected":""}>${s}</option>`)
-.join("")}
+
+${[
+"Disponível",
+"Em manutenção",
+"Indisponível"
+].map(s=>
+
+`<option
+${e.status===s?"selected":""}
+>
+${s}
+</option>`
+
+).join("")}
+
 </select>
 
-<button class="primary" onclick="saveEquip(${i})">Salvar</button>
-`);
+<button
+class="primary"
+onclick="saveEquip(${i})"
+>
+Salvar
+</button>
+
+`
+
+);
+
 }
 
 
 function saveEquip(i){
 
 db.equipment[i]={
-name:eqname.value.trim(),
-pat:eqpat.value.trim(),
-caseId:eqcase.value,
-status:eqstatus.value
+
+name:
+document.getElementById("eqname")
+.value.trim(),
+
+pat:
+document.getElementById("eqpat")
+.value.trim(),
+
+caseId:
+document.getElementById("eqcase")
+.value,
+
+status:
+document.getElementById("eqstatus")
+.value
+
 };
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
 
-/* =========================================================
-   CASES — CADASTRO / EDIÇÃO
-========================================================= */
+/* =====================================================
+   CASES
+===================================================== */
+
+function renderCases(){
+
+const el=
+document.getElementById("caseList");
+
+
+el.innerHTML=
+db.cases.map(c=>`
+
+<div class="card">
+
+<div class="between">
+
+<div>
+
+<h3>
+${esc(c.name)}
+</h3>
+
+<div class="muted">
+${esc(c.id)}
+</div>
+
+</div>
+
+<span class="badge ${
+c.status==="Disponível"
+?"ok"
+:"warn"
+}">
+${esc(c.status)}
+</span>
+
+</div>
+
+
+<p>
+
+${c.items.map(i=>
+
+`<span class="badge">
+${esc(i.name)}
+ × ${i.qty}
+ ${esc(i.unit)}
+</span>`
+
+).join("")}
+
+</p>
+
+
+<div class="row">
+
+<button
+onclick="editarCase('${c.id}')"
+>
+Editar
+</button>
+
+<button
+onclick="caseInfo('${c.id}')"
+>
+Ver conteúdo
+</button>
+
+<button
+onclick="caseMan('${c.id}')"
+>
+Manutenção
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =====================================================
+   NOVO CASE
+===================================================== */
 
 function novoCase(){
 
-openM("Novo case",`
+openM(
+
+"Novo case",
+
+`
 
 <label>Nome do case</label>
-<input id="cnome" placeholder="Ex.: Case 01 - Par LED">
 
-<label>Adicionar conteúdo detalhado</label>
+<input
+id="cnome"
+placeholder="Ex.: Case 01 - PAR LED"
+>
+
+<label>Conteúdo</label>
 
 <div id="items">
-${itemEditorRow()}
+
+${itemRow()}
+
 </div>
 
-<button onclick="addItemRow()">+ Adicionar item</button>
+<button
+onclick="addItemRow()"
+>
++ Adicionar item
+</button>
 
 <br><br>
 
-<button class="primary" onclick="addCase()">Criar case</button>
-`);
+<button
+class="primary"
+onclick="addCase()"
+>
+Criar case
+</button>
+
+`
+
+);
+
 }
 
 
-function itemEditorRow(){
+function itemRow(){
 
-return `
-<div class="itemline">
-<input class="iname" placeholder="Item">
-<input class="iqty" type="number" min="1" value="1">
-<input class="iunit" placeholder="un">
-<button class="smallbtn" onclick="this.parentElement.remove()">×</button>
+return`
+
+<div class="itemrow">
+
+<input
+class="iname"
+placeholder="Descrição do item"
+>
+
+<input
+class="iqty"
+type="number"
+min="1"
+value="1"
+>
+
+<input
+class="iunit"
+value="un"
+placeholder="un"
+>
+
+<button
+onclick="this.parentElement.remove()"
+>
+×
+</button>
+
 </div>
+
 `;
+
 }
 
 
 function addItemRow(){
 
-document.getElementById("items")
-.insertAdjacentHTML("beforeend",itemEditorRow());
+document
+.getElementById("items")
+.insertAdjacentHTML(
+"beforeend",
+itemRow()
+);
+
 }
 
 
 function collectItems(){
 
-let rows=document.querySelectorAll("#items .itemline");
+let rows=
+document.querySelectorAll(
+"#items .itemrow"
+);
+
 let items=[];
+
 
 rows.forEach(r=>{
 
-let name=r.querySelector(".iname").value.trim();
-let qty=Number(r.querySelector(".iqty").value)||1;
-let unit=r.querySelector(".iunit").value.trim()||"un";
+let name=
+r.querySelector(".iname")
+.value.trim();
+
+let qty=
+Number(
+r.querySelector(".iqty")
+.value
+)||1;
+
+let unit=
+r.querySelector(".iunit")
+.value.trim()
+||"un";
+
 
 if(name){
+
 items.push({
+
 name,
 qty,
 unit,
 desc:""
-});
-}
+
 });
 
+}
+
+});
+
+
 return items;
+
 }
 
 
 function addCase(){
 
-let name=cnome.value.trim();
+let name=
+document.getElementById("cnome")
+.value.trim();
+
 
 if(!name){
+
 alert("Informe o nome do case.");
+
 return;
+
 }
 
-let n=db.cases.length+1;
+
+let n=
+db.cases.length+1;
+
 
 db.cases.push({
-id:"SV-C"+String(n).padStart(3,"0"),
-name,
+
+id:
+"SV-C"+
+String(n).padStart(3,"0"),
+
+name:name,
+
 status:"Disponível",
+
 items:collectItems()
+
 });
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
+
+/* =====================================================
+   EDITAR CASE
+===================================================== */
 
 function editarCase(id){
 
-let c=db.cases.find(x=>x.id===id);
+let c=
+db.cases.find(
+x=>x.id===id
+);
 
-openM("Editar case — "+c.name,`
+
+openM(
+
+"Editar case — "+c.id,
+
+`
 
 <label>Nome</label>
-<input id="cnome" value="${esc(c.name)}">
+
+<input
+id="cnome"
+value="${esc(c.name)}"
+>
 
 <label>Status</label>
+
 <select id="cstatus">
+
 ${[
 "Disponível",
 "Reservado",
+"Em evento",
 "Em manutenção interna",
 "Em manutenção externa",
 "Indisponível",
-"Em evento"
+"Disponível — verificar"
 ].map(s=>
-`<option ${c.status===s?"selected":""}>${s}</option>`
+
+`<option
+${c.status===s?"selected":""}
+>
+${s}
+</option>`
+
 ).join("")}
+
 </select>
 
-<label>Conteúdo do case</label>
+
+<label>Conteúdo</label>
 
 <div id="items">
 
-${c.items.map((it,i)=>`
+${c.items.map(i=>`
 
-<div class="itemline">
-<input class="iname" value="${esc(it.name)}" placeholder="Item">
-<input class="iqty" type="number" min="1" value="${it.qty}">
-<input class="iunit" value="${esc(it.unit)}" placeholder="un">
-<button class="smallbtn" onclick="this.parentElement.remove()">×</button>
+<div class="itemrow">
+
+<input
+class="iname"
+value="${esc(i.name)}"
+>
+
+<input
+class="iqty"
+type="number"
+min="1"
+value="${i.qty}"
+>
+
+<input
+class="iunit"
+value="${esc(i.unit)}"
+>
+
+<button
+onclick="this.parentElement.remove()"
+>
+×
+</button>
+
 </div>
 
 `).join("")}
 
 </div>
 
-<button onclick="addItemRow()">+ Adicionar item</button>
+
+<button
+onclick="addItemRow()"
+>
++ Adicionar item
+</button>
 
 <br><br>
 
-<button class="primary" onclick="saveCaseEdit('${id}')">
+<button
+class="primary"
+onclick="saveCase('${id}')"
+>
 Salvar alterações
 </button>
-`);
+
+`
+
+);
+
 }
 
 
-function saveCaseEdit(id){
+function saveCase(id){
 
-let c=db.cases.find(x=>x.id===id);
+let c=
+db.cases.find(
+x=>x.id===id
+);
 
-c.name=cnome.value.trim();
-c.status=cstatus.value;
-c.items=collectItems();
+
+c.name=
+document.getElementById("cnome")
+.value.trim();
+
+c.status=
+document.getElementById("cstatus")
+.value;
+
+c.items=
+collectItems();
+
 
 closeM();
+
 saveDB();
+
 render();
+
 }
 
 
-/* =========================================================
-   EVENTOS
-========================================================= */
+/* =====================================================
+   INFO CASE
+===================================================== */
 
-function renderMov(){
+function caseInfo(id){
 
-let el=document.getElementById("movList");
+let c=
+db.cases.find(
+x=>x.id===id
+);
 
-if(!db.mov.length){
-el.innerHTML=`<div class="empty">Nenhuma movimentação registrada.</div>`;
-return;
-}
 
-el.innerHTML=db.mov.map(m=>{
+openM(
 
-let qtd=m.cases?.length||0;
+c.name,
 
-let status=
-m.returned?"Retornado":
-"Fora";
+`
 
-return `
-<div class="card">
-
-<div class="between">
-<div>
-<h3>${esc(m.name)}</h3>
-<div class="muted">${esc(m.type)}</div>
+<div class="muted">
+${esc(c.id)}
 </div>
 
-<span class="badge ${m.returned?"ok":"warn"}">
-${status}
+<h3>Conteúdo</h3>
+
+${c.items.map(i=>`
+
+<div class="between"
+style="padding:8px 0;border-bottom:1px solid var(--l)"
+>
+
+<span>
+${esc(i.name)}
 </span>
-</div>
 
-<p class="muted">
-Responsável: ${esc(m.resp||"—")}<br>
-Saída: ${esc(m.date||"—")}<br>
-Retorno previsto: ${esc(m.ret||"—")}<br>
-Cases: ${qtd}
-</p>
-
-<div class="row">
-
-<button onclick="abrirEvento('${m.id}')">
-Abrir
-</button>
-
-${!m.returned?
-`<button class="primary" onclick="retorno('${m.id}')">
-Registrar retorno
-</button>`:""}
-
-<button onclick="printMov('${m.id}')">
-Imprimir
-</button>
+<b>
+${i.qty} ${esc(i.unit)}
+</b>
 
 </div>
 
-</div>
-`;
+`).join("")}
 
-}).join("");
+`
+
+);
+
 }
 
+
+/* =====================================================
+   NOVO EVENTO
+===================================================== */
 
 function novoMov(){
 
-openM("Nova saída",`
+openM(
+
+"Nova saída",
+
+`
 
 <label>Tipo</label>
+
 <select id="mtipo">
+
 <option>Evento</option>
 <option>Empréstimo</option>
+
 </select>
 
+
 <label>Nome / destino</label>
-<input id="mnome" placeholder="Ex.: Formatura PG">
+
+<input
+id="mnome"
+placeholder="Ex.: Formatura XYZ"
+>
+
 
 <label>Data de saída</label>
-<input id="mdate" type="date" value="${new Date().toISOString().slice(0,10)}">
+
+<input
+id="mdate"
+type="date"
+value="${
+new Date()
+.toISOString()
+.slice(0,10)
+}"
+>
+
 
 <label>Responsável</label>
-<input id="mresp" placeholder="Responsável pela retirada">
+
+<input
+id="mresp"
+placeholder="Responsável pela retirada"
+>
+
 
 <label>Retorno previsto</label>
-<input id="mret" type="date">
 
-<h3>Selecionar cases</h3>
+<input
+id="mret"
+type="date"
+>
+
+
+<h3>
+Cases
+</h3>
 
 <div id="caseSelect">
 
 ${db.cases.map(c=>`
 
 <label class="check">
-<input type="checkbox" class="casecheck" value="${c.id}">
-<span>
-<b>${esc(c.name)}</b><br>
+
+<input
+type="checkbox"
+class="casecheck"
+value="${c.id}"
+${c.status!=="Disponível"?"disabled":""}
+>
+
+<div>
+
+<b>
+${esc(c.name)}
+</b>
+
+<br>
+
 <span class="muted">
-${c.items.map(i=>`${esc(i.name)} × ${i.qty}`).join(" • ")}
+
+${c.items.map(i=>
+`${esc(i.name)} × ${i.qty} ${esc(i.unit)}`
+).join(" • ")}
+
 </span>
-</span>
+
+</div>
+
 </label>
 
 `).join("")}
 
 </div>
 
-<br>
 
-<button class="primary" onclick="addMov()">
+<button
+class="primary"
+onclick="addMov()"
+>
 Criar saída
 </button>
-`);
+
+`
+
+);
+
 }
 
+
+/* =====================================================
+   CRIAR EVENTO — CORRIGIDO
+===================================================== */
 
 function addMov(){
 
-let selecionados=[
-...document.querySelectorAll(".casecheck:checked")
+const tipo=
+document.getElementById("mtipo")
+.value;
+
+const nome=
+document.getElementById("mnome")
+.value.trim();
+
+const data=
+document.getElementById("mdate")
+.value;
+
+const resp=
+document.getElementById("mresp")
+.value.trim();
+
+const ret=
+document.getElementById("mret")
+.value;
+
+const selecionados=[
+
+...document
+.querySelectorAll(
+".casecheck:checked"
+)
+
 ].map(x=>x.value);
 
-if(!mnome.value.trim()){
-alert("Informe o destino/evento.");
+
+if(!nome){
+
+alert(
+"Informe o destino/evento."
+);
+
 return;
+
 }
+
 
 if(!selecionados.length){
-alert("Selecione pelo menos um case.");
+
+alert(
+"Selecione pelo menos um case."
+);
+
 return;
+
 }
 
-let id=novoId("MOV-",db.mov);
+
+const id=
+"MOV-"+
+String(db.mov.length+1)
+.padStart(4,"0");
+
 
 db.mov.push({
-id,
-type:mtipo.value,
-name:mnome.value.trim(),
-date:mdate.value,
-resp:mresp.value.trim(),
-ret:mret.value,
+
+id:id,
+
+type:tipo,
+
+name:nome,
+
+date:data,
+
+resp:resp,
+
+ret:ret,
+
 cases:selecionados,
+
 returned:false,
+
 returnDate:"",
+
 returnResp:"",
+
 conference:[],
+
 notes:""
+
 });
+
 
 selecionados.forEach(cid=>{
-let c=db.cases.find(x=>x.id===cid);
-if(c)c.status="Em evento";
+
+const c=
+db.cases.find(
+x=>x.id===cid
+);
+
+if(c){
+
+c.status="Em evento";
+
+}
+
 });
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
 
-/* =========================================================
+/* =====================================================
+   LISTA EVENTOS
+===================================================== */
+
+function renderMov(){
+
+const el=
+document.getElementById("movList");
+
+
+if(!db.mov.length){
+
+el.innerHTML=
+`<div class="empty">
+Nenhuma movimentação registrada.
+</div>`;
+
+return;
+
+}
+
+
+el.innerHTML=
+db.mov.map(m=>{
+
+let divergencia=
+m.conference?.some(
+x=>x.status!=="OK"
+);
+
+
+let status=
+!m.returned
+?"FORA"
+:
+divergencia
+?"DIVERGÊNCIA"
+:"RETORNADO";
+
+
+let classe=
+status==="RETORNADO"
+?"ok"
+:
+status==="DIVERGÊNCIA"
+?"bad"
+:"warn";
+
+
+return`
+
+<div class="card">
+
+<div class="between">
+
+<div>
+
+<h3>
+${esc(m.name)}
+</h3>
+
+<div class="muted">
+${esc(m.id)}
+</div>
+
+</div>
+
+<span class="badge ${classe}">
+${status}
+</span>
+
+</div>
+
+
+<p class="muted">
+
+Tipo:
+${esc(m.type)}
+
+<br>
+
+Responsável:
+${esc(m.resp||"—")}
+
+<br>
+
+Saída:
+${esc(m.date||"—")}
+
+<br>
+
+Retorno previsto:
+${esc(m.ret||"—")}
+
+<br>
+
+Cases:
+${m.cases.length}
+
+</p>
+
+
+<div class="row">
+
+<button
+onclick="abrirEvento('${m.id}')"
+>
+Abrir
+</button>
+
+${
+!m.returned
+?
+`<button
+class="primary"
+onclick="retorno('${m.id}')"
+>
+Registrar retorno
+</button>`
+:""
+}
+
+<button
+onclick="printMov('${m.id}')"
+>
+Imprimir
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
    ABRIR EVENTO
-========================================================= */
+===================================================== */
 
 function abrirEvento(id){
 
-let m=db.mov.find(x=>x.id===id);
+let m=
+db.mov.find(
+x=>x.id===id
+);
 
-openM("Evento — "+m.name,`
+
+openM(
+
+"Evento — "+m.name,
+
+`
 
 <p>
-<b>${esc(m.type)}</b><br>
-Responsável: ${esc(m.resp||"—")}<br>
-Saída: ${esc(m.date||"—")}<br>
-Retorno previsto: ${esc(m.ret||"—")}
+
+<b>
+${esc(m.type)}
+</b>
+
+<br>
+
+Responsável:
+${esc(m.resp||"—")}
+
+<br>
+
+Saída:
+${esc(m.date||"—")}
+
+<br>
+
+Retorno previsto:
+${esc(m.ret||"—")}
+
 </p>
 
-<h3>Material separado</h3>
+
+<h3>
+Material separado
+</h3>
+
 
 <table>
+
 <tr>
 <th>Case</th>
 <th>Conteúdo</th>
 </tr>
 
+
 ${m.cases.map(cid=>{
 
-let c=db.cases.find(x=>x.id===cid);
+let c=
+db.cases.find(
+x=>x.id===cid
+);
 
-return `
+
+return`
+
 <tr>
-<td>${esc(c?.name||cid)}</td>
+
 <td>
-${c?.items.map(i=>
-`${esc(i.name)} — ${i.qty} ${esc(i.unit)}`
-).join("<br>")||"—"}
+${esc(c?.name||cid)}
 </td>
+
+<td>
+
+${c?.items.map(i=>
+
+`${esc(i.name)}
+ — ${i.qty} ${esc(i.unit)}`
+
+).join("<br>")||"—"}
+
+</td>
+
 </tr>
+
 `;
 
 }).join("")}
 
 </table>
 
-${m.returned?`
+
+${
+m.returned
+?
+
+`
 
 <hr>
 
-<h3>Retorno registrado</h3>
+<h3>
+Conferência do retorno
+</h3>
 
 <p>
-Data: ${esc(m.returnDate)}<br>
-Conferente: ${esc(m.returnResp)}
+
+Data:
+${esc(m.returnDate)}
+
+<br>
+
+Conferente:
+${esc(m.returnResp||"—")}
+
 </p>
 
-${m.conference?.length?`
-
-<table>
-<tr>
-<th>Case</th>
-<th>Conferência</th>
-</tr>
 
 ${m.conference.map(x=>`
 
-<tr>
-<td>${esc(x.caseName)}</td>
-<td>
-<span class="${x.status==="OK"?"status-ok":"status-bad"}">
-<b>${esc(x.status)}</b>
-</span>
-<br>
-${esc(x.obs||"")}
-</td>
-</tr>
+<div class="card">
+
+<b class="${
+x.status==="OK"
+?"ok"
+:"bad"
+}">
+
+${esc(x.caseName)}
+ — ${esc(x.status)}
+
+</b>
+
+${x.obs?
+
+`<p>
+${esc(x.obs)}
+</p>`
+
+:""}
+
+</div>
 
 `).join("")}
 
-</table>
-`:""}
+`
 
-`:""}
+:""
 
-`);
+}
+
+`
+
+);
+
 }
 
 
-/* =========================================================
-   RETORNO / CONFERÊNCIA
-========================================================= */
+/* =====================================================
+   RETORNO
+===================================================== */
 
 function retorno(id){
 
-let m=db.mov.find(x=>x.id===id);
+let m=
+db.mov.find(
+x=>x.id===id
+);
 
-openM("Retorno — "+m.name,`
+
+openM(
+
+"Retorno — "+m.name,
+
+`
 
 <p class="muted">
-Confira fisicamente cada case antes de finalizar o retorno.
+
+Confira fisicamente os materiais.
+Se houver falta ou dano, registre no campo de observação.
+
 </p>
 
-<label>Data do retorno</label>
-<input id="rdate" type="date" value="${new Date().toISOString().slice(0,10)}">
 
-<label>Responsável pela conferência</label>
-<input id="rresp" placeholder="Quem conferiu o material">
+<label>
+Data do retorno
+</label>
 
-<h3>Conferência dos cases</h3>
+<input
+id="rdate"
+type="date"
+value="${
+new Date()
+.toISOString()
+.slice(0,10)
+}"
+>
+
+
+<label>
+Responsável pela conferência
+</label>
+
+<input
+id="rresp"
+placeholder="Nome de quem conferiu"
+>
+
 
 <div id="conference">
 
 ${m.cases.map(cid=>{
 
-let c=db.cases.find(x=>x.id===cid);
+let c=
+db.cases.find(
+x=>x.id===cid
+);
 
-return `
 
-<div class="card" style="margin-bottom:10px">
+return`
 
-<h3>${esc(c.name)}</h3>
+<div
+class="card"
+style="margin-bottom:12px"
+>
 
-<p class="muted">
-${c.items.map(i=>
-`${esc(i.name)} — ${i.qty} ${esc(i.unit)}`
-).join("<br>")}
-</p>
+<h3>
+${esc(c.name)}
+</h3>
 
-<label>Status</label>
 
-<select class="confstatus" data-case="${cid}">
+<table>
+
+<tr>
+<th>Item</th>
+<th>Esperado</th>
+<th>Encontrado</th>
+</tr>
+
+
+${c.items.map((item,index)=>`
+
+<tr>
+
+<td>
+${esc(item.name)}
+</td>
+
+<td>
+${item.qty} ${esc(item.unit)}
+</td>
+
+<td>
+
+<input
+class="foundqty"
+data-case="${cid}"
+data-index="${index}"
+type="number"
+min="0"
+value="${item.qty}"
+style="margin:0"
+>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+
+<label>
+Situação
+</label>
+
+<select
+class="confstatus"
+data-case="${cid}"
+>
+
 <option>OK</option>
-<option>Faltando material</option>
-<option>Material danificado</option>
-<option>Faltando e danificado</option>
+
+<option>
+Faltando material
+</option>
+
+<option>
+Material danificado
+</option>
+
+<option>
+Faltando e danificado
+</option>
+
 </select>
 
-<label>Observação</label>
+
+<label>
+Observação
+</label>
 
 <textarea
 class="confobs"
 data-case="${cid}"
-placeholder="Informe falta, dano, quantidade divergente, cabo rompido etc."
+placeholder="Ex.: faltaram 2 cabos XLR; 1 cabo com conector danificado..."
 ></textarea>
 
 </div>
@@ -1188,260 +2876,628 @@ placeholder="Informe falta, dano, quantidade divergente, cabo rompido etc."
 
 </div>
 
-<button class="primary" onclick="finalizarRetorno('${id}')">
+
+<button
+class="primary"
+onclick="finalizarRetorno('${id}')"
+>
 Finalizar retorno
 </button>
-`);
+
+`
+
+);
+
 }
 
+
+/* =====================================================
+   FINALIZAR RETORNO
+===================================================== */
 
 function finalizarRetorno(id){
 
-let m=db.mov.find(x=>x.id===id);
+let m=
+db.mov.find(
+x=>x.id===id
+);
+
 
 let conferencias=[];
 
-document.querySelectorAll(".confstatus").forEach(select=>{
+let divergencia=false;
 
-let cid=select.dataset.case;
-
-let obs=document.querySelector(
-`.confobs[data-case="${cid}"]`
-)?.value||"";
-
-let c=db.cases.find(x=>x.id===cid);
-
-conferencias.push({
-caseId:cid,
-caseName:c?.name||cid,
-status:select.value,
-obs
-});
-
-});
-
-m.returned=true;
-m.returnDate=rdate.value;
-m.returnResp=rresp.value.trim();
-m.conference=conferencias;
-
-let divergencia=conferencias.some(x=>x.status!=="OK");
-
-m.notes=divergencia?
-"Retorno com divergência":
-"Retorno conferido sem divergências";
 
 m.cases.forEach(cid=>{
 
-let c=db.cases.find(x=>x.id===cid);
+let c=
+db.cases.find(
+x=>x.id===cid
+);
+
+
+let status=
+document.querySelector(
+`.confstatus[data-case="${cid}"]`
+).value;
+
+
+let obs=
+document.querySelector(
+`.confobs[data-case="${cid}"]`
+).value.trim();
+
+
+let itens=[];
+
+
+c.items.forEach((item,index)=>{
+
+let input=
+document.querySelector(
+`.foundqty[data-case="${cid}"][data-index="${index}"]`
+);
+
+
+let encontrado=
+Number(input?.value)||0;
+
+
+let esperado=
+Number(item.qty)||0;
+
+
+let diferenca=
+encontrado-esperado;
+
+
+if(encontrado!==esperado){
+
+divergencia=true;
+
+}
+
+
+itens.push({
+
+name:item.name,
+
+unit:item.unit,
+
+esperado:esperado,
+
+encontrado:encontrado,
+
+diferenca:diferenca
+
+});
+
+});
+
+
+if(status!=="OK"){
+
+divergencia=true;
+
+}
+
+
+conferencias.push({
+
+caseId:cid,
+
+caseName:c.name,
+
+status:status,
+
+obs:obs,
+
+items:itens
+
+});
+
+});
+
+
+m.returned=true;
+
+m.returnDate=
+document.getElementById("rdate")
+.value;
+
+m.returnResp=
+document.getElementById("rresp")
+.value.trim();
+
+m.conference=
+conferencias;
+
+m.notes=
+divergencia
+?
+"Retorno com divergência"
+:
+"Retorno conferido sem divergências";
+
+
+m.cases.forEach(cid=>{
+
+let c=
+db.cases.find(
+x=>x.id===cid
+);
+
 
 if(c){
-c.status=divergencia
-?"Disponível — verificar"
-:"Disponível";
+
+c.status=
+divergencia
+?
+"Disponível — verificar"
+:
+"Disponível";
+
 }
 
 });
 
+
 closeM();
+
 saveDB();
+
 render();
 
+
 alert(
+
 divergencia
-?"Retorno registrado com divergências. Verifique a conferência do evento."
-:"Retorno registrado e conferido com sucesso."
+
+?
+
+"Retorno registrado com divergências."
+
+:
+
+"Retorno registrado sem divergências."
+
 );
+
 }
 
 
-/* =========================================================
+/* =====================================================
    IMPRESSÃO
-========================================================= */
+===================================================== */
 
 function printMov(id){
 
-let m=db.mov.find(x=>x.id===id);
+let m=
+db.mov.find(
+x=>x.id===id
+);
+
 
 let rows="";
 
+
 m.cases.forEach(cid=>{
 
-let c=db.cases.find(x=>x.id===cid);
+let c=
+db.cases.find(
+x=>x.id===cid
+);
+
 
 c.items.forEach(item=>{
 
 rows+=`
+
 <tr>
-<td>${esc(c.name)}</td>
-<td>${esc(cid)}</td>
-<td>${esc(item.desc||item.name)}</td>
-<td>${item.qty}</td>
-<td>${esc(item.unit)}</td>
-<td>FORA</td>
+
+<td>
+${esc(c.name)}
+</td>
+
+<td>
+${esc(cid)}
+</td>
+
+<td>
+${esc(item.name)}
+</td>
+
+<td>
+${item.qty}
+</td>
+
+<td>
+${esc(item.unit)}
+</td>
+
+<td>
+FORA
+</td>
+
 </tr>
+
 `;
 
 });
 
 });
 
-let w=window.open("","_blank");
+
+let w=
+window.open("","_blank");
+
 
 w.document.write(`
+
 <html>
+
 <head>
-<title>Star Vision — ${esc(m.name)}</title>
+
+<title>
+Star Vision — ${esc(m.name)}
+</title>
+
 <style>
+
 body{
 font-family:Arial;
 padding:30px;
 color:#111
 }
+
 table{
 width:100%;
 border-collapse:collapse;
 margin-top:20px
 }
+
 th,td{
 border:1px solid #aaa;
-padding:7px;
+padding:8px;
 font-size:12px;
 text-align:left
 }
+
 th{
 background:#eee
 }
+
 </style>
+
 </head>
+
 <body>
 
-<h1>STAR VISION</h1>
+<h1>
+STAR VISION
+</h1>
 
-<h2>${esc(m.type)} — ${esc(m.name)}</h2>
+<h2>
+${esc(m.type)} — ${esc(m.name)}
+</h2>
 
 <p>
-Responsável: ${esc(m.resp||"—")}<br>
-Saída: ${esc(m.date||"—")}<br>
-Retorno previsto: ${esc(m.ret||"—")}
+
+Responsável:
+${esc(m.resp||"—")}
+
+<br>
+
+Saída:
+${esc(m.date||"—")}
+
+<br>
+
+Retorno previsto:
+${esc(m.ret||"—")}
+
 </p>
 
+
 <table>
+
 <tr>
+
 <th>Case</th>
 <th>ID</th>
 <th>Item</th>
 <th>Qtd.</th>
 <th>Un.</th>
 <th>Status</th>
+
 </tr>
 
 ${rows}
 
 </table>
 
+
+${
+m.returned
+?
+
+`
+
+<h2>
+Conferência do retorno
+</h2>
+
+<p>
+
+Conferente:
+${esc(m.returnResp||"—")}
+
+<br>
+
+Data:
+${esc(m.returnDate||"—")}
+
+</p>
+
+
+${m.conference.map(c=>`
+
+<h3>
+${esc(c.caseName)}
+ — ${esc(c.status)}
+</h3>
+
+<p>
+${esc(c.obs||"")}
+</p>
+
+
+<table>
+
+<tr>
+
+<th>Item</th>
+<th>Esperado</th>
+<th>Encontrado</th>
+<th>Diferença</th>
+
+</tr>
+
+
+${c.items.map(i=>`
+
+<tr>
+
+<td>
+${esc(i.name)}
+</td>
+
+<td>
+${i.esperado} ${esc(i.unit)}
+</td>
+
+<td>
+${i.encontrado} ${esc(i.unit)}
+</td>
+
+<td>
+${i.diferenca}
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+`).join("")}
+
+`
+
+:""
+
+}
+
+
 <script>
 window.print();
 <\/script>
 
 </body>
+
 </html>
+
 `);
 
+
 w.document.close();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    MANUTENÇÃO
-========================================================= */
+===================================================== */
 
 function renderMan(){
 
-let el=document.getElementById("manList");
+let el=
+document.getElementById("manList");
+
 
 if(!db.maint.length){
-el.innerHTML=`<div class="empty">Nenhuma manutenção registrada.</div>`;
+
+el.innerHTML=
+`<div class="empty">
+Nenhuma manutenção registrada.
+</div>`;
+
 return;
+
 }
 
-el.innerHTML=db.maint.map((m,i)=>`
+
+el.innerHTML=
+db.maint.map((m,i)=>`
 
 <div class="card">
 
 <div class="between">
 
 <div>
-<h3>${esc(m.name)}</h3>
-<span class="badge">${esc(m.type)}</span>
-<span class="badge">${esc(m.status)}</span>
+
+<h3>
+${esc(m.name)}
+</h3>
+
+<span class="badge">
+${esc(m.type)}
+</span>
+
+<span class="badge">
+${esc(m.status)}
+</span>
+
 </div>
 
-${m.status!=="Concluída"?
-`<button onclick="concluirMan(${i})">Concluir</button>`:""}
+
+${
+m.status!=="Concluída"
+
+?
+
+`<button
+onclick="concluirMan(${i})"
+>
+Concluir
+</button>`
+
+:""
+
+}
 
 </div>
 
-<p>${esc(m.desc||"Sem descrição")}</p>
+
+<p>
+${esc(m.desc||"Sem descrição")}
+</p>
 
 </div>
 
 `).join("");
+
 }
 
 
 function novaMan(){
 
-openM("Registrar manutenção",`
+openM(
+
+"Registrar manutenção",
+
+`
 
 <label>Case</label>
 
 <select id="manCase">
+
 ${db.cases.map(c=>
-`<option value="${c.id}">${esc(c.name)}</option>`
+
+`<option value="${c.id}">
+${esc(c.name)}
+</option>`
+
 ).join("")}
+
 </select>
+
 
 <label>Tipo</label>
 
 <select id="manType">
+
 <option>Interna</option>
 <option>Externa</option>
+
 </select>
+
 
 <label>Descrição</label>
 
-<textarea id="manDesc"
-placeholder="Ex.: verificar cabo XLR, conector, lâmpada, ventilação..."></textarea>
+<textarea
+id="manDesc"
+placeholder="Descreva o problema..."
+></textarea>
 
-<button class="primary" onclick="addMan()">
+
+<button
+class="primary"
+onclick="addMan()"
+>
 Registrar
 </button>
-`);
+
+`
+
+);
+
 }
 
 
 function addMan(){
 
-let c=db.cases.find(x=>x.id===manCase.value);
+let c=
+db.cases.find(
+x=>x.id===document
+.getElementById("manCase")
+.value
+);
+
 
 db.maint.push({
+
 name:c.name,
+
 caseId:c.id,
-type:manType.value,
-desc:manDesc.value,
+
+type:
+document.getElementById("manType")
+.value,
+
+desc:
+document.getElementById("manDesc")
+.value,
+
 status:"Pendente",
-date:new Date().toISOString().slice(0,10)
+
+date:
+new Date()
+.toISOString()
+.slice(0,10)
+
 });
 
+
 c.status=
-manType.value==="Externa"
-?"Em manutenção externa":
+document.getElementById("manType")
+.value==="Externa"
+
+?
+
+"Em manutenção externa"
+
+:
+
 "Em manutenção interna";
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
 
@@ -1451,88 +3507,268 @@ let m=db.maint[i];
 
 m.status="Concluída";
 
-let c=db.cases.find(x=>x.id===m.caseId);
+
+let c=
+db.cases.find(
+x=>x.id===m.caseId
+);
+
 
 if(c)c.status="Disponível";
 
+
 saveDB();
+
 render();
+
 }
 
 
-/* =========================================================
+/* =====================================================
+   MANUTENÇÃO DIRETA DO CASE
+===================================================== */
+
+function caseMan(id){
+
+let c=
+db.cases.find(
+x=>x.id===id
+);
+
+
+openM(
+
+"Manutenção — "+c.name,
+
+`
+
+<label>Tipo</label>
+
+<select id="cmtype">
+
+<option>Interna</option>
+<option>Externa</option>
+
+</select>
+
+
+<label>Descrição</label>
+
+<textarea
+id="cmdesc"
+placeholder="Descreva o problema..."
+></textarea>
+
+
+<button
+class="primary"
+onclick="addCaseMan('${id}')"
+>
+Registrar
+</button>
+
+`
+
+);
+
+}
+
+
+function addCaseMan(id){
+
+let c=
+db.cases.find(
+x=>x.id===id
+);
+
+
+let type=
+document.getElementById("cmtype")
+.value;
+
+
+db.maint.push({
+
+name:c.name,
+
+caseId:id,
+
+type:type,
+
+desc:
+document.getElementById("cmdesc")
+.value,
+
+status:"Pendente",
+
+date:
+new Date()
+.toISOString()
+.slice(0,10)
+
+});
+
+
+c.status=
+type==="Externa"
+?
+"Em manutenção externa"
+:
+"Em manutenção interna";
+
+
+closeM();
+
+saveDB();
+
+render();
+
+}
+
+
+/* =====================================================
    ESTOQUE
-========================================================= */
+===================================================== */
 
 function renderStock(){
 
-let el=document.getElementById("stockList");
+let el=
+document.getElementById("stockList");
 
-el.innerHTML=db.stock.map((s,i)=>`
+
+el.innerHTML=
+db.stock.map((s,i)=>`
 
 <div class="card">
 
 <div class="between">
 
-<h3>${esc(s.name)}</h3>
+<h3>
+${esc(s.name)}
+</h3>
 
-<b class="${s.qty<=s.min?"bad":"ok"}">
+<b class="${
+s.qty<=s.min
+?"bad"
+:"ok"
+}">
 ${s.qty<=s.min?"REPOR":"OK"}
 </b>
 
 </div>
 
 <p>
-<b>${s.qty}</b> ${esc(s.unit)}
+
+<b>
+${s.qty}
+</b>
+
+${esc(s.unit)}
+
 •
-mínimo ${s.min}
+
+mínimo
+${s.min}
+
 </p>
 
-<button onclick="stockMov(${i})">
+<button
+onclick="stockMov(${i})"
+>
 Movimentar
 </button>
 
 </div>
 
 `).join("");
+
 }
 
 
 function novoEstoque(){
 
-openM("Novo item",`
+openM(
+
+"Novo item",
+
+`
 
 <label>Item</label>
+
 <input id="sname">
 
 <label>Unidade</label>
-<input id="sunit" placeholder="un, rolo, kg, L...">
+
+<input
+id="sunit"
+placeholder="un, kg, L, rolo..."
+>
 
 <label>Quantidade</label>
-<input id="sqty" type="number" value="0">
 
-<label>Estoque mínimo</label>
-<input id="smin" type="number" value="0">
+<input
+id="sqty"
+type="number"
+min="0"
+value="0"
+>
 
-<button class="primary" onclick="addStock()">
+<label>Mínimo</label>
+
+<input
+id="smin"
+type="number"
+min="0"
+value="0"
+>
+
+<button
+class="primary"
+onclick="addStock()"
+>
 Cadastrar
 </button>
-`);
+
+`
+
+);
+
 }
 
 
 function addStock(){
 
 db.stock.push({
-name:sname.value,
-unit:sunit.value||"un",
-qty:Number(sqty.value)||0,
-min:Number(smin.value)||0
+
+name:
+document.getElementById("sname")
+.value.trim(),
+
+unit:
+document.getElementById("sunit")
+.value.trim()||"un",
+
+qty:
+Number(
+document.getElementById("sqty")
+.value
+)||0,
+
+min:
+Number(
+document.getElementById("smin")
+.value
+)||0
+
 });
 
+
 closeM();
+
 saveDB();
+
 render();
+
 }
 
 
@@ -1540,28 +3776,54 @@ function stockMov(i){
 
 let s=db.stock[i];
 
-openM("Movimentar — "+s.name,`
+
+openM(
+
+"Movimentar — "+s.name,
+
+`
 
 <p>
-Saldo atual:
-<b>${s.qty} ${esc(s.unit)}</b>
+Saldo:
+<b>
+${s.qty} ${esc(s.unit)}
+</b>
 </p>
 
-<label>Tipo</label>
+<label>Operação</label>
 
-<select id="stockType">
-<option value="1">Entrada</option>
-<option value="-1">Saída</option>
+<select id="stockop">
+
+<option value="1">
+Entrada
+</option>
+
+<option value="-1">
+Saída
+</option>
+
 </select>
 
 <label>Quantidade</label>
 
-<input id="stockQty" type="number" min="1" value="1">
+<input
+id="stockamount"
+type="number"
+min="1"
+value="1"
+>
 
-<button class="primary" onclick="applyStock(${i})">
+<button
+class="primary"
+onclick="applyStock(${i})"
+>
 Aplicar
 </button>
-`);
+
+`
+
+);
+
 }
 
 
@@ -1569,24 +3831,48 @@ function applyStock(i){
 
 let s=db.stock[i];
 
-let delta=
-Number(stockType.value)*
-Number(stockQty.value);
+let op=
+Number(
+document.getElementById("stockop")
+.value
+);
 
-s.qty=Math.max(0,s.qty+delta);
+let amount=
+Number(
+document.getElementById("stockamount")
+.value
+);
 
-closeM();
-saveDB();
-render();
+
+if(op===-1&&amount>s.qty){
+
+alert(
+"Quantidade maior que o estoque disponível."
+);
+
+return;
+
 }
 
 
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
+s.qty+=op*amount;
+
+closeM();
+
+saveDB();
 
 render();
-show("home");
+
+}
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+checkLogin();
+
+render();
 
 </script>
 
