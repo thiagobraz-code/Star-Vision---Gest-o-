@@ -84,10 +84,20 @@ if (document.readyState === 'loading') {
 function svPendingMaintenanceForMovement(movementId) {
   if (!window.db || !Array.isArray(db.maintenance)) return [];
 
-  return db.maintenance.filter(m =>
-    m.movementId === movementId &&
-    m.status !== 'Concluída'
-  );
+  const movement = db.movements?.find(m => m.id === movementId);
+  if (!movement) return [];
+
+  return db.maintenance.filter(m => {
+    if (m.status === 'Concluída') return false;
+
+    // Regra principal: a manutenção foi criada pelo retorno deste evento.
+    if (m.movementId === movementId) return true;
+
+    // Compatibilidade com ocorrências antigas que não possuíam movementId.
+    if (m.movementName && m.movementName === movement.name) return true;
+
+    return false;
+  });
 }
 
 function renderEvents() {
@@ -173,5 +183,4 @@ function renderEvents() {
   `;
 }
 
-/* Atualiza o indicador do evento imediatamente após qualquer render. */
 window.svPendingMaintenanceForMovement = svPendingMaintenanceForMovement;
