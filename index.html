@@ -16,19 +16,15 @@
 --m:#a1a1aa;
 --ok:#42d77d;
 --w:#f3bd4e;
---bad:#ff626b;
---blue:#5ea7ff
+--bad:#ff626b
 }
-
 *{box-sizing:border-box}
-
 body{
 margin:0;
 background:var(--bg);
 color:var(--t);
 font:15px Arial,sans-serif
 }
-
 header{
 position:sticky;
 top:0;
@@ -36,7 +32,6 @@ background:#0b0b0def;
 border-bottom:1px solid var(--l);
 z-index:5
 }
-
 .bar{
 max-width:1100px;
 margin:auto;
@@ -46,12 +41,10 @@ justify-content:space-between;
 align-items:center;
 gap:12px
 }
-
 .logo{
 font-weight:900;
 letter-spacing:2px
 }
-
 .logo small{
 display:block;
 color:var(--m);
@@ -59,13 +52,11 @@ font-size:9px;
 letter-spacing:2px;
 margin-top:4px
 }
-
 nav{
 display:flex;
 gap:6px;
 flex-wrap:wrap
 }
-
 .nav,button{
 border:1px solid var(--l);
 background:var(--p2);
@@ -74,76 +65,52 @@ border-radius:8px;
 padding:9px 11px;
 cursor:pointer
 }
-
-.nav.active{
-border-color:#aaa
-}
-
+.nav.active{border-color:#aaa}
 button.primary{
 background:#eee;
 color:#111;
 border-color:#eee
 }
-
 button.danger{
-border-color:#633238;
-color:#ff9ca2
+border-color:#7b252c;
+color:#ff858c
 }
-
 main{
 max-width:1100px;
 margin:auto;
 padding:22px 18px
 }
-
-.view{
-display:none
-}
-
-.view.active{
-display:block
-}
-
-h1{
-margin:0 0 4px
-}
-
-h2,h3{
-margin-top:0
-}
-
+.view{display:none}
+.view.active{display:block}
+h1{margin:0 0 4px}
+h2{margin-top:0}
 .muted{
 color:var(--m);
 font-size:13px
 }
-
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:12px;
 margin-top:18px
 }
-
 .card,.kpi{
 background:var(--p);
 border:1px solid var(--l);
 border-radius:13px;
 padding:15px
 }
-
 .between{
 display:flex;
 justify-content:space-between;
 gap:10px;
 align-items:center
 }
-
 .row{
 display:flex;
 gap:8px;
 flex-wrap:wrap
 }
-
 .badge{
 display:inline-block;
 border:1px solid var(--l);
@@ -152,25 +119,20 @@ padding:5px 8px;
 font-size:12px;
 margin:3px 3px 0 0
 }
-
 .ok{color:var(--ok)}
 .warn{color:var(--w)}
 .bad{color:var(--bad)}
-.blue{color:var(--blue)}
-
 .kpis{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:12px;
 margin:18px 0
 }
-
 .kpi b{
 display:block;
 font-size:28px;
 margin-bottom:5px
 }
-
 input,select,textarea{
 width:100%;
 background:#0e0e10;
@@ -180,143 +142,42 @@ border-radius:8px;
 padding:10px;
 margin:5px 0 12px
 }
-
-textarea{
-min-height:90px
-}
-
+textarea{min-height:100px}
 label{
-display:block
+display:block;
+color:#ddd;
+font-size:13px;
+margin-top:6px
 }
-
-.checkbox-line{
+.check{
 display:flex;
 align-items:center;
-gap:9px;
-padding:10px 0;
-cursor:pointer
-}
-
-.checkbox-line input{
-width:auto;
-margin:0
-}
-
-.tabs{
-display:flex;
 gap:8px;
-margin:18px 0 5px;
-border-bottom:1px solid var(--l);
-padding-bottom:10px
-}
-
-.tab{
-background:transparent;
-border-color:transparent
-}
-
-.tab.active{
-background:var(--p2);
-border-color:#777
-}
-
-.items-editor{
+margin:7px 0;
+padding:8px;
 border:1px solid var(--l);
-border-radius:10px;
-padding:12px;
-margin:8px 0 15px;
-background:#101014
+border-radius:8px
 }
-
-.item-row{
-display:grid;
-grid-template-columns:minmax(0,1fr) 90px 90px auto;
-gap:7px;
-align-items:center;
-margin-bottom:8px
-}
-
-.item-row input{
-margin:0
-}
-
-.check-list{
-border:1px solid var(--l);
-border-radius:10px;
-overflow:hidden;
-margin:8px 0 15px
-}
-
-.check-item{
-display:flex;
-align-items:center;
-gap:10px;
-padding:11px;
-border-bottom:1px solid var(--l);
-cursor:pointer
-}
-
-.check-item:last-child{
-border-bottom:0
-}
-
-.check-item input{
+.check input{
 width:auto;
 margin:0
 }
-
-.check-item:hover{
-background:#202026
-}
-
-.case-box{
-background:#101014;
-border:1px solid var(--l);
-border-radius:10px;
-padding:12px;
-margin-bottom:8px
-}
-
-.item-line{
-display:flex;
-justify-content:space-between;
-gap:10px;
-padding:7px 0;
-border-bottom:1px solid #2a2a30;
-font-size:13px
-}
-
-.item-line:last-child{
-border-bottom:0
-}
-
-.status-box{
-padding:10px;
-border-radius:9px;
-background:#101014;
-border:1px solid var(--l);
-margin:10px 0
-}
-
 table{
 width:100%;
 border-collapse:collapse;
 background:var(--p);
 margin-top:15px
 }
-
 th,td{
 padding:10px;
 border-bottom:1px solid var(--l);
 text-align:left;
 font-size:13px
 }
-
 th{
 color:var(--m);
 font-size:11px
 }
-
 .modal{
 position:fixed;
 inset:0;
@@ -327,55 +188,45 @@ justify-content:center;
 padding:16px;
 z-index:20
 }
-
-.modal.open{
-display:flex
-}
-
+.modal.open{display:flex}
 .box{
 background:var(--p);
 border:1px solid var(--l);
 border-radius:14px;
 padding:18px;
-width:min(720px,100%);
+width:min(760px,100%);
 max-height:90vh;
 overflow:auto
 }
-
-.center{
-text-align:center
+.itemline{
+display:grid;
+grid-template-columns:1fr 100px 100px 45px;
+gap:7px;
+margin-bottom:7px
 }
-
-.search{
-max-width:500px
+.smallbtn{
+padding:7px 9px
 }
-
 .empty{
 padding:25px;
-text-align:center
+text-align:center;
+color:var(--m);
+border:1px dashed var(--l);
+border-radius:12px;
+margin-top:15px
 }
-
+.status-ok{color:var(--ok)}
+.status-bad{color:var(--bad)}
+.status-warn{color:var(--w)}
 @media(max-width:700px){
-
-.kpis{
-grid-template-columns:repeat(2,1fr)
-}
-
+.kpis{grid-template-columns:repeat(2,1fr)}
 .bar{
 align-items:flex-start;
 flex-direction:column
 }
-
-table{
-display:block;
-overflow:auto;
-white-space:nowrap
+.itemline{
+grid-template-columns:1fr 75px 75px 40px
 }
-
-.item-row{
-grid-template-columns:1fr 70px 70px auto
-}
-
 }
 </style>
 </head>
@@ -383,2583 +234,1024 @@ grid-template-columns:1fr 70px 70px auto
 <body>
 
 <header>
-
 <div class="bar">
-
 <div class="logo">
 STAR VISION
 <small>GESTÃO DE EQUIPAMENTOS</small>
 </div>
-
 <nav id="nav"></nav>
-
 </div>
-
 </header>
-
 
 <main>
 
-
-<!-- =========================
-     INÍCIO
-========================= -->
-
+<!-- INÍCIO -->
 <section id="home" class="view active">
-
 <h1>Painel</h1>
-
-<div class="muted">
-Controle interno de equipamentos, cases e movimentações
-</div>
+<div class="muted">Controle interno de equipamentos, cases e movimentações</div>
 
 <div class="kpis">
-
-<div class="kpi">
-<b id="kc">0</b>
-<span class="muted">Cases</span>
+<div class="kpi"><b id="kc">0</b><span class="muted">Cases</span></div>
+<div class="kpi"><b id="ke">0</b><span class="muted">Patrimônios</span></div>
+<div class="kpi"><b id="km">0</b><span class="muted">Manutenções abertas</span></div>
+<div class="kpi"><b id="kv">0</b><span class="muted">Movimentações</span></div>
 </div>
-
-<div class="kpi">
-<b id="ke">0</b>
-<span class="muted">Patrimônios</span>
-</div>
-
-<div class="kpi">
-<b id="km">0</b>
-<span class="muted">Manutenções abertas</span>
-</div>
-
-<div class="kpi">
-<b id="kv">0</b>
-<span class="muted">Movimentações</span>
-</div>
-
-</div>
-
 </section>
 
 
-<!-- =========================
-     INVENTÁRIO
-========================= -->
-
+<!-- INVENTÁRIO -->
 <section id="inv" class="view">
 
 <div class="between">
-
 <div>
-
 <h1>Inventário</h1>
-
-<div class="muted">
-Patrimônios individuais e estrutura dos cases.
+<div class="muted">Equipamentos patrimoniais cadastrados.</div>
 </div>
-
+<button class="primary" onclick="novoEquip()">+ Novo patrimônio</button>
 </div>
-
-</div>
-
-
-<div class="tabs">
-
-<button
-id="tabPat"
-class="tab active"
-onclick="showInvTab('pat')"
->
-Patrimônios
-</button>
-
-<button
-id="tabCases"
-class="tab"
-onclick="showInvTab('cases')"
->
-Cases
-</button>
-
-</div>
-
-
-<!-- PATRIMÔNIOS -->
-
-<div id="invPatTab">
-
-<div class="between">
-
-<div>
-
-<h2>Patrimônios</h2>
-
-<div class="muted">
-Equipamentos identificados individualmente.
-</div>
-
-</div>
-
-<button
-class="primary"
-onclick="novoPatrimonio()"
->
-+ Novo patrimônio
-</button>
-
-</div>
-
-
-<input
-class="search"
-id="invSearch"
-placeholder="Pesquisar equipamento ou patrimônio..."
-oninput="renderInv()"
->
 
 <div id="invBody"></div>
 
-</div>
-
-
-<!-- CASES -->
-
-<div id="invCasesTab" style="display:none">
-
-<div class="between">
-
-<div>
-
-<h2>Cases</h2>
-
-<div class="muted">
-Cadastre e configure os cases da Star Vision.
-</div>
-
-</div>
-
-<button
-class="primary"
-onclick="novoCase()"
->
-+ Novo case
-</button>
-
-</div>
-
-
-<input
-class="search"
-id="caseSearch"
-placeholder="Pesquisar case..."
-oninput="renderCases()"
->
-
-<div
-id="caseList"
-class="grid"
->
-</div>
-
-</div>
-
 </section>
 
 
-<!-- =========================
-     EVENTOS
-========================= -->
-
+<!-- EVENTOS -->
 <section id="mov" class="view">
 
 <div class="between">
-
 <div>
-
 <h1>Eventos / Empréstimos</h1>
-
-<div class="muted">
-Saída, conferência e retorno dos equipamentos.
+<div class="muted">Saída, retorno e conferência dos materiais.</div>
+</div>
+<button class="primary" onclick="novoMov()">+ Nova saída</button>
 </div>
 
-</div>
-
-<button
-class="primary"
-onclick="novoMov()"
->
-+ Nova saída
-</button>
-
-</div>
-
-<div
-id="movList"
-class="grid"
->
-</div>
+<div id="movList" class="grid"></div>
 
 </section>
 
 
-<!-- =========================
-     MANUTENÇÃO
-========================= -->
-
+<!-- MANUTENÇÃO -->
 <section id="maint" class="view">
 
 <div class="between">
-
 <div>
-
 <h1>Manutenção</h1>
-
-<div class="muted">
-Controle de manutenção interna ou externa.
+<div class="muted">Controle de manutenção interna e externa.</div>
+</div>
+<button class="primary" onclick="novaMan()">+ Registrar</button>
 </div>
 
-</div>
-
-<button
-class="primary"
-onclick="novaMan()"
->
-+ Registrar
-</button>
-
-</div>
-
-<div
-id="manList"
-class="grid"
->
-</div>
+<div id="manList" class="grid"></div>
 
 </section>
 
 
-<!-- =========================
-     ESTOQUE
-========================= -->
-
+<!-- ESTOQUE -->
 <section id="stock" class="view">
 
 <div class="between">
-
 <div>
-
 <h1>Estoque</h1>
-
-<div class="muted">
-Peças, materiais e consumíveis.
+<div class="muted">Peças, materiais e consumíveis.</div>
+</div>
+<button class="primary" onclick="novoEstoque()">+ Novo item</button>
 </div>
 
-</div>
-
-<button
-class="primary"
-onclick="novoEstoque()"
->
-+ Novo item
-</button>
-
-</div>
-
-<div
-id="stockList"
-class="grid"
->
-</div>
+<div id="stockList" class="grid"></div>
 
 </section>
 
 </main>
 
 
-<!-- =========================
-     MODAL
-========================= -->
-
-<div
-id="modal"
-class="modal"
->
-
+<div id="modal" class="modal">
 <div class="box">
-
 <div class="between">
-
 <h2 id="mtitle"></h2>
-
-<button onclick="closeM()">
-Fechar
-</button>
-
+<button onclick="closeM()">Fechar</button>
 </div>
-
 <div id="mbody"></div>
-
 </div>
-
 </div>
 
 
 <script>
 
 /* =========================================================
-   CASES INICIAIS
+   BANCO LOCAL
 ========================================================= */
 
-const initialCases=[
-
-['SV-C001','Case 01 - XLR Som','XLR Som'],
-
-['SV-C002','Case 01 - XLR Luz','XLR Luz'],
-
-['SV-C003','Case 01 - Chicotes','Chicotes'],
-
-['SV-C004','Case 01 - Extensão PP','Extensão Régua;Extensão PP Simples'],
-
-['SV-C005','Case 01 - 01V96','01V96 × 1;ADA Behringer × 2'],
-
-['SV-C006','Case 02 - 01V96i','01V96i × 1'],
-
-['SV-C007','Case 01 - Midas M32 Full','Midas M32 Full × 1'],
-
-['SV-C008','Case 01 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C009','Case 02 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C010','Case 03 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C011','Case 04 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C012','Case 05 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C013','Case 06 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C014','Case 07 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C015','Case 08 - Beam','Beam × 2;Powercon × 2;Gancho × 4'],
-
-['SV-C016','Case 01 - Cabos Painel','Gancho;RJ;Powercon'],
-
-['SV-C017','Case 02 - Cabos Painel','Gancho;RJ;Powercon'],
-
-['SV-C018','Case 01 - Grand MA','Grand MA × 1'],
-
-['SV-C019','Case 02 - Grand MA','Grand MA × 1']
-
+const CASES_INICIAIS=[
+{
+id:"SV-C001",
+name:"Case 01 - XLR Som",
+status:"Disponível",
+items:[
+{name:"Cabo XLR",qty:27,unit:"un",desc:"Cabo XLR 10 metros"}
+]
+},
+{
+id:"SV-C002",
+name:"Case 01 - XLR Luz",
+status:"Disponível",
+items:[
+{name:"Cabo XLR",qty:10,unit:"un",desc:"Cabo XLR 20 metros"}
+]
+},
+{
+id:"SV-C003",
+name:"Case 01 - Chicotes",
+status:"Disponível",
+items:[
+{name:"Chicote",qty:1,unit:"kit",desc:""}
+]
+},
+{
+id:"SV-C004",
+name:"Case 01 - Extensão PP",
+status:"Disponível",
+items:[
+{name:"Extensão Régua",qty:1,unit:"un",desc:""},
+{name:"Extensão PP Simples",qty:1,unit:"un",desc:""}
+]
+},
+{
+id:"SV-C005",
+name:"Case 01 - 01V96",
+status:"Disponível",
+items:[
+{name:"01V96",qty:1,unit:"un",desc:""},
+{name:"ADA Behringer",qty:2,unit:"un",desc:""}
+]
+},
+{
+id:"SV-C006",
+name:"Case 02 - 01V96i",
+status:"Disponível",
+items:[
+{name:"01V96i",qty:1,unit:"un",desc:""},
+{name:"ADA",qty:2,unit:"un",desc:""}
+]
+},
+{
+id:"SV-C007",
+name:"Case 01 - Midas M32 Full",
+status:"Disponível",
+items:[
+{name:"Midas M32 Full",qty:1,unit:"un",desc:""}
+]
+}
 ];
 
-
-/* =========================================================
-   EQUIPAMENTOS INICIAIS
-========================================================= */
-
-function defaultEquipment(){
-
-const e=[
-
-['01V96','PAT-0001','SV-C005'],
-
-['ADA Behringer 01','PAT-0002','SV-C005'],
-
-['ADA Behringer 02','PAT-0003','SV-C005'],
-
-['01V96i','PAT-0004','SV-C006'],
-
-['Midas M32 Full','PAT-0005','SV-C007']
-
-];
-
-for(let caseNo=0;caseNo<8;caseNo++){
-
-for(let n=1;n<=2;n++){
-
-const index=caseNo*2+n;
-
-e.push([
-
-'Beam '+String(index).padStart(2,'0'),
-
-'PAT-'+String(index+5).padStart(4,'0'),
-
-'SV-C'+String(8+caseNo).padStart(3,'0')
-
-]);
-
+for(let i=1;i<=8;i++){
+CASES_INICIAIS.push({
+id:"SV-C"+String(i+7).padStart(3,"0"),
+name:"Case "+String(i).padStart(2,"0")+" - Beam",
+status:"Disponível",
+items:[
+{name:"Beam",qty:2,unit:"un",desc:""},
+{name:"Powercon",qty:2,unit:"un",desc:""},
+{name:"Gancho",qty:4,unit:"un",desc:""}
+]
+});
 }
 
+CASES_INICIAIS.push(
+{
+id:"SV-C016",
+name:"Case 01 - Cabos Painel",
+status:"Disponível",
+items:[
+{name:"Gancho",qty:1,unit:"un",desc:""},
+{name:"RJ",qty:1,unit:"un",desc:""},
+{name:"Powercon",qty:1,unit:"un",desc:""}
+]
+},
+{
+id:"SV-C018",
+name:"Case 01 - Grand MA",
+status:"Disponível",
+items:[
+{name:"Grand MA",qty:1,unit:"un",desc:""}
+]
+},
+{
+id:"SV-C019",
+name:"Case 02 - Grand MA",
+status:"Disponível",
+items:[
+{name:"Grand MA",qty:1,unit:"un",desc:""}
+]
 }
-
-e.push(
-
-['Grand MA 01','PAT-0022','SV-C018'],
-
-['Grand MA 02','PAT-0023','SV-C019']
-
 );
 
-return e;
+const EQUIP_INICIAIS=[
+["01V96","PAT-0001","SV-C005"],
+["ADA Behringer 01","PAT-0002","SV-C005"],
+["ADA Behringer 02","PAT-0003","SV-C005"],
+["01V96i","PAT-0004","SV-C006"],
+["Midas M32 Full","PAT-0005","SV-C007"]
+];
 
+for(let i=1;i<=16;i++){
+EQUIP_INICIAIS.push([
+"Beam "+String(i).padStart(2,"0"),
+"PAT-"+String(i+5).padStart(4,"0"),
+"SV-C"+String(7+Math.ceil(i/2)).padStart(3,"0")
+]);
 }
 
+EQUIP_INICIAIS.push(
+["Grand MA 01","PAT-0022","SV-C018"],
+["Grand MA 02","PAT-0023","SV-C019"]
+);
 
-/* =========================================================
-   BANCO PADRÃO
-========================================================= */
+let db=JSON.parse(localStorage.getItem("svdb"));
 
-const defaults={
-
-cases:initialCases.map(x=>({
-
-id:x[0],
-
-name:x[1],
-
-items:x[2],
-
-itemsList:[],
-
-hasItems:false,
-
-status:'Disponível'
-
+if(!db){
+db={
+cases:CASES_INICIAIS,
+equipment:EQUIP_INICIAIS.map(e=>({
+name:e[0],
+pat:e[1],
+caseId:e[2],
+status:"Disponível"
 })),
-
-equipment:defaultEquipment(),
-
 maint:[],
-
 mov:[],
-
 stock:[
-
-{
-name:'Lâmpada AR-111',
-unit:'un',
-qty:10,
-min:2
-},
-
-{
-name:'Fita isolante',
-unit:'rolo',
-qty:20,
-min:10
-},
-
-{
-name:'Líquido de fumaça',
-unit:'L',
-qty:0,
-min:5
-},
-
-{
-name:'Papel picado',
-unit:'kg',
-qty:0,
-min:5
-}
-
+{name:"Lâmpada AR-111",unit:"un",qty:10,min:2},
+{name:"Fita isolante",unit:"rolo",qty:20,min:10},
+{name:"Líquido de fumaça",unit:"L",qty:0,min:5},
+{name:"Papel picado",unit:"kg",qty:0,min:5}
 ]
-
 };
-
-
-let db=
-JSON.parse(
-localStorage.getItem('svdb')||'null'
-)||defaults;
-
-
-/* =========================================================
-   COMPATIBILIDADE
-========================================================= */
-
-db.cases ||= [];
-db.equipment ||= [];
-db.maint ||= [];
-db.mov ||= [];
-db.stock ||= [];
-
-
-db.cases.forEach(c=>{
-
-if(c.hasItems===undefined)
-c.hasItems=false;
-
-if(!Array.isArray(c.itemsList))
-c.itemsList=[];
-
-});
-
-
-db.mov.forEach(m=>{
-
-m.cases ||= [];
-
-m.returned ||= [];
-
-m.status ||= 'Em andamento';
-
-});
+saveDB();
+}
 
 
 /* =========================================================
    UTILIDADES
 ========================================================= */
 
-function save(){
-
-localStorage.setItem(
-'svdb',
-JSON.stringify(db)
-);
-
-render();
-
+function saveDB(){
+localStorage.setItem("svdb",JSON.stringify(db));
 }
-
 
 function esc(s){
-
-return String(s??'').replace(
-/[&<>"']/g,
-
-m=>({
-
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#039;'
-
-}[m])
-
-);
-
+return String(s??"").replace(/[&<>"']/g,m=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[m]));
 }
-
 
 function openM(t,b){
-
-document.getElementById('mtitle').textContent=t;
-
-document.getElementById('mbody').innerHTML=b;
-
-document.getElementById('modal').classList.add('open');
-
+document.getElementById("mtitle").textContent=t;
+document.getElementById("mbody").innerHTML=b;
+document.getElementById("modal").classList.add("open");
 }
 
-
 function closeM(){
+document.getElementById("modal").classList.remove("open");
+}
 
-document
-.getElementById('modal')
-.classList.remove('open');
-
+function novoId(prefix,lista){
+return prefix+String(lista.length+1).padStart(4,"0");
 }
 
 
 /* =========================================================
-   MENU PRINCIPAL
+   NAVEGAÇÃO
 ========================================================= */
 
 const nav=[
-
-['home','Início'],
-
-['inv','Inventário'],
-
-['mov','Eventos'],
-
-['maint','Manutenção'],
-
-['stock','Estoque']
-
+["home","Início"],
+["inv","Inventário"],
+["mov","Eventos"],
+["maint","Manutenção"],
+["stock","Estoque"]
 ];
 
-
-document.getElementById('nav').innerHTML=
-
+document.getElementById("nav").innerHTML=
 nav.map(x=>
+`<button class="nav" data-v="${x[0]}">${x[1]}</button>`
+).join("");
 
-`<button
-class="nav"
-data-v="${x[0]}"
->${x[1]}</button>`
-
-).join('');
-
-
-document
-.querySelectorAll('.nav')
-.forEach(b=>{
-
+document.querySelectorAll(".nav").forEach(b=>{
 b.onclick=()=>show(b.dataset.v);
-
 });
-
 
 function show(v){
 
-document
-.querySelectorAll('.view')
-.forEach(x=>
-x.classList.remove('active')
-);
+document.querySelectorAll(".view")
+.forEach(x=>x.classList.remove("active"));
 
-document
-.getElementById(v)
-.classList.add('active');
+document.getElementById(v).classList.add("active");
 
-
-document
-.querySelectorAll('.nav')
-.forEach(x=>
-
-x.classList.toggle(
-'active',
-x.dataset.v===v
-)
-
-);
+document.querySelectorAll(".nav")
+.forEach(x=>x.classList.toggle("active",x.dataset.v===v));
 
 render();
-
 }
 
 
 /* =========================================================
-   ABAS DO INVENTÁRIO
-========================================================= */
-
-function showInvTab(tab){
-
-const pat=
-document.getElementById('invPatTab');
-
-const cases=
-document.getElementById('invCasesTab');
-
-const tabPat=
-document.getElementById('tabPat');
-
-const tabCases=
-document.getElementById('tabCases');
-
-
-if(tab==='pat'){
-
-pat.style.display='block';
-
-cases.style.display='none';
-
-tabPat.classList.add('active');
-
-tabCases.classList.remove('active');
-
-}else{
-
-pat.style.display='none';
-
-cases.style.display='block';
-
-tabPat.classList.remove('active');
-
-tabCases.classList.add('active');
-
-renderCases();
-
-}
-
-}
-
-
-/* =========================================================
-   RENDER GERAL
+   RENDER
 ========================================================= */
 
 function render(){
 
-document.getElementById('kc').textContent=
-db.cases.length;
+document.getElementById("kc").textContent=db.cases.length;
+document.getElementById("ke").textContent=db.equipment.length;
+document.getElementById("km").textContent=
+db.maint.filter(x=>x.status!=="Concluída").length;
+document.getElementById("kv").textContent=db.mov.length;
 
-document.getElementById('ke').textContent=
-db.equipment.length;
-
-document.getElementById('km').textContent=
-db.maint.filter(
-x=>x.status!=='Concluída'
-).length;
-
-document.getElementById('kv').textContent=
-db.mov.filter(
-x=>x.status!=='Concluída'
-).length;
-
-
-renderInv();
-
-renderCases();
-
+renderInventario();
 renderMov();
-
-renderMaint();
-
+renderMan();
 renderStock();
-
 }
 
 
 /* =========================================================
-   RENDER PATRIMÔNIOS
+   INVENTÁRIO
 ========================================================= */
 
-function renderInv(){
+function renderInventario(){
 
-const q=
-(
-document.getElementById('invSearch')?.value||''
-).toLowerCase();
-
-
-const list=
-db.equipment.filter(e=>
-
-(
-e.join(' ')+' '+
-(
-db.cases.find(
-c=>c.id===e[2]
-)?.name||''
-)
-).toLowerCase().includes(q)
-
-);
-
-
-document.getElementById('invBody').innerHTML=
-
-'<table>'+
-'<tr>'+
-'<th>Equipamento</th>'+
-'<th>Patrimônio</th>'+
-'<th>Case</th>'+
-'<th>Status</th>'+
-'<th>Ação</th>'+
-'</tr>'+
-
-list.map((e,i)=>`
-
+let html=`
+<table>
 <tr>
+<th>Equipamento</th>
+<th>Patrimônio</th>
+<th>Case</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>`;
 
-<td>${esc(e[0])}</td>
+db.equipment.forEach((e,i)=>{
 
-<td>${esc(e[1])}</td>
+let c=db.cases.find(x=>x.id===e.caseId);
 
+html+=`
+<tr>
+<td>${esc(e.name)}</td>
+<td>${esc(e.pat)}</td>
+<td>${esc(c?.name||"—")}</td>
+<td>${esc(e.status||"Disponível")}</td>
 <td>
-${esc(
-db.cases.find(
-c=>c.id===e[2]
-)?.name||'—'
-)}
+<button onclick="editEquip(${i})">Editar</button>
 </td>
+</tr>`;
+});
 
-<td>${esc(e[3]||'Disponível')}</td>
+html+=`</table>`;
 
-<td>
-
-<button
-onclick="editarPatrimonio(${db.equipment.indexOf(e)})"
->
-Editar
-</button>
-
-</td>
-
-</tr>
-
-`).join('')+
-
-'</table>';
-
+document.getElementById("invBody").innerHTML=html;
 }
 
 
-/* =========================================================
-   NOVO PATRIMÔNIO
-========================================================= */
+function novoEquip(){
 
-function novoPatrimonio(){
+openM("Novo patrimônio",`
 
-openM(
+<label>Nome do equipamento</label>
+<input id="eqname" placeholder="Ex.: Mesa M32">
 
-'Novo patrimônio',
+<label>Número do patrimônio</label>
+<input id="eqpat" placeholder="Ex.: PAT-0024">
 
-`
-
-<label>
-Equipamento
-</label>
-
-<input
-id="patNome"
-placeholder="Ex.: PAR LED 01"
->
-
-
-<label>
-Número do patrimônio
-</label>
-
-<input
-id="patNumero"
-placeholder="Ex.: PAT-0024"
->
-
-
-<label>
-Case
-</label>
-
-<select id="patCase">
-
-<option value="">
-Sem case
-</option>
-
+<label>Case</label>
+<select id="eqcase">
+<option value="">Sem case</option>
 ${db.cases.map(c=>
-
-`<option value="${c.id}">
-${esc(c.name)}
-</option>`
-
-).join('')}
-
+`<option value="${c.id}">${esc(c.name)}</option>`
+).join("")}
 </select>
 
-
-<label>
-Status
-</label>
-
-<select id="patStatus">
-
-<option>
-Disponível
-</option>
-
-<option>
-Em evento
-</option>
-
-<option>
-Em manutenção
-</option>
-
-<option>
-Indisponível
-</option>
-
+<label>Status</label>
+<select id="eqstatus">
+<option>Disponível</option>
+<option>Em manutenção</option>
+<option>Indisponível</option>
 </select>
 
-
-<button
-class="primary"
-onclick="addPatrimonio()"
->
-Cadastrar patrimônio
-</button>
-
-`
-
-);
-
+<button class="primary" onclick="addEquip()">Cadastrar</button>
+`);
 }
 
 
-/* =========================================================
-   ADICIONA PATRIMÔNIO
-========================================================= */
+function addEquip(){
 
-function addPatrimonio(){
-
-const nome=
-document.getElementById('patNome')
-.value.trim();
-
-const numero=
-document.getElementById('patNumero')
-.value.trim();
-
-const cid=
-document.getElementById('patCase')
-.value;
-
-
-if(!nome){
-
-alert(
-'Informe o equipamento.'
-);
-
+if(!eqname.value.trim()){
+alert("Informe o equipamento.");
 return;
-
 }
 
-
-if(!numero){
-
-alert(
-'Informe o número do patrimônio.'
-);
-
-return;
-
-}
-
-
-if(db.equipment.some(
-e=>e[1]===numero
-)){
-
-alert(
-'Esse número de patrimônio já existe.'
-);
-
-return;
-
-}
-
-
-db.equipment.push([
-
-nome,
-
-numero,
-
-cid,
-
-document.getElementById('patStatus')
-.value
-
-]);
-
+db.equipment.push({
+name:eqname.value.trim(),
+pat:eqpat.value.trim()||"PAT-"+String(db.equipment.length+1).padStart(4,"0"),
+caseId:eqcase.value,
+status:eqstatus.value
+});
 
 closeM();
-
-save();
-
+saveDB();
+render();
 }
 
 
-/* =========================================================
-   EDITAR PATRIMÔNIO
-========================================================= */
+function editEquip(i){
 
-function editarPatrimonio(index){
+let e=db.equipment[i];
 
-const e=
-db.equipment[index];
+openM("Editar patrimônio",`
 
-if(!e)return;
+<label>Nome</label>
+<input id="eqname" value="${esc(e.name)}">
 
+<label>Patrimônio</label>
+<input id="eqpat" value="${esc(e.pat)}">
 
-openM(
-
-'Editar patrimônio',
-
-`
-
-<label>
-Equipamento
-</label>
-
-<input
-id="patNome"
-value="${esc(e[0])}"
->
-
-
-<label>
-Número do patrimônio
-</label>
-
-<input
-id="patNumero"
-value="${esc(e[1])}"
->
-
-
-<label>
-Case
-</label>
-
-<select id="patCase">
-
-<option value="">
-Sem case
-</option>
-
+<label>Case</label>
+<select id="eqcase">
+<option value="">Sem case</option>
 ${db.cases.map(c=>
-
-`<option
-value="${c.id}"
-${e[2]===c.id?'selected':''}
->
+`<option value="${c.id}" ${c.id===e.caseId?"selected":""}>
 ${esc(c.name)}
 </option>`
-
-).join('')}
-
+).join("")}
 </select>
 
-
-<label>
-Status
-</label>
-
-<select id="patStatus">
-
-${[
-'Disponível',
-'Em evento',
-'Em manutenção',
-'Indisponível'
-].map(x=>
-
-`<option
-${(e[3]||'Disponível')===x?'selected':''}
->
-${x}
-</option>`
-
-).join('')}
-
+<label>Status</label>
+<select id="eqstatus">
+${["Disponível","Em manutenção","Indisponível"]
+.map(s=>`<option ${e.status===s?"selected":""}>${s}</option>`)
+.join("")}
 </select>
 
-
-<button
-class="primary"
-onclick="savePatrimonio(${index})"
->
-Salvar
-</button>
-
-`
-
-);
-
+<button class="primary" onclick="saveEquip(${i})">Salvar</button>
+`);
 }
 
 
-/* =========================================================
-   SALVA PATRIMÔNIO
-========================================================= */
+function saveEquip(i){
 
-function savePatrimonio(index){
-
-const e=
-db.equipment[index];
-
-const nome=
-document.getElementById('patNome')
-.value.trim();
-
-const numero=
-document.getElementById('patNumero')
-.value.trim();
-
-
-if(!nome||!numero){
-
-alert(
-'Preencha equipamento e patrimônio.'
-);
-
-return;
-
-}
-
-
-const duplicado=
-db.equipment.some(
-(x,i)=>i!==index&&x[1]===numero
-);
-
-
-if(duplicado){
-
-alert(
-'Esse número de patrimônio já existe.'
-);
-
-return;
-
-}
-
-
-e[0]=nome;
-
-e[1]=numero;
-
-e[2]=
-document.getElementById('patCase')
-.value;
-
-e[3]=
-document.getElementById('patStatus')
-.value;
-
+db.equipment[i]={
+name:eqname.value.trim(),
+pat:eqpat.value.trim(),
+caseId:eqcase.value,
+status:eqstatus.value
+};
 
 closeM();
-
-save();
-
+saveDB();
+render();
 }
 
 
 /* =========================================================
-   RENDER CASES
+   CASES — CADASTRO / EDIÇÃO
 ========================================================= */
 
-function renderCases(){
+function novoCase(){
 
-const box=
-document.getElementById('caseList');
+openM("Novo case",`
 
-if(!box)return;
+<label>Nome do case</label>
+<input id="cnome" placeholder="Ex.: Case 01 - Par LED">
 
+<label>Adicionar conteúdo detalhado</label>
 
-const q=
-(
-document.getElementById('caseSearch')?.value||''
-).toLowerCase();
-
-
-const list=
-db.cases.filter(c=>
-
-(
-c.name+' '+
-c.id+' '+
-(c.items||'')
-).toLowerCase().includes(q)
-
-);
-
-
-box.innerHTML=
-
-list.map(c=>`
-
-<div class="card">
-
-<div class="between">
-
-<div>
-
-<h3>
-${esc(c.name)}
-</h3>
-
-<div class="muted">
-${esc(c.id)}
+<div id="items">
+${itemEditorRow()}
 </div>
 
-</div>
+<button onclick="addItemRow()">+ Adicionar item</button>
 
+<br><br>
 
-<span class="badge ${
-c.status==='Disponível'
-?'ok'
-:'warn'
-}">
-
-${esc(c.status)}
-
-</span>
-
-</div>
-
-
-<p>
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`<span class="badge blue">
-${c.itemsList.length}
-item(ns) detalhado(s)
-</span>`
-
-:
-
-`<span class="badge">
-Sem detalhamento
-</span>`
-
-}
-
-</p>
-
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`
-
-<div>
-
-${c.itemsList.map(item=>
-
-`<span class="badge">
-${esc(item.desc)}
- × ${item.qty} ${esc(item.unit)}
-</span>`
-
-).join('')}
-
-</div>
-
-`
-
-:
-
-`<div class="muted">
-O conteúdo ainda não foi detalhado.
-</div>`
-
+<button class="primary" onclick="addCase()">Criar case</button>
+`);
 }
 
 
-<div class="row" style="margin-top:12px">
+function itemEditorRow(){
 
-<button
-onclick="editCase('${c.id}')"
->
-Editar
-</button>
-
-
-<button
-onclick="caseQR('${c.id}')"
->
-Identificação
-</button>
-
-
-<button
-onclick="caseMan('${c.id}')"
->
-Manutenção
-</button>
-
-</div>
-
-</div>
-
-`).join('')||
-
-`
-<div class="card empty muted">
-Nenhum case encontrado.
+return `
+<div class="itemline">
+<input class="iname" placeholder="Item">
+<input class="iqty" type="number" min="1" value="1">
+<input class="iunit" placeholder="un">
+<button class="smallbtn" onclick="this.parentElement.remove()">×</button>
 </div>
 `;
-
-}
-
-
-/* =========================================================
-   EDITOR DE ITENS
-========================================================= */
-
-function itemRows(items=[]){
-
-return items.map(item=>`
-
-<div class="item-row">
-
-<input
-class="item-desc"
-value="${esc(item.desc||'')}"
-placeholder="Descrição"
->
-
-<input
-class="item-qty"
-type="number"
-min="0"
-value="${Number(item.qty)||0}"
-placeholder="Qtd"
->
-
-<input
-class="item-unit"
-value="${esc(item.unit||'un')}"
-placeholder="Un."
->
-
-<button
-type="button"
-onclick="removeItemRow(this)"
->
-×
-</button>
-
-</div>
-
-`).join('');
-
 }
 
 
 function addItemRow(){
 
-const box=
-document.getElementById('itemsEditor');
-
-if(!box)return;
-
-
-const row=
-document.createElement('div');
-
-row.className='item-row';
-
-row.innerHTML=`
-
-<input
-class="item-desc"
-placeholder="Descrição"
->
-
-<input
-class="item-qty"
-type="number"
-min="0"
-value="1"
-placeholder="Qtd"
->
-
-<input
-class="item-unit"
-value="un"
-placeholder="Un."
->
-
-<button
-type="button"
-onclick="removeItemRow(this)"
->
-×
-</button>
-
-`;
-
-box.appendChild(row);
-
-}
-
-
-function removeItemRow(btn){
-
-btn.parentElement.remove();
-
+document.getElementById("items")
+.insertAdjacentHTML("beforeend",itemEditorRow());
 }
 
 
 function collectItems(){
 
-const rows=
-document.querySelectorAll(
-'#itemsEditor .item-row'
-);
+let rows=document.querySelectorAll("#items .itemline");
+let items=[];
 
-const result=[];
+rows.forEach(r=>{
 
+let name=r.querySelector(".iname").value.trim();
+let qty=Number(r.querySelector(".iqty").value)||1;
+let unit=r.querySelector(".iunit").value.trim()||"un";
 
-rows.forEach(row=>{
-
-const desc=
-row.querySelector('.item-desc')
-.value.trim();
-
-const qty=
-Number(
-row.querySelector('.item-qty')
-.value
-);
-
-const unit=
-row.querySelector('.item-unit')
-.value.trim()||'un';
-
-
-if(desc&&qty>0){
-
-result.push({
-
-desc:desc,
-
-qty:qty,
-
-unit:unit
-
+if(name){
+items.push({
+name,
+qty,
+unit,
+desc:""
+});
+}
 });
 
+return items;
 }
 
-});
-
-
-return result;
-
-}
-
-
-/* =========================================================
-   NOVO CASE
-========================================================= */
-
-function novoCase(){
-
-openM(
-
-'Novo case',
-
-`
-
-<label>
-Nome do case
-</label>
-
-<input
-id="caseName"
-placeholder="Ex.: Case 01 - PAR LED"
->
-
-
-<label class="checkbox-line">
-
-<input
-type="checkbox"
-id="caseHasItems"
-onchange="toggleItemsEditor()"
->
-
-<span>
-Este case possui itens para conferência
-</span>
-
-</label>
-
-
-<div
-id="itemsArea"
-style="display:none"
->
-
-<label>
-Itens do case
-</label>
-
-<div class="muted">
-Cadastre descrição, quantidade e unidade.
-</div>
-
-
-<div
-id="itemsEditor"
-class="items-editor"
->
-</div>
-
-
-<button
-type="button"
-onclick="addItemRow()"
->
-+ Adicionar item
-</button>
-
-</div>
-
-
-<br>
-
-<button
-class="primary"
-onclick="addCase()"
->
-Criar case
-</button>
-
-`
-
-);
-
-}
-
-
-/* =========================================================
-   TOGGLE ITENS
-========================================================= */
-
-function toggleItemsEditor(){
-
-const active=
-document.getElementById('caseHasItems')
-.checked;
-
-const area=
-document.getElementById('itemsArea');
-
-
-if(!area)return;
-
-
-area.style.display=
-active?'block':'none';
-
-
-if(active){
-
-const editor=
-document.getElementById('itemsEditor');
-
-if(!editor.children.length){
-
-addItemRow();
-
-}
-
-}
-
-}
-
-
-/* =========================================================
-   ADICIONA CASE
-========================================================= */
 
 function addCase(){
 
-const name=
-document.getElementById('caseName')
-.value.trim();
-
+let name=cnome.value.trim();
 
 if(!name){
-
-alert(
-'Informe o nome do case.'
-);
-
+alert("Informe o nome do case.");
 return;
-
 }
 
-
-const hasItems=
-document.getElementById('caseHasItems')
-.checked;
-
-
-const itemsList=
-hasItems
-?collectItems()
-:[];
-
-
-if(hasItems&&!itemsList.length){
-
-alert(
-'Adicione pelo menos um item.'
-);
-
-return;
-
-}
-
-
-const next=
-db.cases.length+1;
-
+let n=db.cases.length+1;
 
 db.cases.push({
-
-id:
-'SV-C'+
-String(next).padStart(3,'0'),
-
-name:name,
-
-items:
-itemsList.length
-?itemsList.map(
-x=>x.desc+' × '+x.qty
-).join(';')
-:'',
-
-itemsList:itemsList,
-
-hasItems:hasItems,
-
-status:'Disponível'
-
+id:"SV-C"+String(n).padStart(3,"0"),
+name,
+status:"Disponível",
+items:collectItems()
 });
 
-
 closeM();
-
-save();
-
-showInvTab('cases');
-
+saveDB();
+render();
 }
 
 
-/* =========================================================
-   EDITAR CASE EXISTENTE
-========================================================= */
+function editarCase(id){
 
-function editCase(id){
+let c=db.cases.find(x=>x.id===id);
 
-const c=
-db.cases.find(
-x=>x.id===id
-);
+openM("Editar case — "+c.name,`
 
-if(!c)return;
+<label>Nome</label>
+<input id="cnome" value="${esc(c.name)}">
 
-
-openM(
-
-'Editar case — '+c.id,
-
-`
-
-<label>
-Nome do case
-</label>
-
-<input
-id="caseName"
-value="${esc(c.name)}"
->
-
-
-<label class="checkbox-line">
-
-<input
-type="checkbox"
-id="caseHasItems"
-${c.hasItems?'checked':''}
-onchange="toggleItemsEditor()"
->
-
-<span>
-Este case possui itens para conferência
-</span>
-
-</label>
-
-
-<div
-id="itemsArea"
-style="display:${c.hasItems?'block':'none'}"
->
-
-<label>
-Itens do case
-</label>
-
-<div class="muted">
-Descrição • quantidade • unidade
-</div>
-
-
-<div
-id="itemsEditor"
-class="items-editor"
->
-
-${itemRows(c.itemsList||[])}
-
-</div>
-
-
-<button
-type="button"
-onclick="addItemRow()"
->
-+ Adicionar item
-</button>
-
-</div>
-
-
-<label>
-Status
-</label>
-
-<select id="caseStatus">
-
+<label>Status</label>
+<select id="cstatus">
 ${[
-'Disponível',
-'Reservado',
-'Em evento',
-'Em manutenção interna',
-'Em manutenção externa',
-'Indisponível'
-].map(x=>
-
-`<option
-${c.status===x?'selected':''}
->
-${x}
-</option>`
-
-).join('')}
-
+"Disponível",
+"Reservado",
+"Em manutenção interna",
+"Em manutenção externa",
+"Indisponível",
+"Em evento"
+].map(s=>
+`<option ${c.status===s?"selected":""}>${s}</option>`
+).join("")}
 </select>
 
+<label>Conteúdo do case</label>
 
-<br>
+<div id="items">
 
-<button
-class="primary"
-onclick="saveCase('${id}')"
->
+${c.items.map((it,i)=>`
+
+<div class="itemline">
+<input class="iname" value="${esc(it.name)}" placeholder="Item">
+<input class="iqty" type="number" min="1" value="${it.qty}">
+<input class="iunit" value="${esc(it.unit)}" placeholder="un">
+<button class="smallbtn" onclick="this.parentElement.remove()">×</button>
+</div>
+
+`).join("")}
+
+</div>
+
+<button onclick="addItemRow()">+ Adicionar item</button>
+
+<br><br>
+
+<button class="primary" onclick="saveCaseEdit('${id}')">
 Salvar alterações
 </button>
-
-`
-
-);
-
+`);
 }
 
 
-/* =========================================================
-   SALVA CASE EXISTENTE
-========================================================= */
+function saveCaseEdit(id){
 
-function saveCase(id){
+let c=db.cases.find(x=>x.id===id);
 
-const c=
-db.cases.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-
-const name=
-document.getElementById('caseName')
-.value.trim();
-
-
-if(!name){
-
-alert(
-'Informe o nome do case.'
-);
-
-return;
-
-}
-
-
-const hasItems=
-document.getElementById('caseHasItems')
-.checked;
-
-
-const itemsList=
-hasItems
-?collectItems()
-:[];
-
-
-if(hasItems&&!itemsList.length){
-
-alert(
-'Adicione pelo menos um item.'
-);
-
-return;
-
-}
-
-
-c.name=name;
-
-c.hasItems=hasItems;
-
-c.itemsList=itemsList;
-
-c.items=
-itemsList.length
-?itemsList.map(
-x=>x.desc+' × '+x.qty
-).join(';')
-:'';
-
-c.status=
-document.getElementById('caseStatus')
-.value;
-
+c.name=cnome.value.trim();
+c.status=cstatus.value;
+c.items=collectItems();
 
 closeM();
-
-save();
-
+saveDB();
+render();
 }
 
 
 /* =========================================================
-   SELETOR DE CASES PARA EVENTO
-========================================================= */
-
-function caseSelector(selected=[]){
-
-return `
-
-<div class="check-list">
-
-${db.cases.map(c=>`
-
-<label class="check-item">
-
-<input
-type="checkbox"
-class="case-select"
-value="${c.id}"
-${selected.includes(c.id)?'checked':''}
-${c.status!=='Disponível'&&!selected.includes(c.id)
-?'disabled'
-:''}
->
-
-<div>
-
-<b>
-${esc(c.name)}
-</b>
-
-<div class="muted">
-${esc(c.id)} • ${esc(c.status)}
-</div>
-
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`
-
-<div>
-
-${c.itemsList.map(item=>
-
-`<span class="badge">
-${esc(item.desc)}
- × ${item.qty} ${esc(item.unit)}
-</span>`
-
-).join('')}
-
-</div>
-
-`
-
-:
-
-`<div class="muted">
-Sem itens detalhados
-</div>`
-
-}
-
-</div>
-
-</label>
-
-`).join('')}
-
-</div>
-
-`;
-
-}
-
-
-/* =========================================================
-   NOVA SAÍDA
-========================================================= */
-
-function novoMov(){
-
-openM(
-
-'Nova saída',
-
-`
-
-<label>Tipo</label>
-
-<select id="movTipo">
-
-<option>Evento</option>
-
-<option>Empréstimo</option>
-
-</select>
-
-
-<label>
-Nome / destino
-</label>
-
-<input
-id="movNome"
-placeholder="Formatura XYZ / Empresa ABC"
->
-
-
-<label>
-Data de saída
-</label>
-
-<input
-id="movData"
-type="date"
->
-
-
-<label>
-Responsável
-</label>
-
-<input
-id="movResp"
-placeholder="Nome do responsável"
->
-
-
-<label>
-Retorno previsto
-</label>
-
-<input
-id="movRet"
-type="date"
->
-
-
-<h3>
-Cases que irão sair
-</h3>
-
-<div class="muted">
-Selecione os cases.
-</div>
-
-
-${caseSelector()}
-
-
-<button
-class="primary"
-onclick="addMov()"
->
-Criar saída
-</button>
-
-`
-
-);
-
-}
-
-
-/* =========================================================
-   CRIA MOVIMENTAÇÃO
-========================================================= */
-
-function addMov(){
-
-const nome=
-document.getElementById('movNome')
-.value.trim();
-
-
-if(!nome){
-
-alert(
-'Informe o nome ou destino.'
-);
-
-return;
-
-}
-
-
-const cases=[
-
-...document
-.querySelectorAll(
-'.case-select:checked'
-)
-
-].map(x=>x.value);
-
-
-if(!cases.length){
-
-alert(
-'Selecione pelo menos um case.'
-);
-
-return;
-
-}
-
-
-const mov={
-
-id:
-'MOV-'+
-String(db.mov.length+1)
-.padStart(4,'0'),
-
-type:
-document.getElementById('movTipo')
-.value,
-
-name:nome,
-
-date:
-document.getElementById('movData')
-.value,
-
-resp:
-document.getElementById('movResp')
-.value,
-
-ret:
-document.getElementById('movRet')
-.value,
-
-cases:cases,
-
-returned:[],
-
-status:'Em andamento'
-
-};
-
-
-db.mov.push(mov);
-
-
-cases.forEach(cid=>{
-
-const c=
-db.cases.find(
-x=>x.id===cid
-);
-
-if(c)c.status='Em evento';
-
-});
-
-
-closeM();
-
-save();
-
-}
-
-
-/* =========================================================
-   LISTA EVENTOS
+   EVENTOS
 ========================================================= */
 
 function renderMov(){
 
-const lista=
-document.getElementById('movList');
-
+let el=document.getElementById("movList");
 
 if(!db.mov.length){
-
-lista.innerHTML=`
-
-<div class="card empty muted">
-Nenhuma movimentação registrada.
-</div>
-
-`;
-
+el.innerHTML=`<div class="empty">Nenhuma movimentação registrada.</div>`;
 return;
-
 }
 
+el.innerHTML=db.mov.map(m=>{
 
-lista.innerHTML=
+let qtd=m.cases?.length||0;
 
-db.mov.map(m=>`
+let status=
+m.returned?"Retornado":
+"Fora";
 
+return `
 <div class="card">
 
 <div class="between">
-
 <div>
-
-<h3>
-${esc(m.name)}
-</h3>
-
-<div class="muted">
-${esc(m.id)}
+<h3>${esc(m.name)}</h3>
+<div class="muted">${esc(m.type)}</div>
 </div>
 
-</div>
-
-
-<span class="badge ${
-m.status==='Concluída'
-?'ok'
-:m.status==='Retorno parcial'
-?'warn'
-:'blue'
-}">
-
-${esc(m.status)}
-
+<span class="badge ${m.returned?"ok":"warn"}">
+${status}
 </span>
-
 </div>
-
-
-<p>
-
-<span class="badge">
-${esc(m.type)}
-</span>
-
-</p>
-
 
 <p class="muted">
-
-Responsável:
-${esc(m.resp||'—')}
-
-<br>
-
-Saída:
-${esc(m.date||'—')}
-
-<br>
-
-Retorno previsto:
-${esc(m.ret||'—')}
-
-<br>
-
-Cases:
-${m.cases.length}
-
+Responsável: ${esc(m.resp||"—")}<br>
+Saída: ${esc(m.date||"—")}<br>
+Retorno previsto: ${esc(m.ret||"—")}<br>
+Cases: ${qtd}
 </p>
-
 
 <div class="row">
 
-<button
-onclick="openMov('${m.id}')"
->
-Abrir / conferir
+<button onclick="abrirEvento('${m.id}')">
+Abrir
 </button>
 
-<button
-onclick="printMov('${m.id}')"
->
+${!m.returned?
+`<button class="primary" onclick="retorno('${m.id}')">
+Registrar retorno
+</button>`:""}
+
+<button onclick="printMov('${m.id}')">
 Imprimir
 </button>
 
 </div>
 
 </div>
+`;
 
-`).join('');
+}).join("");
+}
 
+
+function novoMov(){
+
+openM("Nova saída",`
+
+<label>Tipo</label>
+<select id="mtipo">
+<option>Evento</option>
+<option>Empréstimo</option>
+</select>
+
+<label>Nome / destino</label>
+<input id="mnome" placeholder="Ex.: Formatura PG">
+
+<label>Data de saída</label>
+<input id="mdate" type="date" value="${new Date().toISOString().slice(0,10)}">
+
+<label>Responsável</label>
+<input id="mresp" placeholder="Responsável pela retirada">
+
+<label>Retorno previsto</label>
+<input id="mret" type="date">
+
+<h3>Selecionar cases</h3>
+
+<div id="caseSelect">
+
+${db.cases.map(c=>`
+
+<label class="check">
+<input type="checkbox" class="casecheck" value="${c.id}">
+<span>
+<b>${esc(c.name)}</b><br>
+<span class="muted">
+${c.items.map(i=>`${esc(i.name)} × ${i.qty}`).join(" • ")}
+</span>
+</span>
+</label>
+
+`).join("")}
+
+</div>
+
+<br>
+
+<button class="primary" onclick="addMov()">
+Criar saída
+</button>
+`);
+}
+
+
+function addMov(){
+
+let selecionados=[
+...document.querySelectorAll(".casecheck:checked")
+].map(x=>x.value);
+
+if(!mnome.value.trim()){
+alert("Informe o destino/evento.");
+return;
+}
+
+if(!selecionados.length){
+alert("Selecione pelo menos um case.");
+return;
+}
+
+let id=novoId("MOV-",db.mov);
+
+db.mov.push({
+id,
+type:mtipo.value,
+name:mnome.value.trim(),
+date:mdate.value,
+resp:mresp.value.trim(),
+ret:mret.value,
+cases:selecionados,
+returned:false,
+returnDate:"",
+returnResp:"",
+conference:[],
+notes:""
+});
+
+selecionados.forEach(cid=>{
+let c=db.cases.find(x=>x.id===cid);
+if(c)c.status="Em evento";
+});
+
+closeM();
+saveDB();
+render();
 }
 
 
 /* =========================================================
-   CONFERÊNCIA
+   ABRIR EVENTO
 ========================================================= */
 
-function openMov(id){
+function abrirEvento(id){
 
-const m=
-db.mov.find(
-x=>x.id===id
-);
+let m=db.mov.find(x=>x.id===id);
 
-if(!m)return;
+openM("Evento — "+m.name,`
 
+<p>
+<b>${esc(m.type)}</b><br>
+Responsável: ${esc(m.resp||"—")}<br>
+Saída: ${esc(m.date||"—")}<br>
+Retorno previsto: ${esc(m.ret||"—")}
+</p>
 
-openM(
+<h3>Material separado</h3>
 
-'Conferência — '+m.name,
-
-`
-
-<div class="status-box">
-
-<b>
-${esc(m.type)}
-</b>
-
-<br>
-
-Responsável:
-${esc(m.resp||'—')}
-
-<br>
-
-Saída:
-${esc(m.date||'—')}
-
-<br>
-
-Retorno previsto:
-${esc(m.ret||'—')}
-
-</div>
-
-
-<h3>
-Cases desta saída
-</h3>
-
+<table>
+<tr>
+<th>Case</th>
+<th>Conteúdo</th>
+</tr>
 
 ${m.cases.map(cid=>{
 
-const c=
-db.cases.find(
-x=>x.id===cid
-);
-
-if(!c)return '';
-
-
-const voltou=
-m.returned.includes(cid);
-
+let c=db.cases.find(x=>x.id===cid);
 
 return `
-
-<div class="case-box">
-
-<div class="between">
-
-<div>
-
-<h4>
-${esc(c.name)}
-</h4>
-
-<div class="muted">
-${esc(c.id)}
-</div>
-
-</div>
-
-
-<span class="badge ${
-voltou?'ok':'warn'
-}">
-
-${voltou
-?'RETORNOU'
-:'FORA'}
-
-</span>
-
-</div>
-
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`
-
-${c.itemsList.map(item=>
-
-`<div class="item-line">
-
-<span>
-${esc(item.desc)}
-</span>
-
-<b>
-${item.qty}
- ${esc(item.unit)}
-</b>
-
-</div>`
-
-).join('')}
-
-`
-
-:
-
-`
-
-<div class="muted">
-Case sem itens detalhados.
-</div>
-
-`
-
-}
-
-</div>
-
+<tr>
+<td>${esc(c?.name||cid)}</td>
+<td>
+${c?.items.map(i=>
+`${esc(i.name)} — ${i.qty} ${esc(i.unit)}`
+).join("<br>")||"—"}
+</td>
+</tr>
 `;
 
-}).join('')}
+}).join("")}
 
+</table>
 
-<div class="row">
+${m.returned?`
 
-<button
-class="primary"
-onclick="registrarRetorno('${id}')"
->
-Registrar retorno
-</button>
+<hr>
 
-<button
-onclick="printMov('${id}')"
->
-Imprimir relação
-</button>
+<h3>Retorno registrado</h3>
 
-</div>
-
-`
-
-);
-
-}
-
-
-/* =========================================================
-   RETORNO
-========================================================= */
-
-function registrarRetorno(id){
-
-const m=
-db.mov.find(
-x=>x.id===id
-);
-
-if(!m)return;
-
-
-const pendentes=
-m.cases.filter(
-cid=>!m.returned.includes(cid)
-);
-
-
-if(!pendentes.length){
-
-alert(
-'Todos os cases já foram retornados.'
-);
-
-return;
-
-}
-
-
-openM(
-
-'Registrar retorno',
-
-`
-
-<p class="muted">
-Marque os cases que efetivamente retornaram.
+<p>
+Data: ${esc(m.returnDate)}<br>
+Conferente: ${esc(m.returnResp)}
 </p>
 
+${m.conference?.length?`
 
-<div class="check-list">
+<table>
+<tr>
+<th>Case</th>
+<th>Conferência</th>
+</tr>
 
-${pendentes.map(cid=>{
+${m.conference.map(x=>`
 
-const c=
-db.cases.find(
-x=>x.id===cid
-);
+<tr>
+<td>${esc(x.caseName)}</td>
+<td>
+<span class="${x.status==="OK"?"status-ok":"status-bad"}">
+<b>${esc(x.status)}</b>
+</span>
+<br>
+${esc(x.obs||"")}
+</td>
+</tr>
 
-return `
+`).join("")}
 
-<label class="check-item">
+</table>
+`:""}
 
-<input
-type="checkbox"
-class="retorno-select"
-value="${cid}"
->
+`:""}
 
-<div>
-
-<b>
-${esc(c.name)}
-</b>
-
-<div class="muted">
-${esc(c.id)}
-</div>
-
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`<div>
-
-${c.itemsList.map(item=>
-
-`<span class="badge">
-${esc(item.desc)}
- × ${item.qty} ${esc(item.unit)}
-</span>`
-
-).join('')}
-
-</div>`
-
-:''
-
-}
-
-</div>
-
-</label>
-
-`;
-
-}).join('')}
-
-</div>
-
-
-<button
-class="primary"
-onclick="confirmarRetorno('${id}')"
->
-Confirmar retorno
-</button>
-
-`
-
-);
-
+`);
 }
 
 
 /* =========================================================
-   CONFIRMA RETORNO
+   RETORNO / CONFERÊNCIA
 ========================================================= */
 
-function confirmarRetorno(id){
+function retorno(id){
 
-const m=
-db.mov.find(
-x=>x.id===id
-);
+let m=db.mov.find(x=>x.id===id);
 
-if(!m)return;
+openM("Retorno — "+m.name,`
 
+<p class="muted">
+Confira fisicamente cada case antes de finalizar o retorno.
+</p>
 
-const retornados=[
+<label>Data do retorno</label>
+<input id="rdate" type="date" value="${new Date().toISOString().slice(0,10)}">
 
-...document
-.querySelectorAll(
-'.retorno-select:checked'
-)
+<label>Responsável pela conferência</label>
+<input id="rresp" placeholder="Quem conferiu o material">
 
-].map(x=>x.value);
+<h3>Conferência dos cases</h3>
 
+<div id="conference">
 
-if(!retornados.length){
+${m.cases.map(cid=>{
 
-alert(
-'Selecione pelo menos um case.'
-);
+let c=db.cases.find(x=>x.id===cid);
 
-return;
+return `
 
+<div class="card" style="margin-bottom:10px">
+
+<h3>${esc(c.name)}</h3>
+
+<p class="muted">
+${c.items.map(i=>
+`${esc(i.name)} — ${i.qty} ${esc(i.unit)}`
+).join("<br>")}
+</p>
+
+<label>Status</label>
+
+<select class="confstatus" data-case="${cid}">
+<option>OK</option>
+<option>Faltando material</option>
+<option>Material danificado</option>
+<option>Faltando e danificado</option>
+</select>
+
+<label>Observação</label>
+
+<textarea
+class="confobs"
+data-case="${cid}"
+placeholder="Informe falta, dano, quantidade divergente, cabo rompido etc."
+></textarea>
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+<button class="primary" onclick="finalizarRetorno('${id}')">
+Finalizar retorno
+</button>
+`);
 }
 
 
-retornados.forEach(cid=>{
+function finalizarRetorno(id){
 
-if(!m.returned.includes(cid)){
+let m=db.mov.find(x=>x.id===id);
 
-m.returned.push(cid);
+let conferencias=[];
 
-}
+document.querySelectorAll(".confstatus").forEach(select=>{
 
+let cid=select.dataset.case;
 
-const c=
-db.cases.find(
-x=>x.id===cid
-);
+let obs=document.querySelector(
+`.confobs[data-case="${cid}"]`
+)?.value||"";
 
+let c=db.cases.find(x=>x.id===cid);
 
-if(c)c.status='Disponível';
+conferencias.push({
+caseId:cid,
+caseName:c?.name||cid,
+status:select.value,
+obs
+});
 
 });
 
+m.returned=true;
+m.returnDate=rdate.value;
+m.returnResp=rresp.value.trim();
+m.conference=conferencias;
 
-if(m.returned.length>=m.cases.length){
+let divergencia=conferencias.some(x=>x.status!=="OK");
 
-m.status='Concluída';
+m.notes=divergencia?
+"Retorno com divergência":
+"Retorno conferido sem divergências";
 
-}else{
+m.cases.forEach(cid=>{
 
-m.status='Retorno parcial';
+let c=db.cases.find(x=>x.id===cid);
 
+if(c){
+c.status=divergencia
+?"Disponível — verificar"
+:"Disponível";
 }
 
+});
 
 closeM();
+saveDB();
+render();
 
-save();
-
+alert(
+divergencia
+?"Retorno registrado com divergências. Verifique a conferência do evento."
+:"Retorno registrado e conferido com sucesso."
+);
 }
 
 
@@ -2969,152 +1261,79 @@ save();
 
 function printMov(id){
 
-const m=
-db.mov.find(
-x=>x.id===id
-);
+let m=db.mov.find(x=>x.id===id);
 
-if(!m)return;
-
-
-let rows='';
-
+let rows="";
 
 m.cases.forEach(cid=>{
 
-const c=
-db.cases.find(
-x=>x.id===cid
-);
+let c=db.cases.find(x=>x.id===cid);
 
-if(!c)return;
-
-
-const voltou=
-m.returned.includes(cid);
-
-
-if(c.hasItems&&c.itemsList?.length){
-
-c.itemsList.forEach(item=>{
+c.items.forEach(item=>{
 
 rows+=`
-
 <tr>
-
 <td>${esc(c.name)}</td>
-
-<td>${esc(c.id)}</td>
-
-<td>${esc(item.desc)}</td>
-
+<td>${esc(cid)}</td>
+<td>${esc(item.desc||item.name)}</td>
 <td>${item.qty}</td>
-
 <td>${esc(item.unit)}</td>
-
-<td>${voltou?'RETORNOU':'FORA'}</td>
-
+<td>FORA</td>
 </tr>
-
 `;
 
 });
 
-}else{
-
-rows+=`
-
-<tr>
-
-<td>${esc(c.name)}</td>
-
-<td>${esc(c.id)}</td>
-
-<td>Case completo</td>
-
-<td>1</td>
-
-<td>un</td>
-
-<td>${voltou?'RETORNOU':'FORA'}</td>
-
-</tr>
-
-`;
-
-}
-
 });
 
-
-const w=
-window.open('','_blank');
-
+let w=window.open("","_blank");
 
 w.document.write(`
-
 <html>
-
 <head>
-
-<title>
-Star Vision - ${esc(m.name)}
-</title>
-
+<title>Star Vision — ${esc(m.name)}</title>
 <style>
-
 body{
 font-family:Arial;
 padding:30px;
 color:#111
 }
-
 table{
 width:100%;
-border-collapse:collapse
+border-collapse:collapse;
+margin-top:20px
 }
-
 th,td{
-border:1px solid #999;
-padding:8px;
+border:1px solid #aaa;
+padding:7px;
+font-size:12px;
 text-align:left
 }
-
+th{
+background:#eee
+}
 </style>
-
 </head>
-
 <body>
 
-<h1>
-STAR VISION
-</h1>
+<h1>STAR VISION</h1>
 
-<h2>
-${esc(m.type)} — ${esc(m.name)}
-</h2>
+<h2>${esc(m.type)} — ${esc(m.name)}</h2>
 
 <p>
-Responsável:
-${esc(m.resp||'—')}
-</p>
-
-<p>
-Saída:
-${esc(m.date||'—')}
+Responsável: ${esc(m.resp||"—")}<br>
+Saída: ${esc(m.date||"—")}<br>
+Retorno previsto: ${esc(m.ret||"—")}
 </p>
 
 <table>
-
 <tr>
-
 <th>Case</th>
 <th>ID</th>
 <th>Item</th>
 <th>Qtd.</th>
 <th>Un.</th>
 <th>Status</th>
-
 </tr>
 
 ${rows}
@@ -3126,13 +1345,10 @@ window.print();
 <\/script>
 
 </body>
-
 </html>
-
 `);
 
 w.document.close();
-
 }
 
 
@@ -3140,269 +1356,107 @@ w.document.close();
    MANUTENÇÃO
 ========================================================= */
 
-function novaMan(){
+function renderMan(){
 
-openM(
-
-'Registrar manutenção',
-
-`
-
-<label>
-Case
-</label>
-
-<select id="manCase">
-
-${db.cases.map(c=>
-
-`<option value="${c.id}">
-${esc(c.name)} — ${esc(c.status)}
-</option>`
-
-).join('')}
-
-</select>
-
-
-<label>
-Tipo
-</label>
-
-<select id="manTipo">
-
-<option>
-Interna
-</option>
-
-<option>
-Externa
-</option>
-
-</select>
-
-
-<label>
-Descrição
-</label>
-
-<textarea
-id="manDesc"
-placeholder="Descreva o problema ou serviço..."
-></textarea>
-
-
-<button
-class="primary"
-onclick="addMan2()"
->
-Registrar
-</button>
-
-`
-
-);
-
-}
-
-
-/* =========================================================
-   ADICIONA MANUTENÇÃO
-========================================================= */
-
-function addMan2(){
-
-const cid=
-document.getElementById('manCase')
-.value;
-
-
-const c=
-db.cases.find(
-x=>x.id===cid
-);
-
-
-if(!c){
-
-alert(
-'Selecione um case.'
-);
-
-return;
-
-}
-
-
-const man={
-
-id:
-'MAN-'+
-String(db.maint.length+1)
-.padStart(4,'0'),
-
-name:c.name,
-
-case:cid,
-
-type:
-document.getElementById('manTipo')
-.value,
-
-desc:
-document.getElementById('manDesc')
-.value,
-
-status:'Pendente',
-
-date:
-new Date()
-.toISOString()
-.slice(0,10)
-
-};
-
-
-db.maint.push(man);
-
-
-c.status=
-man.type==='Externa'
-?'Em manutenção externa'
-:'Em manutenção interna';
-
-
-closeM();
-
-save();
-
-}
-
-
-/* =========================================================
-   LISTA MANUTENÇÃO
-========================================================= */
-
-function renderMaint(){
-
-const lista=
-document.getElementById('manList');
-
+let el=document.getElementById("manList");
 
 if(!db.maint.length){
-
-lista.innerHTML=`
-
-<div class="card empty muted">
-Nenhuma manutenção registrada.
-</div>
-
-`;
-
+el.innerHTML=`<div class="empty">Nenhuma manutenção registrada.</div>`;
 return;
-
 }
 
-
-lista.innerHTML=
-
-db.maint.map(m=>`
+el.innerHTML=db.maint.map((m,i)=>`
 
 <div class="card">
 
 <div class="between">
 
 <div>
-
-<h3>
-${esc(m.name)}
-</h3>
-
-<div class="muted">
-${esc(m.id)} • ${esc(m.case)}
+<h3>${esc(m.name)}</h3>
+<span class="badge">${esc(m.type)}</span>
+<span class="badge">${esc(m.status)}</span>
 </div>
 
-</div>
-
-
-<span class="badge ${
-m.status==='Concluída'
-?'ok'
-:'warn'
-}">
-
-${esc(m.status)}
-
-</span>
+${m.status!=="Concluída"?
+`<button onclick="concluirMan(${i})">Concluir</button>`:""}
 
 </div>
 
-
-<p>
-
-<span class="badge">
-${esc(m.type)}
-</span>
-
-</p>
-
-
-<p>
-${esc(m.desc||'Sem descrição.')}
-</p>
-
-
-<p class="muted">
-Registro: ${esc(m.date||'—')}
-</p>
-
-
-${m.status!=='Concluída'?
-
-`<button
-class="primary"
-onclick="concluirMan('${m.id}')"
->
-Concluir manutenção
-</button>`
-
-:''}
+<p>${esc(m.desc||"Sem descrição")}</p>
 
 </div>
 
-`).join('');
-
+`).join("");
 }
 
 
-/* =========================================================
-   CONCLUI MANUTENÇÃO
-========================================================= */
+function novaMan(){
 
-function concluirMan(id){
+openM("Registrar manutenção",`
 
-const m=
-db.maint.find(
-x=>x.id===id
-);
+<label>Case</label>
 
-if(!m)return;
+<select id="manCase">
+${db.cases.map(c=>
+`<option value="${c.id}">${esc(c.name)}</option>`
+).join("")}
+</select>
+
+<label>Tipo</label>
+
+<select id="manType">
+<option>Interna</option>
+<option>Externa</option>
+</select>
+
+<label>Descrição</label>
+
+<textarea id="manDesc"
+placeholder="Ex.: verificar cabo XLR, conector, lâmpada, ventilação..."></textarea>
+
+<button class="primary" onclick="addMan()">
+Registrar
+</button>
+`);
+}
 
 
-m.status='Concluída';
+function addMan(){
+
+let c=db.cases.find(x=>x.id===manCase.value);
+
+db.maint.push({
+name:c.name,
+caseId:c.id,
+type:manType.value,
+desc:manDesc.value,
+status:"Pendente",
+date:new Date().toISOString().slice(0,10)
+});
+
+c.status=
+manType.value==="Externa"
+?"Em manutenção externa":
+"Em manutenção interna";
+
+closeM();
+saveDB();
+render();
+}
 
 
-const c=
-db.cases.find(
-x=>x.id===m.case
-);
+function concluirMan(i){
 
+let m=db.maint[i];
 
-if(c)c.status='Disponível';
+m.status="Concluída";
 
+let c=db.cases.find(x=>x.id===m.caseId);
 
-save();
+if(c)c.status="Disponível";
 
+saveDB();
+render();
 }
 
 
@@ -3412,506 +1466,118 @@ save();
 
 function renderStock(){
 
-const lista=
-document.getElementById('stockList');
+let el=document.getElementById("stockList");
 
-
-lista.innerHTML=
-
-db.stock.map((s,i)=>`
+el.innerHTML=db.stock.map((s,i)=>`
 
 <div class="card">
 
 <div class="between">
 
-<h3>
-${esc(s.name)}
-</h3>
+<h3>${esc(s.name)}</h3>
 
-<b class="${
-s.qty<=s.min?'bad':'ok'
-}">
-
-${s.qty<=s.min?'REPOR':'OK'}
-
+<b class="${s.qty<=s.min?"bad":"ok"}">
+${s.qty<=s.min?"REPOR":"OK"}
 </b>
 
 </div>
 
-
 <p>
-
-<b>${s.qty}</b>
-${esc(s.unit)}
-
+<b>${s.qty}</b> ${esc(s.unit)}
 •
-
-mínimo
-${s.min}
-
+mínimo ${s.min}
 </p>
 
-
-<button
-onclick="stock('${i}')"
->
+<button onclick="stockMov(${i})">
 Movimentar
 </button>
 
 </div>
 
-`).join('');
-
+`).join("");
 }
 
-
-/* =========================================================
-   NOVO ESTOQUE
-========================================================= */
 
 function novoEstoque(){
 
-openM(
+openM("Novo item",`
 
-'Novo item',
+<label>Item</label>
+<input id="sname">
 
-`
+<label>Unidade</label>
+<input id="sunit" placeholder="un, rolo, kg, L...">
 
-<label>
-Item
-</label>
+<label>Quantidade</label>
+<input id="sqty" type="number" value="0">
 
-<input
-id="stockNome"
->
+<label>Estoque mínimo</label>
+<input id="smin" type="number" value="0">
 
-
-<label>
-Unidade
-</label>
-
-<input
-id="stockUnit"
-placeholder="un, kg, L, rolo..."
->
-
-
-<label>
-Quantidade inicial
-</label>
-
-<input
-id="stockQty"
-type="number"
-min="0"
-value="0"
->
-
-
-<label>
-Estoque mínimo
-</label>
-
-<input
-id="stockMin"
-type="number"
-min="0"
-value="0"
->
-
-
-<button
-class="primary"
-onclick="addStock()"
->
+<button class="primary" onclick="addStock()">
 Cadastrar
 </button>
-
-`
-
-);
-
+`);
 }
 
-
-/* =========================================================
-   ADICIONA ESTOQUE
-========================================================= */
 
 function addStock(){
 
-const nome=
-document.getElementById('stockNome')
-.value.trim();
-
-
-if(!nome){
-
-alert(
-'Informe o nome do item.'
-);
-
-return;
-
-}
-
-
 db.stock.push({
-
-name:nome,
-
-unit:
-document.getElementById('stockUnit')
-.value,
-
-qty:
-Number(
-document.getElementById('stockQty')
-.value
-),
-
-min:
-Number(
-document.getElementById('stockMin')
-.value
-)
-
+name:sname.value,
+unit:sunit.value||"un",
+qty:Number(sqty.value)||0,
+min:Number(smin.value)||0
 });
 
-
 closeM();
-
-save();
-
+saveDB();
+render();
 }
 
 
-/* =========================================================
-   MOVIMENTAR ESTOQUE
-========================================================= */
+function stockMov(i){
 
-function stock(i){
+let s=db.stock[i];
 
-const s=db.stock[i];
-
-
-openM(
-
-'Estoque — '+s.name,
-
-`
+openM("Movimentar — "+s.name,`
 
 <p>
 Saldo atual:
-<b>
-${s.qty} ${esc(s.unit)}
-</b>
+<b>${s.qty} ${esc(s.unit)}</b>
 </p>
 
+<label>Tipo</label>
 
-<label>
-Operação
-</label>
-
-<select id="stockOp">
-
-<option value="1">
-Entrada
-</option>
-
-<option value="-1">
-Saída
-</option>
-
+<select id="stockType">
+<option value="1">Entrada</option>
+<option value="-1">Saída</option>
 </select>
 
+<label>Quantidade</label>
 
-<label>
-Quantidade
-</label>
+<input id="stockQty" type="number" min="1" value="1">
 
-<input
-id="stockAmount"
-type="number"
-min="1"
-value="1"
->
-
-
-<button
-class="primary"
-onclick="moveStock(${i})"
->
+<button class="primary" onclick="applyStock(${i})">
 Aplicar
 </button>
-
-`
-
-);
-
+`);
 }
 
 
-/* =========================================================
-   APLICA ESTOQUE
-========================================================= */
+function applyStock(i){
 
-function moveStock(i){
+let s=db.stock[i];
 
-const s=db.stock[i];
+let delta=
+Number(stockType.value)*
+Number(stockQty.value);
 
-const op=
-Number(
-document.getElementById('stockOp')
-.value
-);
-
-const amount=
-Number(
-document.getElementById('stockAmount')
-.value
-);
-
-
-if(amount<=0){
-
-alert(
-'Informe uma quantidade válida.'
-);
-
-return;
-
-}
-
-
-if(op===-1&&amount>s.qty){
-
-alert(
-'A quantidade de saída é maior que o estoque disponível.'
-);
-
-return;
-
-}
-
-
-s.qty+=op*amount;
-
+s.qty=Math.max(0,s.qty+delta);
 
 closeM();
-
-save();
-
-}
-
-
-/* =========================================================
-   IDENTIFICAÇÃO DO CASE
-========================================================= */
-
-function caseQR(id){
-
-const c=
-db.cases.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-
-openM(
-
-'Identificação do case',
-
-`
-
-<div class="center">
-
-<h2>
-${esc(c.name)}
-</h2>
-
-<div
-style="
-background:white;
-color:#111;
-padding:25px;
-border-radius:10px;
-font:bold 24px monospace;
-display:inline-block
-"
->
-${esc(c.id)}
-</div>
-
-<p class="muted">
-Identificador permanente do case.
-</p>
-
-<p>
-Status:
-<b>
-${esc(c.status)}
-</b>
-</p>
-
-
-${
-c.hasItems&&c.itemsList?.length
-
-?
-
-`
-
-<h3>
-Itens do case
-</h3>
-
-${c.itemsList.map(item=>
-
-`<div class="item-line">
-
-<span>
-${esc(item.desc)}
-</span>
-
-<b>
-${item.qty}
- ${esc(item.unit)}
-</b>
-
-</div>`
-
-).join('')}
-
-`
-
-:''
-
-}
-
-</div>
-
-`
-
-);
-
-}
-
-
-/* =========================================================
-   MANUTENÇÃO DIRETA DO CASE
-========================================================= */
-
-function caseMan(id){
-
-const c=
-db.cases.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-
-openM(
-
-'Manutenção — '+c.name,
-
-`
-
-<label>
-Tipo
-</label>
-
-<select id="caseManTipo">
-
-<option>
-Interna
-</option>
-
-<option>
-Externa
-</option>
-
-</select>
-
-
-<label>
-Descrição
-</label>
-
-<textarea
-id="caseManDesc"
-placeholder="Descreva o problema..."
-></textarea>
-
-
-<button
-class="primary"
-onclick="addCaseMan('${id}')"
->
-Registrar manutenção
-</button>
-
-`
-
-);
-
-}
-
-
-function addCaseMan(id){
-
-const c=
-db.cases.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-
-const type=
-document.getElementById('caseManTipo')
-.value;
-
-
-db.maint.push({
-
-id:
-'MAN-'+
-String(db.maint.length+1)
-.padStart(4,'0'),
-
-name:c.name,
-
-case:id,
-
-type:type,
-
-desc:
-document.getElementById('caseManDesc')
-.value,
-
-status:'Pendente',
-
-date:
-new Date()
-.toISOString()
-.slice(0,10)
-
-});
-
-
-c.status=
-type==='Externa'
-?'Em manutenção externa'
-:'Em manutenção interna';
-
-
-closeM();
-
-save();
-
+saveDB();
+render();
 }
 
 
@@ -3920,8 +1586,7 @@ save();
 ========================================================= */
 
 render();
-
-show('home');
+show("home");
 
 </script>
 
