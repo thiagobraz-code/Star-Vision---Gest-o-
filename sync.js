@@ -95,8 +95,73 @@ function renderEvents() {
 window.svPendingMaintenanceForMovement = svPendingMaintenanceForMovement;
 
 /* =========================================================
-   INVENTÁRIO 2.0 — carregado depois do sistema principal para
-   substituir a interface antiga sem perder os dados existentes.
+   EXCLUSÃO DE EVENTOS / EMPRÉSTIMOS
+   A exclusão remove a movimentação, libera os cases e
+   remove as ocorrências de manutenção originadas por ela.
+========================================================= */
+
+function deleteMovement(id) {
+  const movement = db.movements?.find(m => m.id === id);
+  if (!movement) {
+    alert('Movimentação não encontrada.');
+    return;
+  }
+
+  const label = `${movement.type || 'Movimentação'}: ${movement.name || id}`;
+  if (!confirm(`Excluir esta movimentação?\n\n${label}\nCases vinculados: ${(movement.cases || []).length}\n\nOs cases e quantidades comprometidas serão liberados novamente.`)) return;
+
+  const caseIds = (movement.cases || []).map(ec => ec.caseId).filter(Boolean);
+
+  // Remove ocorrências de manutenção criadas a partir deste evento.
+  db.maintenance = (db.maintenance || []).filter(mt => {
+    if (mt.movementId === id) return false;
+    if (mt.movementName && mt.movementName === movement.name) return false;
+    return true;
+  });
+
+  // Remove a movimentação do banco central/local.
+  db.movements = (db.movements || []).filter(m => m.id !== id);
+
+  // Recalcula o status dos cases liberados.
+  caseIds.forEach(caseId => {
+    if (typeof updateCaseStatus === 'function') updateCaseStatus(caseId);
+  });
+  if (typeof normalizeDB === 'function') normalizeDB();
+
+  localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
+
+  fetch('/api/db', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+    cache: 'no-store',
+    body: JSON.stringify(db)
+  })
+  .then(async r => {
+    if (r.status === 409) {
+      const x = await r.json().catch(() => ({}));
+      throw new Error(x.message || 'Conflito de sincronização. Atualize e tente novamente.');
+    }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const remote = await r.json();
+    db = remote;
+    normalizeDB();
+    localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
+  })
+  .then(() => {
+    closeModal();
+    render();
+    if (typeof svSyncNow === 'function') svSyncNow();
+  })
+  .catch(err => {
+    console.error('Star Vision: erro ao excluir movimentação', err);
+    alert('Não foi possível excluir a movimentação no banco central.\n\n' + err.message);
+    if (typeof svSyncNow === 'function') svSyncNow();
+  });
+}
+window.deleteMovement = deleteMovement;
+
+/* =========================================================
+   INVENTÁRIO 2.0
 ========================================================= */
 (function loadInventoryV2(){
   const s=document.createElement('script');
