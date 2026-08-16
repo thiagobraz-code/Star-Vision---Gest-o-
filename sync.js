@@ -120,17 +120,14 @@ async function deleteMovement(id) {
   try {
     const caseIds = (movement.cases || []).map(ec => ec.caseId).filter(Boolean);
 
-    // Remove ocorrências de manutenção criadas a partir deste evento.
     db.maintenance = (db.maintenance || []).filter(mt => {
       if (mt.movementId === id) return false;
       if (mt.movementName && mt.movementName === movement.name) return false;
       return true;
     });
 
-    // Remove a movimentação do banco central/local.
     db.movements = (db.movements || []).filter(m => m.id !== id);
 
-    // Recalcula o status dos cases liberados.
     caseIds.forEach(caseId => {
       if (typeof updateCaseStatus === 'function') updateCaseStatus(caseId);
     });
@@ -147,7 +144,6 @@ async function deleteMovement(id) {
 
     if (r.status === 409) {
       const x = await r.json().catch(() => ({}));
-      // Refresh the authoritative state before reporting the conflict.
       if (x.current) {
         db = x.current;
         normalizeDB();
@@ -170,7 +166,6 @@ async function deleteMovement(id) {
     await svSyncNow();
   } finally {
     svMutationBusy = false;
-    // Pull any changes that happened after our successful write.
     svSyncNow();
   }
 }
@@ -184,5 +179,16 @@ window.deleteMovement = deleteMovement;
   s.src='/inventory-v2.js?v=1';
   s.onload=()=>console.log('Star Vision Inventário 2.0 carregado');
   s.onerror=e=>console.warn('Não foi possível carregar Inventário 2.0',e);
+  document.head.appendChild(s);
+})();
+
+/* =========================================================
+   USUÁRIOS
+========================================================= */
+(function loadUsers(){
+  const s=document.createElement('script');
+  s.src='/users.js?v=1';
+  s.onload=()=>console.log('Star Vision Usuários carregado');
+  s.onerror=e=>console.warn('Não foi possível carregar Usuários',e);
   document.head.appendChild(s);
 })();
