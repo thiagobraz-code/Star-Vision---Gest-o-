@@ -119,4 +119,5 @@
     const oldRender=window.render;
     window.render=function(){ oldRender(); if(currentUser?.role===ADMIN && document.getElementById('users')?.classList.contains('active')) renderUsers(); };
   }
+  if(typeof window.buildNav==='function' && window.currentUser) window.buildNav();
 })();
