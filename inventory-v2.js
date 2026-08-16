@@ -36,6 +36,7 @@
 
     (db.cases||[]).forEach(c=>{
       c.items ||= [];
+      c.active=c.active!==false;
       c.items.forEach(item=>{
         if(item.inventoryItemId && db.inventoryItems.some(i=>i.id===item.inventoryItemId)) return;
         const name=safeItemName(item.name); if(!name) return;
@@ -97,7 +98,7 @@
     const q=(document.getElementById('svInvSearch')?.value||'').toLowerCase();
     const list=db.inventoryItems.filter(i=>i.active!==false&&(i.name.toLowerCase().includes(q)||(invGroup(i.groupId)?.name||'').toLowerCase().includes(q)));
     if(!list.length){target.innerHTML='<div class="empty">Nenhum item cadastrado.</div>';return;}
-    target.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Item</th><th>Grupo</th><th>Controle</th><th>Total</th><th>Em uso</th><th>Disponível</th><th></th></tr></thead><tbody>${list.map(i=>{const used=allocatedQty(i.id),available=Math.max(0,Number(i.totalQty||0)-used);return `<tr><td><b>${esc(i.name)}</b></td><td>${esc(invGroup(i.groupId)?.name||'—')}</td><td>${i.control==='patrimonio'?'Patrimônio':'Quantidade'}</td><td>${i.totalQty} ${esc(i.unit)}</td><td>${used} ${esc(i.unit)}</td><td class="${available>0?'ok':'bad'}">${available} ${esc(i.unit)}</td><td><button class="small" onclick="svEditInventoryItem('${i.id}')">Editar</button></td></tr>`}).join('')}</tbody></table></div>`;
+    target.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Item</th><th>Grupo</th><th>Controle</th><th>Total</th><th>Em uso</th><th>Disponível</th><th></th></tr></thead><tbody>${list.map(i=>{const used=allocatedQty(i.id),available=Math.max(0,Number(i.totalQty||0)-used);return `<tr><td><b>${esc(i.name)}</b></td><td>${esc(invGroup(i.groupId)?.name||'—')}</td><td>${i.control==='patrimonio'?'Patrimônio':'Quantidade'}</td><td>${i.totalQty} ${esc(i.unit)}</td><td>${used} ${esc(i.unit)}</td><td class="${available>0?'ok':'bad'}">${available} ${esc(i.unit)}</td><td><button class="small" onclick="svEditInventoryItem('${i.id}')">Editar</button> <button class="small danger" onclick="svDeleteInventoryItem('${i.id}')">Excluir</button></td></tr>`}).join('')}</tbody></table></div>`;
   }
 
   function allocatedQty(itemId,ignoreMovementId){
@@ -110,6 +111,7 @@
   }
   function caseAvailability(caseId,movementId){
     const c=db.cases.find(x=>x.id===caseId); if(!c)return{ok:false,reason:'Case não encontrado.'};
+    if(c.active===false)return{ok:false,reason:'Case retirado do inventário.'};
     if(['Indisponível','Em manutenção interna','Em manutenção externa'].includes(c.status))return{ok:false,reason:'Case indisponível / em manutenção.'};
     if(db.movements.some(m=>m.status==='Aberto'&&m.id!==movementId&&m.cases?.some(ec=>ec.caseId===caseId)))return{ok:false,reason:'Case já está em outro evento aberto.'};
     const eqUsed=allocatedEquipmentIds(movementId), conflict=(db.equipment||[]).filter(e=>e.caseId===caseId).find(e=>eqUsed.has(e.pat));
@@ -119,7 +121,7 @@
   }
 
   function renderCasesV2(){const cp=document.getElementById('casesPanel');if(!cp)return;cp.innerHTML=`<div class="section-head"><div><h3>Cases</h3><div class="muted">Cada case é um conjunto físico. Ao entrar em um evento, ele fica indisponível para os demais.</div></div><button class="primary" onclick="svNewCase()">+ Novo case</button></div><input class="search" id="svCaseSearch" placeholder="Pesquisar case..." oninput="svRenderCaseTable()"><div id="svCaseTable"></div>`;svRenderCaseTable();}
-  function svRenderCaseTable(){const t=document.getElementById('svCaseTable');if(!t)return;const q=(document.getElementById('svCaseSearch')?.value||'').toLowerCase();const list=db.cases.filter(c=>c.name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q));t.innerHTML=`<div class="grid">${list.map(c=>{const pending=pendingMaintenanceForCase(c.id),open=caseHasOpenMovement(c.id);return `<div class="card"><div class="between"><div><h3>${esc(c.name)}</h3><div class="muted">${esc(c.id)}</div></div><span class="status-pill ${c.status==='Disponível'?'status-ok':'status-out'}">${esc(c.status)}</span></div>${pending.length?'<div class="maintenance-alert">⚠️ Manutenção pendente</div>':''}<div style="margin:12px 0">${(c.items||[]).map(it=>{const inv=invItem(it.inventoryItemId);return `<span class="badge">${esc(inv?.name||safeItemName(it.name))} × ${it.qty||0} ${esc(it.unit||inv?.unit||'un')}</span>`}).join('')||'<span class="muted">Sem conteúdo cadastrado.</span>'}</div><div class="row"><button onclick="svEditCase('${c.id}')">Editar conteúdo</button>${open?'<span class="badge warn">Em evento</span>':''}</div></div>`}).join('')}</div>`;}
+  function svRenderCaseTable(){const t=document.getElementById('svCaseTable');if(!t)return;const q=(document.getElementById('svCaseSearch')?.value||'').toLowerCase();const list=db.cases.filter(c=>c.active!==false&&(c.name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q)));t.innerHTML=`<div class="grid">${list.map(c=>{const pending=pendingMaintenanceForCase(c.id),open=caseHasOpenMovement(c.id);return `<div class="card"><div class="between"><div><h3>${esc(c.name)}</h3><div class="muted">${esc(c.id)}</div></div><span class="status-pill ${c.status==='Disponível'?'status-ok':'status-out'}">${esc(c.status)}</span></div>${pending.length?'<div class="maintenance-alert">⚠️ Manutenção pendente</div>':''}<div style="margin:12px 0">${(c.items||[]).map(it=>{const inv=invItem(it.inventoryItemId);return `<span class="badge">${esc(inv?.name||safeItemName(it.name))} × ${it.qty||0} ${esc(it.unit||inv?.unit||'un')}</span>`}).join('')||'<span class="muted">Sem conteúdo cadastrado.</span>'}</div><div class="row"><button onclick="svEditCase('${c.id}')">Editar conteúdo</button>${open?'<span class="badge warn">Em evento</span>':''}<button class="danger" onclick="svDeleteCase('${c.id}')">Excluir</button></div></div>`}).join('')}</div>`;}
   function renderGroups(){const cp=document.getElementById('casesPanel');if(!cp)return;cp.innerHTML=`<div class="section-head"><div><h3>Grupos de inventário</h3><div class="muted">Organização editável dos itens.</div></div><button class="primary" onclick="svNewGroup()">+ Novo grupo</button></div><div class="grid">${db.inventoryGroups.filter(g=>g.active!==false).map(g=>{const count=db.inventoryItems.filter(i=>i.groupId===g.id&&i.active!==false).length;return `<div class="card"><div class="between"><h3>${esc(g.name)}</h3><span class="badge">${count} item(ns)</span></div><button onclick="svEditGroup('${g.id}')">Editar nome</button></div>`}).join('')}</div>`;}
 
   function svNewGroup(){openModal('Novo grupo',`<label>Nome do grupo</label><input id="svGroupName" placeholder="Ex.: Cabos"><button class="primary" onclick="svCreateGroup()">Criar grupo</button>`);}
@@ -132,13 +134,35 @@
   function svEditInventoryItem(id){const i=invItem(id);if(!i)return;const used=allocatedQty(id);openModal('Editar item',`<label>Nome</label><input id="svInvName" value="${attr(i.name)}"><label>Grupo</label><select id="svInvGroup">${db.inventoryGroups.filter(g=>g.active!==false).map(g=>`<option value="${g.id}" ${g.id===i.groupId?'selected':''}>${esc(g.name)}</option>`).join('')}</select><label>Controle</label><select id="svInvControl"><option value="quantidade" ${i.control==='quantidade'?'selected':''}>Quantidade</option><option value="patrimonio" ${i.control==='patrimonio'?'selected':''}>Patrimônio</option></select><label>Unidade</label><input id="svInvUnit" value="${attr(i.unit)}"><label>Total ${used?'(já existem '+used+' em eventos abertos)':''}</label><input id="svInvQty" type="number" min="${used}" value="${i.totalQty}"><button class="primary" onclick="svSaveInventoryItem('${id}')">Salvar</button>`);}
   function svSaveInventoryItem(id){const i=invItem(id);if(!i)return;const qty=Number(document.getElementById('svInvQty').value||0),used=allocatedQty(id);if(qty<used)return alert(`Não pode ficar abaixo de ${used}. Essa quantidade já está comprometida em eventos.`);i.name=document.getElementById('svInvName').value.trim();i.groupId=document.getElementById('svInvGroup').value;i.control=document.getElementById('svInvControl').value;i.unit=document.getElementById('svInvUnit').value.trim()||'un';i.totalQty=qty;saveInventory();closeModal();render();}
 
+  function svDeleteInventoryItem(id){
+    const i=invItem(id); if(!i)return;
+    const used=allocatedQty(id);
+    if(used>0)return alert(`Não é possível excluir "${i.name}" porque ${used} ${i.unit} já está comprometido em evento(s) aberto(s). Retorne os equipamentos antes de retirar o item do inventário.`);
+    const caseRefs=(db.cases||[]).filter(c=>c.active!==false&&(c.items||[]).some(it=>it.inventoryItemId===id)).length;
+    const extra=caseRefs?`\n\nO item está presente em ${caseRefs} case(s). Ele será retirado do inventário, mas o histórico/conteúdo dos cases será preservado.`:'';
+    if(!confirm(`Retirar "${i.name}" do inventário?${extra}\n\nO item não será apagado fisicamente do banco; ficará inativo para preservar o histórico.`))return;
+    i.active=false;
+    saveInventory();closeModal();render();
+  }
+
   function svCaseItemRow(item){const id='svrow-'+Date.now()+'-'+Math.random();return `<div class="content-row" id="${id}"><select class="sv-case-item"><option value="">Selecione o item</option>${db.inventoryItems.filter(i=>i.active!==false).map(i=>`<option value="${i.id}" ${i.id===item?.inventoryItemId?'selected':''}>${esc(invGroup(i.groupId)?.name||'')} — ${esc(i.name)}</option>`).join('')}</select><input class="sv-case-qty" type="number" min="0" value="${item?.qty||0}"><input class="sv-case-unit" value="${attr(item?.unit||'un')}"><button class="danger small" onclick="document.getElementById('${id}').remove()">×</button></div>`;}
   function svNewCase(){openModal('Novo case',`<label>Nome do case</label><input id="svCaseName" placeholder="Ex.: Case 02 - XLR Som"><h3 style="margin-top:18px">Conteúdo do case</h3><div id="svCaseRows"></div><button onclick="svAddCaseRow()">+ Adicionar item</button><div style="margin-top:18px"><button class="primary" onclick="svCreateCase()">Criar case</button></div>`);svAddCaseRow();}
   function svAddCaseRow(item=null){document.getElementById('svCaseRows')?.insertAdjacentHTML('beforeend',svCaseItemRow(item));}
   function collectCaseRows(){return [...document.querySelectorAll('#svCaseRows .content-row')].map(r=>({inventoryItemId:r.querySelector('.sv-case-item').value,qty:Number(r.querySelector('.sv-case-qty').value||0),unit:r.querySelector('.sv-case-unit').value.trim()||'un'})).filter(x=>x.inventoryItemId&&x.qty>0).map(x=>({...x,name:invItem(x.inventoryItemId)?.name||''}));}
-  function svCreateCase(){const name=document.getElementById('svCaseName').value.trim();if(!name)return alert('Informe o nome do case.');const rows=collectCaseRows(),next=Math.max(0,...db.cases.map(c=>Number(String(c.id).replace('SV-C',''))||0))+1;db.cases.push({id:'SV-C'+String(next).padStart(3,'0'),name,description:true,items:rows,status:'Disponível',maintenanceIds:[]});saveInventory();closeModal();render();}
+  function svCreateCase(){const name=document.getElementById('svCaseName').value.trim();if(!name)return alert('Informe o nome do case.');const rows=collectCaseRows(),next=Math.max(0,...db.cases.map(c=>Number(String(c.id).replace('SV-C',''))||0))+1;db.cases.push({id:'SV-C'+String(next).padStart(3,'0'),name,description:true,items:rows,status:'Disponível',maintenanceIds:[],active:true});saveInventory();closeModal();render();}
   function svEditCase(id){const c=db.cases.find(x=>x.id===id);if(!c)return;openModal('Editar case — '+c.name,`<label>Nome</label><input id="svCaseName" value="${attr(c.name)}"><h3 style="margin-top:18px">Conteúdo</h3><div id="svCaseRows"></div><button onclick="svAddCaseRow()">+ Adicionar item</button><div class="row" style="margin-top:18px"><button class="primary" onclick="svSaveCase('${id}')">Salvar</button></div>`);(c.items||[]).forEach(it=>svAddCaseRow(it));}
   function svSaveCase(id){const c=db.cases.find(x=>x.id===id);if(!c)return;if(caseHasOpenMovement(id))return alert('Este case está em um evento aberto. Retorne o case antes de alterar seu conteúdo.');c.name=document.getElementById('svCaseName').value.trim();c.items=collectCaseRows();saveInventory();closeModal();render();}
+
+  function svDeleteCase(id){
+    const c=db.cases.find(x=>x.id===id); if(!c)return;
+    if(caseHasOpenMovement(id))return alert(`Não é possível excluir "${c.name}" porque ele está em um evento aberto. Retorne o case antes de retirá-lo do inventário.`);
+    const hasEquipment=(db.equipment||[]).some(e=>e.caseId===id);
+    const hasHistory=(db.movements||[]).some(m=>(m.cases||[]).some(ec=>ec.caseId===id));
+    if(!confirm(`Retirar o case "${c.name}" (${c.id}) do inventário?\n\n${hasEquipment?'Este case possui patrimônios vinculados. ':''}${hasHistory?'O histórico de eventos será preservado. ':''}\nO case ficará inativo para preservar o histórico e não poderá ser usado em novos eventos.`))return;
+    c.active=false;
+    c.status='Indisponível';
+    saveInventory();closeModal();render();
+  }
 
   window.toggleEventCase=function(movementId,caseId,checked){
     const m=db.movements.find(x=>x.id===movementId),c=db.cases.find(x=>x.id===caseId);if(!m||!c)return;
@@ -159,8 +183,8 @@
 
   window.svInventoryTab=tabs;
   window.svNewGroup=svNewGroup;window.svCreateGroup=svCreateGroup;window.svEditGroup=svEditGroup;window.svSaveGroup=svSaveGroup;
-  window.svNewInventoryItem=svNewInventoryItem;window.svCreateInventoryItem=svCreateInventoryItem;window.svEditInventoryItem=svEditInventoryItem;window.svSaveInventoryItem=svSaveInventoryItem;
-  window.svNewCase=svNewCase;window.svAddCaseRow=svAddCaseRow;window.svCreateCase=svCreateCase;window.svEditCase=svEditCase;window.svSaveCase=svSaveCase;
+  window.svNewInventoryItem=svNewInventoryItem;window.svCreateInventoryItem=svCreateInventoryItem;window.svEditInventoryItem=svEditInventoryItem;window.svSaveInventoryItem=svSaveInventoryItem;window.svDeleteInventoryItem=svDeleteInventoryItem;
+  window.svNewCase=svNewCase;window.svAddCaseRow=svAddCaseRow;window.svCreateCase=svCreateCase;window.svEditCase=svEditCase;window.svSaveCase=svSaveCase;window.svDeleteCase=svDeleteCase;
   window.svRenderItemTable=svRenderItemTable;window.svRenderCaseTable=svRenderCaseTable;
   window.renderInventory=renderInventoryV2;
   ensureModel();saveInventory();if(typeof render==='function'&&currentUser)render();
