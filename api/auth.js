@@ -19,8 +19,8 @@ function hash(value) {
 }
 
 function sign(payload) {
-  const secret = process.env.SV_AUTH_SECRET;
-  if (!secret) throw new Error('SV_AUTH_SECRET is not configured');
+  const secret = process.env.sv_auth_secret;
+  if (!secret) throw new Error('sv_auth_secret is not configured');
   return crypto.createHmac('sha256', secret).update(payload).digest('hex');
 }
 
