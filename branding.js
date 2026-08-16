@@ -44,7 +44,7 @@
 
   function brandLogin(){
     const loginBrand=document.querySelector('#loginScreen .login-brand');
-    if(!loginBrand)return;
+    if(!loginBrand||loginBrand.dataset.svBrand==='1')return;
     loginBrand.innerHTML=lockup();
     loginBrand.dataset.svBrand='1';
   }
