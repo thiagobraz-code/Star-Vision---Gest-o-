@@ -89,7 +89,7 @@ function svInstallSaveHook(){
   function wrappedSaveDB(...args){
     svMarkPending();
     const result=original.apply(this,args);
-    setTimeout(()=>svSyncNow(),250);
+    setTimeout(()=>{svMarkPending();svSyncNow()},500);
     return result;
   }
   wrappedSaveDB.__svWrapped=true;
