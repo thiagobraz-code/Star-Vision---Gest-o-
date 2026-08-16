@@ -2,12 +2,32 @@
 (function(){
   const ADMIN='Administrador';
   const COLLAB='Colaborador';
+  const HASH_PREFIX='sha256:';
+
+  async function hashPassword(value){
+    const data=new TextEncoder().encode(String(value||''));
+    const digest=await crypto.subtle.digest('SHA-256',data);
+    return HASH_PREFIX+Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function passwordMatches(user,value){
+    if(!user)return false;
+    if(String(user.pass||'').startsWith(HASH_PREFIX)) return (await hashPassword(value))===user.pass;
+    return String(user.pass||'')===String(value||'');
+  }
+
+  async function migratePassword(user,value){
+    if(user&&!String(user.pass||'').startsWith(HASH_PREFIX)){
+      user.pass=await hashPassword(value);
+      saveDB();
+    }
+  }
 
   function normalizeUsers(){
     if(!window.db) return;
     db.users ||= [];
     if(!db.users.length){
-      db.users.push({user:'admin',pass:'1234',name:'Administrador',role:ADMIN,active:true});
+      db.users.push({user:'admin',pass:HASH_PREFIX+'03ac674216f3e15c761ee1b49f2d2f7e5d8e4f3f5c4c6b2d7b3d5f8c4a1d5f2',name:'Administrador',role:ADMIN,active:true});
     }
     db.users.forEach(u=>{
       u.active=u.active!==false;
@@ -56,6 +76,23 @@
       <div class="row" style="margin-top:15px"><button class="primary" onclick="svSaveUser(${editing?`'${attr(user.user)}'`:'null'})">Salvar</button></div>`;
   }
 
+  window.login=async function(){
+    const user=document.getElementById('loginUser').value.trim();
+    const pass=document.getElementById('loginPass').value;
+    const found=db.users.find(u=>u.user===user && u.active!==false);
+    if(!found || !(await passwordMatches(found,pass))){
+      document.getElementById('loginError').textContent='Usuário ou senha inválidos.';
+      return;
+    }
+    await migratePassword(found,pass);
+    currentUser=found;
+    sessionStorage.setItem('svLoggedUser',JSON.stringify({user:found.user,role:found.role}));
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('currentUser').textContent=found.name+' • '+found.role;
+    buildNav(); show('home');
+  };
+
   window.svNewUser=function(){
     if(!isAdmin()) return alert('Apenas administradores podem gerenciar usuários.');
     openModal('Novo usuário',userForm(null));
@@ -78,9 +115,9 @@
     if(!u){
       if(db.users.some(x=>x.user.toLowerCase()===login.toLowerCase()))return alert('Este usuário já existe.');
       if(!pass)return alert('Informe uma senha para o novo usuário.');
-      u={user:login,pass,name,role,active}; db.users.push(u);
+      u={user:login,pass:await hashPassword(pass),name,role,active}; db.users.push(u);
     }else{
-      if(pass)u.pass=pass;
+      if(pass)u.pass=await hashPassword(pass);
       u.name=name;u.role=role;u.active=active;
       if(u.user===currentUser.user) currentUser=u;
     }
@@ -100,7 +137,7 @@
   const oldBuildNav=window.buildNav;
   window.buildNav=function(){
     normalizeUsers(); ensureView();
-    if(typeof oldBuildNav==='function') oldBuildNav();
+    if(typeof oldBuildNav==='function')oldBuildNav();
     const nav=document.getElementById('nav');
     if(nav && isAdmin() && !nav.querySelector('[data-view="users"]')){
       const b=document.createElement('button'); b.className='nav-btn'; b.dataset.view='users'; b.textContent='Usuários'; b.onclick=()=>show('users'); nav.appendChild(b);
@@ -111,13 +148,13 @@
   window.show=function(view){
     if(view==='users' && !isAdmin()) return oldShow('home');
     oldShow(view);
-    if(view==='users') renderUsers();
+    if(view==='users')renderUsers();
   };
 
   normalizeUsers(); ensureView();
   if(typeof window.render==='function'){
     const oldRender=window.render;
-    window.render=function(){ oldRender(); if(currentUser?.role===ADMIN && document.getElementById('users')?.classList.contains('active')) renderUsers(); };
+    window.render=function(){oldRender();if(currentUser?.role===ADMIN&&document.getElementById('users')?.classList.contains('active'))renderUsers();};
   }
-  if(typeof window.buildNav==='function' && window.currentUser) window.buildNav();
+  if(typeof window.buildNav==='function'&&window.currentUser)window.buildNav();
 })();
