@@ -3,6 +3,7 @@
   const ADMIN='Administrador';
   const COLLAB='Colaborador';
   const HASH_PREFIX='sha256:';
+  const DEFAULT_ADMIN_HASH=HASH_PREFIX+'03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';
 
   async function hashPassword(value){
     const data=new TextEncoder().encode(String(value||''));
@@ -24,86 +25,54 @@
   }
 
   function normalizeUsers(){
-    if(!window.db) return;
+    if(!window.db)return;
     db.users ||= [];
     if(!db.users.length){
-      db.users.push({user:'admin',pass:HASH_PREFIX+'03ac674216f3e15c761ee1b49f2d2f7e5d8e4f3f5c4c6b2d7b3d5f8c4a1d5f2',name:'Administrador',role:ADMIN,active:true});
+      db.users.push({user:'admin',pass:DEFAULT_ADMIN_HASH,name:'Administrador',role:ADMIN,active:true});
     }
     db.users.forEach(u=>{
       u.active=u.active!==false;
-      if(u.role==='Admin' || u.role==='Administrador' || u.role==='admin') u.role=ADMIN;
+      if(u.role==='Admin'||u.role==='Administrador'||u.role==='admin')u.role=ADMIN;
       else u.role=COLLAB;
     });
   }
 
   function ensureView(){
-    if(document.getElementById('users')) return;
+    if(document.getElementById('users'))return;
     const main=document.querySelector('main');
-    if(!main) return;
-    main.insertAdjacentHTML('beforeend',`
-      <section id="users" class="view">
-        <div class="section-head">
-          <div><h1>Usuários</h1><div class="muted">Acessos ao Star Vision.</div></div>
-          <button class="primary" onclick="svNewUser()">+ Novo usuário</button>
-        </div>
-        <div id="usersList"></div>
-      </section>`);
+    if(!main)return;
+    main.insertAdjacentHTML('beforeend',`<section id="users" class="view"><div class="section-head"><div><h1>Usuários</h1><div class="muted">Acessos ao Star Vision.</div></div><button class="primary" onclick="svNewUser()">+ Novo usuário</button></div><div id="usersList"></div></section>`);
   }
 
   function renderUsers(){
-    normalizeUsers(); ensureView();
-    const target=document.getElementById('usersList'); if(!target)return;
-    target.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Usuário</th><th>Tipo</th><th>Status</th><th></th></tr></thead><tbody>${db.users.map(u=>`
-      <tr>
-        <td>${esc(u.name||u.user)}</td>
-        <td>${esc(u.user)}</td>
-        <td class="${u.role===ADMIN?'ok':'blue'}">${u.role===ADMIN?'Admin':'Colaborador'}</td>
-        <td class="${u.active!==false?'ok':'bad'}">${u.active!==false?'Ativo':'Inativo'}</td>
-        <td><div class="row">
-          <button class="small" onclick="svEditUser('${attr(u.user)}')">Editar</button>
-          ${u.user!==currentUser?.user?`<button class="small danger" onclick="svDeleteUser('${attr(u.user)}')">${u.active!==false?'Desativar':'Excluir'}</button>`:''}
-        </div></td>
-      </tr>`).join('')}</tbody></table></div>`;
+    normalizeUsers();ensureView();
+    const target=document.getElementById('usersList');if(!target)return;
+    target.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Usuário</th><th>Tipo</th><th>Status</th><th></th></tr></thead><tbody>${db.users.map(u=>`<tr><td>${esc(u.name||u.user)}</td><td>${esc(u.user)}</td><td class="${u.role===ADMIN?'ok':'blue'}">${u.role===ADMIN?'Admin':'Colaborador'}</td><td class="${u.active!==false?'ok':'bad'}">${u.active!==false?'Ativo':'Inativo'}</td><td><div class="row"><button class="small" onclick="svEditUser('${attr(u.user)}')">Editar</button>${u.user!==currentUser?.user?`<button class="small danger" onclick="svDeleteUser('${attr(u.user)}')">${u.active!==false?'Desativar':'Excluir'}</button>`:''}</div></td></tr>`).join('')}</tbody></table></div>`;
   }
 
   function userForm(user){
     const editing=!!user;
-    return `<label>Nome</label><input id="svUserName" value="${attr(user?.name||'')}">
-      <label>Usuário / login</label><input id="svUserLogin" value="${attr(user?.user||'')}" ${editing?'disabled':''}>
-      <label>Senha ${editing?'(deixe em branco para manter)':''}</label><input id="svUserPass" type="password" autocomplete="new-password">
-      <label>Tipo de usuário</label><select id="svUserRole"><option value="${ADMIN}" ${user?.role===ADMIN?'selected':''}>Admin — acesso total</option><option value="${COLLAB}" ${user?.role!==ADMIN?'selected':''}>Colaborador — operação sem exclusões/inventário estrutural</option></select>
-      <label class="check-item" style="margin-top:8px"><input id="svUserActive" type="checkbox" ${user?.active!==false?'checked':''}><span>Usuário ativo</span></label>
-      <div class="row" style="margin-top:15px"><button class="primary" onclick="svSaveUser(${editing?`'${attr(user.user)}'`:'null'})">Salvar</button></div>`;
+    return `<label>Nome</label><input id="svUserName" value="${attr(user?.name||'')}"><label>Usuário / login</label><input id="svUserLogin" value="${attr(user?.user||'')}" ${editing?'disabled':''}><label>Senha ${editing?'(deixe em branco para manter)':''}</label><input id="svUserPass" type="password" autocomplete="new-password"><label>Tipo de usuário</label><select id="svUserRole"><option value="${ADMIN}" ${user?.role===ADMIN?'selected':''}>Admin — acesso total</option><option value="${COLLAB}" ${user?.role!==ADMIN?'selected':''}>Colaborador — operação sem exclusões/inventário estrutural</option></select><label class="check-item" style="margin-top:8px"><input id="svUserActive" type="checkbox" ${user?.active!==false?'checked':''}><span>Usuário ativo</span></label><div class="row" style="margin-top:15px"><button class="primary" onclick="svSaveUser(${editing?`'${attr(user.user)}'`:'null'})">Salvar</button></div>`;
   }
 
   window.login=async function(){
     const user=document.getElementById('loginUser').value.trim();
     const pass=document.getElementById('loginPass').value;
-    const found=db.users.find(u=>u.user===user && u.active!==false);
-    if(!found || !(await passwordMatches(found,pass))){
-      document.getElementById('loginError').textContent='Usuário ou senha inválidos.';
-      return;
-    }
+    const found=db.users.find(u=>u.user===user&&u.active!==false);
+    if(!found||!(await passwordMatches(found,pass))){document.getElementById('loginError').textContent='Usuário ou senha inválidos.';return;}
     await migratePassword(found,pass);
     currentUser=found;
     sessionStorage.setItem('svLoggedUser',JSON.stringify({user:found.user,role:found.role}));
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     document.getElementById('currentUser').textContent=found.name+' • '+found.role;
-    buildNav(); show('home');
+    buildNav();show('home');
   };
 
-  window.svNewUser=function(){
-    if(!isAdmin()) return alert('Apenas administradores podem gerenciar usuários.');
-    openModal('Novo usuário',userForm(null));
-  };
-  window.svEditUser=function(login){
-    if(!isAdmin()) return alert('Apenas administradores podem gerenciar usuários.');
-    const u=db.users.find(x=>x.user===login); if(!u)return;
-    openModal('Editar usuário',userForm(u));
-  };
+  window.svNewUser=function(){if(!isAdmin())return alert('Apenas administradores podem gerenciar usuários.');openModal('Novo usuário',userForm(null));};
+  window.svEditUser=function(login){if(!isAdmin())return alert('Apenas administradores podem gerenciar usuários.');const u=db.users.find(x=>x.user===login);if(!u)return;openModal('Editar usuário',userForm(u));};
   window.svSaveUser=async function(oldLogin){
-    if(!isAdmin()) return alert('Apenas administradores podem gerenciar usuários.');
+    if(!isAdmin())return alert('Apenas administradores podem gerenciar usuários.');
     normalizeUsers();
     const name=document.getElementById('svUserName').value.trim();
     const login=document.getElementById('svUserLogin').value.trim();
@@ -115,46 +84,37 @@
     if(!u){
       if(db.users.some(x=>x.user.toLowerCase()===login.toLowerCase()))return alert('Este usuário já existe.');
       if(!pass)return alert('Informe uma senha para o novo usuário.');
-      u={user:login,pass:await hashPassword(pass),name,role,active}; db.users.push(u);
+      u={user:login,pass:await hashPassword(pass),name,role,active};db.users.push(u);
     }else{
       if(pass)u.pass=await hashPassword(pass);
       u.name=name;u.role=role;u.active=active;
-      if(u.user===currentUser.user) currentUser=u;
+      if(u.user===currentUser.user)currentUser=u;
     }
     saveDB();closeModal();renderUsers();render();
   };
+
   window.svDeleteUser=async function(login){
-    if(!isAdmin()) return alert('Apenas administradores podem gerenciar usuários.');
-    const u=db.users.find(x=>x.user===login); if(!u)return;
+    if(!isAdmin())return alert('Apenas administradores podem gerenciar usuários.');
+    const u=db.users.find(x=>x.user===login);if(!u)return;
     if(u.user===currentUser?.user)return alert('Você não pode desativar seu próprio usuário.');
     const action=u.active!==false?'desativar':'excluir';
     if(!confirm(`${action==='desativar'?'Desativar':'Excluir'} o usuário "${u.name}"?\n\nO histórico do sistema será preservado.`))return;
-    if(action==='desativar')u.active=false;
-    else db.users=db.users.filter(x=>x.user!==login);
+    if(action==='desativar')u.active=false;else db.users=db.users.filter(x=>x.user!==login);
     saveDB();renderUsers();
   };
 
   const oldBuildNav=window.buildNav;
   window.buildNav=function(){
-    normalizeUsers(); ensureView();
+    normalizeUsers();ensureView();
     if(typeof oldBuildNav==='function')oldBuildNav();
     const nav=document.getElementById('nav');
-    if(nav && isAdmin() && !nav.querySelector('[data-view="users"]')){
-      const b=document.createElement('button'); b.className='nav-btn'; b.dataset.view='users'; b.textContent='Usuários'; b.onclick=()=>show('users'); nav.appendChild(b);
-    }
+    if(nav&&isAdmin()&&!nav.querySelector('[data-view="users"]')){const b=document.createElement('button');b.className='nav-btn';b.dataset.view='users';b.textContent='Usuários';b.onclick=()=>show('users');nav.appendChild(b);}
   };
 
   const oldShow=window.show;
-  window.show=function(view){
-    if(view==='users' && !isAdmin()) return oldShow('home');
-    oldShow(view);
-    if(view==='users')renderUsers();
-  };
+  window.show=function(view){if(view==='users'&&!isAdmin())return oldShow('home');oldShow(view);if(view==='users')renderUsers();};
 
-  normalizeUsers(); ensureView();
-  if(typeof window.render==='function'){
-    const oldRender=window.render;
-    window.render=function(){oldRender();if(currentUser?.role===ADMIN&&document.getElementById('users')?.classList.contains('active'))renderUsers();};
-  }
+  normalizeUsers();ensureView();
+  if(typeof window.render==='function'){const oldRender=window.render;window.render=function(){oldRender();if(currentUser?.role===ADMIN&&document.getElementById('users')?.classList.contains('active'))renderUsers();};}
   if(typeof window.buildNav==='function'&&window.currentUser)window.buildNav();
 })();
