@@ -1,27 +1,37 @@
 (function(){
-  const LOGO='/star-vision-logo.svg?v=1';
+  const MARK='/star-mark.svg?v=1';
   function install(){
     if(document.getElementById('sv-brand-style'))return;
     const style=document.createElement('style');
     style.id='sv-brand-style';
     style.textContent=`
-      .sv-official-logo{display:block;width:min(360px,78vw);height:auto;object-fit:contain}
-      .brand .sv-official-logo{width:220px;max-width:52vw}
-      .sv-brand-sub{display:block;color:var(--muted,#a1a1aa);font-size:9px;letter-spacing:2.5px;margin-top:3px}
+      .sv-brand-lockup{display:flex;align-items:center;gap:10px;white-space:nowrap}
+      .sv-brand-mark{display:block;width:42px;height:42px;flex:none;object-fit:contain}
+      .sv-brand-name{font-family:'Ethnocentric','Arial Black',Arial,sans-serif;font-weight:900;letter-spacing:2px;font-size:20px;line-height:1}
       .sv-login-brand{display:flex;justify-content:center;margin:0 auto 20px;padding:4px 0}
-      .sv-login-brand .sv-official-logo{width:min(360px,82vw)}
-      @media(max-width:760px){.brand .sv-official-logo{width:190px;max-width:58vw}.sv-brand-sub{font-size:8px;letter-spacing:2px}}
+      .sv-login-brand .sv-brand-lockup{gap:14px}
+      .sv-login-brand .sv-brand-mark{width:58px;height:58px}
+      .sv-login-brand .sv-brand-name{font-size:30px;letter-spacing:3px}
+      @media(max-width:760px){
+        .sv-brand-mark{width:38px;height:38px}
+        .sv-brand-name{font-size:17px;letter-spacing:1.5px}
+        .sv-login-brand .sv-brand-mark{width:50px;height:50px}
+        .sv-login-brand .sv-brand-name{font-size:24px;letter-spacing:2px}
+      }
     `;
     document.head.appendChild(style);
     document.title='Star Vision Gestão';
+  }
+  function lockup(extraClass){
+    return '<div class="sv-brand-lockup '+(extraClass||'')+'"><img class="sv-brand-mark" src="'+MARK+'" alt=""><span class="sv-brand-name">STAR VISION</span></div>';
   }
   function brandHeader(){
     document.querySelectorAll('.brand').forEach(el=>{
       if(el.dataset.svBrand==='1')return;
       el.dataset.svBrand='1';
-      el.innerHTML='<img class="sv-official-logo" src="'+LOGO+'" alt="Star Vision Áudio Visual"><span class="sv-brand-sub">GESTÃO DE EQUIPAMENTOS</span>';
-      el.style.flexDirection='column';
-      el.style.alignItems='flex-start';
+      el.innerHTML=lockup();
+      el.style.flexDirection='row';
+      el.style.alignItems='center';
       el.style.gap='0';
     });
   }
@@ -33,7 +43,7 @@
     if(!form||form.querySelector('.sv-login-brand'))return;
     const box=document.createElement('div');
     box.className='sv-login-brand';
-    box.innerHTML='<img class="sv-official-logo" src="'+LOGO+'" alt="Star Vision Áudio Visual">';
+    box.innerHTML=lockup();
     form.parentElement.insertBefore(box,form);
   }
   function run(){install();brandHeader();brandLogin();}
