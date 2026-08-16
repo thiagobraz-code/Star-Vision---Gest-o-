@@ -3,6 +3,7 @@ const SV_SYNC_KEY = 'starVisionDB';
 const SV_SYNC_INTERVAL = 5000;
 let svSyncTimer = null;
 let svSyncBusy = false;
+let svMutationBusy = false;
 
 function svReadLocalDB() {
   try { return JSON.parse(localStorage.getItem(SV_SYNC_KEY) || 'null'); }
@@ -31,7 +32,10 @@ function svApplyCentral(remote) {
 }
 
 async function svSyncNow() {
-  if (svSyncBusy) return;
+  // Never pull the central database while a write is in progress.
+  // Otherwise the 5s automatic sync can race with a mutation and make
+  // the following PUT fail with a version conflict.
+  if (svSyncBusy || svMutationBusy) return;
   svSyncBusy = true;
   try { svApplyCentral(await svGetCentral()); }
   catch (e) { console.warn('Star Vision central sync:', e); }
@@ -100,7 +104,9 @@ window.svPendingMaintenanceForMovement = svPendingMaintenanceForMovement;
    remove as ocorrências de manutenção originadas por ela.
 ========================================================= */
 
-function deleteMovement(id) {
+async function deleteMovement(id) {
+  if (svMutationBusy) return;
+
   const movement = db.movements?.find(m => m.id === id);
   if (!movement) {
     alert('Movimentação não encontrada.');
@@ -110,53 +116,63 @@ function deleteMovement(id) {
   const label = `${movement.type || 'Movimentação'}: ${movement.name || id}`;
   if (!confirm(`Excluir esta movimentação?\n\n${label}\nCases vinculados: ${(movement.cases || []).length}\n\nOs cases e quantidades comprometidas serão liberados novamente.`)) return;
 
-  const caseIds = (movement.cases || []).map(ec => ec.caseId).filter(Boolean);
+  svMutationBusy = true;
+  try {
+    const caseIds = (movement.cases || []).map(ec => ec.caseId).filter(Boolean);
 
-  // Remove ocorrências de manutenção criadas a partir deste evento.
-  db.maintenance = (db.maintenance || []).filter(mt => {
-    if (mt.movementId === id) return false;
-    if (mt.movementName && mt.movementName === movement.name) return false;
-    return true;
-  });
+    // Remove ocorrências de manutenção criadas a partir deste evento.
+    db.maintenance = (db.maintenance || []).filter(mt => {
+      if (mt.movementId === id) return false;
+      if (mt.movementName && mt.movementName === movement.name) return false;
+      return true;
+    });
 
-  // Remove a movimentação do banco central/local.
-  db.movements = (db.movements || []).filter(m => m.id !== id);
+    // Remove a movimentação do banco central/local.
+    db.movements = (db.movements || []).filter(m => m.id !== id);
 
-  // Recalcula o status dos cases liberados.
-  caseIds.forEach(caseId => {
-    if (typeof updateCaseStatus === 'function') updateCaseStatus(caseId);
-  });
-  if (typeof normalizeDB === 'function') normalizeDB();
+    // Recalcula o status dos cases liberados.
+    caseIds.forEach(caseId => {
+      if (typeof updateCaseStatus === 'function') updateCaseStatus(caseId);
+    });
+    if (typeof normalizeDB === 'function') normalizeDB();
 
-  localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
+    localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
 
-  fetch('/api/db', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
-    cache: 'no-store',
-    body: JSON.stringify(db)
-  })
-  .then(async r => {
+    const r = await fetch('/api/db', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+      cache: 'no-store',
+      body: JSON.stringify(db)
+    });
+
     if (r.status === 409) {
       const x = await r.json().catch(() => ({}));
-      throw new Error(x.message || 'Conflito de sincronização. Atualize e tente novamente.');
+      // Refresh the authoritative state before reporting the conflict.
+      if (x.current) {
+        db = x.current;
+        normalizeDB();
+        localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
+      }
+      throw new Error(x.message || 'Conflito de sincronização. O banco central mudou enquanto esta exclusão estava sendo salva.');
     }
     if (!r.ok) throw new Error('HTTP ' + r.status);
+
     const remote = await r.json();
     db = remote;
     normalizeDB();
     localStorage.setItem(SV_SYNC_KEY, JSON.stringify(db));
-  })
-  .then(() => {
+
     closeModal();
     render();
-    if (typeof svSyncNow === 'function') svSyncNow();
-  })
-  .catch(err => {
+  } catch (err) {
     console.error('Star Vision: erro ao excluir movimentação', err);
     alert('Não foi possível excluir a movimentação no banco central.\n\n' + err.message);
-    if (typeof svSyncNow === 'function') svSyncNow();
-  });
+    await svSyncNow();
+  } finally {
+    svMutationBusy = false;
+    // Pull any changes that happened after our successful write.
+    svSyncNow();
+  }
 }
 window.deleteMovement = deleteMovement;
 
