@@ -1,55 +1,11 @@
 (function(){
   const MARK='/star-mark.svg?v=2';
-
-  function install(){
-    if(document.getElementById('sv-brand-style'))return;
-    const style=document.createElement('style');
-    style.id='sv-brand-style';
-    style.textContent=`
-      .sv-brand-lockup{display:flex;align-items:center;justify-content:center;gap:12px;white-space:nowrap}
-      .sv-brand-mark{display:block;width:44px;height:44px;flex:none;object-fit:contain}
-      .sv-brand-name{font-family:'Ethnocentric','Arial Black',Arial,sans-serif;font-weight:900;letter-spacing:2px;font-size:20px;line-height:1;color:#f5f5f5}
-      .login-brand{margin-bottom:30px!important}
-      .login-brand .sv-brand-lockup{gap:14px}
-      .login-brand .sv-brand-mark{width:64px;height:64px}
-      .login-brand .sv-brand-name{font-size:29px;letter-spacing:2.5px}
-      .brand .sv-brand-lockup{justify-content:flex-start}
-      .brand .sv-brand-mark{width:42px;height:42px}
-      .brand .sv-brand-name{font-size:20px}
-      @media(max-width:600px){
-        .login-brand .sv-brand-mark{width:52px;height:52px}
-        .login-brand .sv-brand-name{font-size:23px;letter-spacing:2px}
-        .brand .sv-brand-mark{width:38px;height:38px}
-        .brand .sv-brand-name{font-size:17px;letter-spacing:1.5px}
-      }
-    `;
-    document.head.appendChild(style);
-    document.title='Star Vision Gestão';
-  }
-
-  function lockup(){
-    return '<div class="sv-brand-lockup"><img class="sv-brand-mark" src="'+MARK+'" alt=""><span class="sv-brand-name">STAR VISION</span></div>';
-  }
-
-  function brandHeader(){
-    document.querySelectorAll('.brand').forEach(el=>{
-      if(el.dataset.svBrand==='1')return;
-      el.dataset.svBrand='1';
-      el.innerHTML=lockup();
-      el.style.flexDirection='row';
-      el.style.alignItems='center';
-      el.style.gap='0';
-    });
-  }
-
-  function brandLogin(){
-    const loginBrand=document.querySelector('#loginScreen .login-brand');
-    if(!loginBrand||loginBrand.dataset.svBrand==='1')return;
-    loginBrand.innerHTML=lockup();
-    loginBrand.dataset.svBrand='1';
-  }
-
-  function run(){install();brandHeader();brandLogin();}
+  function install(){if(document.getElementById('sv-brand-style'))return;const style=document.createElement('style');style.id='sv-brand-style';style.textContent=`.sv-brand-lockup{display:flex;align-items:center;justify-content:center;gap:12px;white-space:nowrap}.sv-brand-mark{display:block;width:44px;height:44px;flex:none;object-fit:contain}.sv-brand-name{font-family:'Ethnocentric','Arial Black',Arial,sans-serif;font-weight:900;letter-spacing:2px;font-size:20px;line-height:1;color:#f5f5f5}.login-brand{margin-bottom:30px!important}.login-brand .sv-brand-lockup{gap:14px}.login-brand .sv-brand-mark{width:64px;height:64px}.login-brand .sv-brand-name{font-size:29px;letter-spacing:2.5px}.brand .sv-brand-lockup{justify-content:flex-start}.brand .sv-brand-mark{width:42px;height:42px}.brand .sv-brand-name{font-size:20px}@media(max-width:600px){.login-brand .sv-brand-mark{width:52px;height:52px}.login-brand .sv-brand-name{font-size:23px;letter-spacing:2px}.brand .sv-brand-mark{width:38px;height:38px}.brand .sv-brand-name{font-size:17px;letter-spacing:1.5px}}`;document.head.appendChild(style);document.title='Star Vision Gestão';}
+  function lockup(){return '<div class="sv-brand-lockup"><img class="sv-brand-mark" src="'+MARK+'" alt=""><span class="sv-brand-name">STAR VISION</span></div>';}
+  function brandHeader(){document.querySelectorAll('.brand').forEach(el=>{if(el.dataset.svBrand==='1')return;el.dataset.svBrand='1';el.innerHTML=lockup();el.style.flexDirection='row';el.style.alignItems='center';el.style.gap='0';});}
+  function brandLogin(){const loginBrand=document.querySelector('#loginScreen .login-brand');if(!loginBrand||loginBrand.dataset.svBrand==='1')return;loginBrand.innerHTML=lockup();loginBrand.dataset.svBrand='1';}
+  function loadEvents(){if(window.__svEventV2Loaded)return;window.__svEventV2Loaded=true;const s=document.createElement('script');s.src='/event-v2.js?v=1';s.onload=()=>console.log('Star Vision Eventos 2.0 carregado');s.onerror=e=>console.warn('Não foi possível carregar Eventos 2.0',e);document.head.appendChild(s);}
+  function run(){install();brandHeader();brandLogin();loadEvents();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
   new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});
 })();
